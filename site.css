@@ -1,0 +1,23 @@
+body {
+  margin: 0px;
+  font-family: "Roboto";
+}
+
+div#top {
+  background-color: #2a4672;
+  text-align: center;
+  color: white;
+  padding: 0.5em;
+}
+
+p.menu-item {
+  display: inline;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 0.2em;
+  border-bottom: 0.3em solid hidden;
+}
+
+p.menu-item:hover {
+  border-bottom: 0.3em solid lightblue
+}
