@@ -26,8 +26,7 @@ function decode(str, style) {
 
 function decodeToHTML(str, style) {
   if (typeof style === 'undefined') { style = DEFAULT_CSS_STYLE }
-  let decoded = decode(str, style)
-  return decoded.map(elementToHTML)
+  return decode(str, style).map(elementToHTML)
 }
 
 // Decoding helper functions
@@ -48,6 +47,29 @@ function decodeHeader(line, style) {
   return element
 }
 
+function linksToHTML(line, style) {
+  const link_regex = /\{.+?\}/g
+  const matches = line.match(link_regex)
+  if (!matches) {
+    return line
+  }
+  const links = matches.map(match => {
+    const [text, href] = match.slice(1,match.length-1).split("|").map(str => str.trim())
+    if (href) {
+      return "<a href=\"{0}\">{1}</a>".replace("{0}", href).replace("{1}", text)
+    } else {
+      return "<a href=\"{0}\">{0}</a>".replace("{0}", text)
+    }
+  })
+
+  let new_line = line
+  for (let i=0; i<links.length; i++) {
+    console.log(matches[i], links[i])
+    new_line = new_line.replace(matches[i], links[i])
+  }
+  return new_line
+}
+
 function process_attribute(attr, style) {
   type = style[attr[0]]
   value = attr.slice(1, attr.length)
@@ -56,7 +78,7 @@ function process_attribute(attr, style) {
 
 function elementToHTML(element) {
   let DOM_element = document.createElement(element.name)
-  DOM_element.innerHTML = element.content
+  DOM_element.innerHTML = linksToHTML(element.content.trim()).replace(new RegExp("\n", "g"), "\n<br>")
 
   delete element.name
   delete element.content
