@@ -1,0 +1,23 @@
+FML stands for Flat Markup Language and therefor does not contain nested elements.
+
+!xx
+Next lines will be in the element in xx
+Trailing newlines will be ignored.
+
+e.g.
+!h1 .menu-item #contact
+This is a title with the class menu-item and the id contact.
+
+!p
+This is
+a paragraph.
+
+{x}
+Creates a link which displays x and links to x.
+
+{x | y}
+This is an hyperlink. Which shows the text x and links to y.
+
+e.g.
+!p
+Take a look at the GitHub page {here | github.com/some-user/some-project}
