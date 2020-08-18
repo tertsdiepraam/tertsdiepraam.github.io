@@ -1,0 +1,125 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Terts Diepraam</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" type="text/css" href="styles.css">
+
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">
+            You are using an <strong>outdated</strong> browser. Please
+            <a href="http://browsehappy.com/">upgrade your browser</a> to improve
+            your experience.
+            </p>
+        <![endif]-->
+
+        <div id="content">
+            <div id="header">
+                <img id="banner-image" src="logo.svg"></img>
+                <h1 id="banner-text">Terts Diepraam</h1>
+            </div>
+            <div id="buttons">
+                <button id="button-home">HOME</button>
+                <button id="button-resume">RESUME</button>
+                <button id="button-projects">PROJECTS</button>
+            </div>
+            <hr>
+            <div id="text">
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script>
+         const TEXT = {
+             "HOME":
+`# Home
+Hi! On this website, you'll find:
+- my resume
+- my projects
+`,
+             "RESUME":
+`# Resume
+## Education
+ - Het 4e Gymnasium
+ - Amsterdam University College
+
+## Experience
+ - Machine Learning Programs
+ - Bit
+ - Bit Academy
+`,
+             "PROJECTS": "These are projects.",
+         };
+
+         let text_str = "";
+         let text_el = document.getElementById('text');
+         updateText("HOME");
+
+         document.getElementById('button-home').onclick = () => {
+             updateText("HOME");
+         }
+
+         document.getElementById('button-resume').onclick = () => {
+             updateText("RESUME");
+         }
+
+         document.getElementById('button-projects').onclick = () => {
+             updateText("PROJECTS");
+         }
+
+         function sleep(ms) {
+             return new Promise(resolve => setTimeout(resolve, ms));
+         }
+
+         function applyText() {
+             text_el.innerHTML = marked(text_str);
+             let last = text_el.lastElementChild;
+             if (!last) {
+                 last = document.createElement("p");
+             }
+             while (["UL", "OL"].includes(last.nodeName)) {
+                 last = last.lastElementChild;
+             }
+             last.innerHTML += "<span id='cursor'>|</span>";
+         }
+
+         function removeChar() {
+             text_str = text_str.substr(0, text_str.length-1);
+             applyText();
+         }
+
+         function writeChar(char) {
+             text_str += char;
+             applyText();
+         }
+
+         async function removeText() {
+             while (text_str) {
+                 removeChar();
+                 await sleep(1);
+             }
+         }
+
+         async function writeText(text) {
+             for (char of text) {
+                 writeChar(char);
+                 await sleep(10);
+             }
+         }
+
+         async function updateText(key) {
+             new_text = TEXT[key];
+             await removeText();
+             await writeText(new_text);
+         }
+        </script>
+    </body>
+</html>
