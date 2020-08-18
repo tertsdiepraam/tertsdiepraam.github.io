@@ -11,7 +11,7 @@
         <!-- Place favicon.ico in the root directory -->
 
         <link rel="stylesheet" type="text/css" href="styles.css">
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -25,12 +25,18 @@
         <div id="content">
             <div id="header">
                 <img id="banner-image" src="logo.svg"></img>
-                <h1 id="banner-text">Terts Diepraam</h1>
+                <h1 id="banner-text">TERTS DIEPRAAM</h1>
             </div>
             <div id="buttons">
                 <button id="button-home">HOME</button>
                 <button id="button-resume">RESUME</button>
                 <button id="button-projects">PROJECTS</button>
+                <a href="mailto:terts.diepraam@gmail.com">
+                    <button id="button-email"><span class="fa fa-envelope"></span></button>
+                </a>
+                <a href="https://gitlab.com/TertsDiepraam">
+                    <button id="button-gitlab"><span class="fa fa-gitlab"></span></button>
+                </a>
             </div>
             <hr>
             <div id="text">
@@ -40,11 +46,38 @@
         <script>
          const TEXT = {
              "HOME":
-`# Home
-Hi! On this website, you'll find
+`# Hi!
+I'm Terts Diepraam and I am a
 
-- my resume
-- my projects
+- software engineer,
+- open source lover,
+- film enthusiast,
+- bad typist (although I'm trying to improve).
+
+Want to get in contact? [Send me an email!](mailto:terts.diepraam@gmail.com)
+
+My personal projects mostly live on GitLab. [Check it out!](https://gitlab.com/tertsdiepraam)
+
+A few projects are still on GitHub. [Check that out too!](https://github.com/tertsdiepraam)
+
+## More about me
+Non-exhaustive list of programming-related technologies I love:
+- Rust
+- Python
+- Godot
+- Emacs
+- LaTeX
+- ...
+
+I have worked with
+- Linux
+- Git
+- Python (including NumPy, Pandas & SciPy)
+- Rust
+- LaTeX
+- PHP
+- HTML + CSS + JavaScript
+- and more...
 `,
              "RESUME":
 `# Resume
@@ -57,7 +90,29 @@ Hi! On this website, you'll find
  - Bit
  - Bit Academy
 `,
-             "PROJECTS": "These are projects.",
+             "PROJECTS":
+`# Projects
+This page contains a (non-exhaustive) list of personal projects.
+## Sorters
+A sorting algorithm visualizer for the browser written mostly in Rust with
+WebAssembly. To my knowledge, this is one of the most feature-packed sorting
+algorithm visualizers available in the browser. It supports a variety of sorting
+algorithms, visualizations, colorschemes and more.
+
+[Live demo](https://tertsdiepraam.gitlab.io/Sorters/) | [GitLab repository](https://www.gitlab.com/TertsDiepraam/Sorters)
+
+## Removing Confusion from Petri Nets (Bachelor's Thesis)
+Accompanying my bachelor's thesis, I wrote a Python implementation of the
+algorithm described in the thesis. More information can be found on the Gitlab
+repository and the thesis.
+
+[GitLab repository](https://gitlab.com/tertsdiepraam/petrinet) | [Thesis](Terts_Diepraam_Thesis.pdf)
+
+## Conway's Game of Life
+Back in 2017, I implemented John Conway's Game of Life in JavaScript.
+
+[Live demo](https://tertsdiepraam.github.io/Conways-Game-of-Life/) | [GitHub repository](https://www.github.com/TertsDiepraam/Conways-Game-of-Life/)
+`,
          };
 
          let text_str = "";
@@ -114,13 +169,14 @@ Hi! On this website, you'll find
                      break;
                  case 'DELETE':
                      if (current_idx <= 0) {
+                         current_idx = 0;
                          STATE = 'WRITE';
-                         correct_text_key = next_text_key;
-                         correct_text = TEXT[correct_text_key];
+                         current_text_key = next_text_key;
+                         correct_text = TEXT[current_text_key];
                          mistakes_text = makeMistakes(correct_text);
                      } else {
                          showUntil(current_idx);
-                         current_idx--;
+                         current_idx -= 5;
                      }
                      break;
                  case 'CORRECT':
@@ -159,7 +215,7 @@ Hi! On this website, you'll find
          function makeMistakes(txt) {
              // Force a copy of the text
              let text = txt.split('');
-             let num_mistakes = text.length / 20 + getRandomInt(-5,5);
+             let num_mistakes = text.length / 40 + getRandomInt(-5,5);
              for (var i=0; i<num_mistakes; i++) {
                  if (getRandomInt(0,2)) {
                      // Swap two characters
@@ -191,7 +247,6 @@ Hi! On this website, you'll find
              } else {
                  next_text_key = key;
                  STATE = 'DELETE';
-                 delete_to = 0;
                  last_mistake_idx = null;
              }
          }
