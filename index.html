@@ -41,7 +41,7 @@
          const TEXT = {
              "HOME":
 `# Home
-Hi! On this website, you'll find:
+Hi! On this website, you'll find
 - my resume
 - my projects
 `,
@@ -75,12 +75,40 @@ Hi! On this website, you'll find:
              updateText("PROJECTS");
          }
 
-         function sleep(ms) {
-             return new Promise(resolve => setTimeout(resolve, ms));
+         var STATE = 'WRITING' // or 'DELETING' or 'DONE'
+         var current_char = 0;
+         var current_text_key = 'HOME';
+         var next_text_key = null;
+
+         function update() {
+             switch (STATE) {
+                 case 'WRITING':
+                     if (current_char == TEXT[current_text_key].length) {
+                         STATE = 'DONE';
+                     } else {
+                         showUntil(current_char);
+                         current_char++;
+                     }
+                     break;
+                 case 'DELETING':
+                     if (current_char <= 0) {
+                         STATE = 'WRITING';
+                         current_text_key = next_text_key;
+                         current_char = 0;
+                     } else {
+                         showUntil(current_char);
+                         current_char--;
+                     }
+                     break;
+                 case 'DONE':
+                     break;
+             }
          }
 
-         function applyText() {
-             text_el.innerHTML = marked(text_str);
+         setInterval(update, 10);
+
+         function showUntil(idx) {
+             text_el.innerHTML = marked(TEXT[current_text_key].substr(0,idx));
              let last = text_el.lastElementChild;
              if (!last) {
                  last = document.createElement("p");
@@ -91,34 +119,13 @@ Hi! On this website, you'll find:
              last.innerHTML += "<span id='cursor'>|</span>";
          }
 
-         function removeChar() {
-             text_str = text_str.substr(0, text_str.length-1);
-             applyText();
-         }
-
-         function writeChar(char) {
-             text_str += char;
-             applyText();
-         }
-
-         async function removeText() {
-             while (text_str) {
-                 removeChar();
-                 await sleep(1);
-             }
-         }
-
-         async function writeText(text) {
-             for (char of text) {
-                 writeChar(char);
-                 await sleep(10);
-             }
-         }
-
          async function updateText(key) {
-             new_text = TEXT[key];
-             await removeText();
-             await writeText(new_text);
+             if (current_text_key == key) {
+                 STATE = 'WRITING';
+             } else {
+                 next_text_key = key;
+                 STATE = 'DELETING';
+             }
          }
         </script>
     </body>
