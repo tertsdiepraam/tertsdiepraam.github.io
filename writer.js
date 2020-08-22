@@ -86,16 +86,16 @@ document.getElementById('button-projects').onclick = () => {
 
 // These serve as reference for the depth-first traversal of the DOM tree.
 function next_element(el) {
-    if (el.firstchild !== null) {
-        return el.firstchild;
+    if (el.firstChild !== null) {
+        return el.firstChild;
     }
-    while (el.nextsibling === null) {
-        el = el.parentnode;
+    while (el.nextSibling === null) {
+        el = el.parentNode;
         if (el === null) {
             return null;
         }
     }
-    return el.nextsibling;
+    return el.nextSibling;
 }
 
 function previous_element(el) {
@@ -116,34 +116,35 @@ let DONE = 3;
 
 class Writer {
     constructor() {
-        this.mistakes_html = text_el;
+        this.html = text_el;
         this.init('HOME');
+        this.steps_past_mistake = null;
     }
 
     init(key) {
         this.STATE = WRITE;
-        this.current_key = key;
-        this.correct_html = document.createElement('div');
-        this.correct_html.innerHTML = marked(TEXT[key])
-        this.correct_element = this.correct_html;
-        this.mistakes_html.innerHTML = "";
-        this.mistakes_element = this.mistakes_html;
+        this.key = key;
         this.next_key = null;
+        this.reference_html = document.createElement('div');
+        this.reference_html.innerHTML = marked(TEXT[key])
+        this.reference_element = this.reference_html;
+        this.html.innerHTML = "";
+        this.element = this.html;
+
+        makeMistakes(this.reference_element);
     }
 
     update() {
+        console.log(this.element);
         switch (this.STATE) {
         case WRITE:
-            if (!this.add()) {
-                this.STATE = DONE;
-            };
+            this.write();
             break;
         case DELETE:
-            if (!this.remove_element()) {
-                this.init(this.next_key)
-            }
+            this.erase();
             break;
         case CORRECT:
+            this.correct();
             break;
         case DONE:
             break;
@@ -152,71 +153,121 @@ class Writer {
 
     setText(key) {
         this.next_key = key;
-        this.STATE = DELETE;
-    }
-
-    add() {
-        if (this.correct_element.nodeName === "#text"
-            && this.correct_element.data.length > this.mistakes_element.data.length) {
-            return this.add_character();
+        if (key === this.key) {
+            this.STATE = WRITE;
         } else {
-            return this.add_element();
+            this.STATE = DELETE;
         }
     }
 
-    add_character() {
-        this.mistakes_element.data += this.correct_element.data[this.mistakes_element.data.length];
+    write() {
+        if (this.steps_past_mistake !== null) {
+            if (Math.random() < (this.steps_past_mistake / 40)) {
+                this.STATE = CORRECT;
+                return;
+            }
+            this.steps_past_mistake++;
+        }
+        if (this.reference_element.nodeName === "#text"
+            && this.reference_element.data.length > this.element.data.length) {
+            this.addCharacter();
+        } else {
+            if (!this.addElement()) {
+                this.STATE = DONE;
+            }
+        }
+    }
+
+    correct() {
+        if (!this.remove() || this.steps_past_mistake === 0){
+            const idx = this.element.data.length+2;
+            this.reference_element.wrong_text =
+                this.reference_element.data.substr(0,idx)
+                + this.reference_element.wrong_text.substr(idx);
+            this.steps_past_mistake = null;
+            this.STATE = WRITE;
+        }
+    }
+
+    erase() {
+        this.steps_past_mistake = null;
+        if (!this.removeElement()) {
+            this.init(this.next_key);
+        }
+    }
+
+    remove() {
+        this.steps_past_mistake--;
+        if (this.reference_element.nodeName === "#text"
+            && this.element.data.length > 0) {
+            return this.removeCharacter();
+        } else {
+            return this.removeElement();
+        }
+    }
+
+    addCharacter() {
+        let idx = this.element.data.length;
+        this.element.data += this.reference_element.wrong_text[idx];
+        if (this.steps_past_mistake === null
+            && this.reference_element.wrong_text[idx] != this.reference_element.data[idx])
+            this.steps_past_mistake = 1;
         return true;
     }
 
-    add_element() {
-        if (this.correct_element.firstChild !== null) {
-            this.correct_element = this.correct_element.firstChild;
-            this.mistakes_element.appendChild(this.correct_element.cloneNode(false));
-            this.mistakes_element = this.mistakes_element.firstChild;
-            if (this.mistakes_element.nodeName === "#text") {
-                this.mistakes_element.data = '';
+    addElement() {
+        if (this.reference_element.firstChild !== null) {
+            this.reference_element = this.reference_element.firstChild;
+            this.element.appendChild(this.reference_element.cloneNode(false));
+            this.element = this.element.firstChild;
+            if (this.element.nodeName === "#text") {
+                this.element.data = '';
             }
             return true;
         }
 
-        let tmp_correct = this.correct_element;
-        let tmp_mistakes = this.mistakes_element;
-        while (tmp_correct.nextSibling === null) {
-            if (tmp_correct.parentNode === null) {
+        let tmp_reference = this.reference_element;
+        let tmp_mistakes = this.element;
+        while (tmp_reference.nextSibling === null) {
+            if (tmp_reference.parentNode === null) {
                 return false;
             }
-            tmp_correct = tmp_correct.parentNode;
+            tmp_reference = tmp_reference.parentNode;
             tmp_mistakes = tmp_mistakes.parentNode;
         }
-        this.correct_element = tmp_correct;
-        this.mistakes_element = tmp_mistakes;
+        this.reference_element = tmp_reference;
+        this.element = tmp_mistakes;
 
-        let new_element = this.correct_element.nextSibling.cloneNode(false);
+        let new_element = this.reference_element.nextSibling.cloneNode(false);
         if (new_element.nodeName === "#text") {
                 new_element.data = "";
-            }
-        this.mistakes_element.parentNode.appendChild(new_element);
-        this.mistakes_element = this.mistakes_element.nextSibling;
-        this.correct_element = this.correct_element.nextSibling;
+        }
+        this.element.parentNode.appendChild(new_element);
+        this.element = this.element.nextSibling;
+        this.reference_element = this.reference_element.nextSibling;
         return true;
     }
 
-    remove_element() {
-        if (this.correct_element.previousSibling !== null) {
-            this.correct_element = this.correct_element.previousSibling;
-            let previous = this.mistakes_element;
-            this.mistakes_element = this.mistakes_element.previousSibling;
+    removeCharacter() {
+        this.element.data = this.element.data.substr(0, this.element.data.length-1);
+        return true;
+    }
+
+    removeElement() {
+        if (this.reference_element.previousSibling !== null) {
+            this.reference_element = this.reference_element.previousSibling;
+            let previous = this.element;
+            this.element = this.element.previousSibling;
             previous.remove();
-            while (this.correct_element.lastChild !== null) {
-                this.correct_element = this.correct_element.lastChild;
-                this.mistakes_element = this.mistakes_element.lastChild;
+            while (this.reference_element.lastChild !== null) {
+                this.reference_element = this.reference_element.lastChild;
+                this.element = this.element.lastChild;
             }
             return true;
-        } else if (this.correct_element.parentNode !== null) {
-            this.correct_element = this.correct_element.parentNode;
-            let previous = this.mistakes_element;
-            this.mistakes_element = this.mistakes_element.parentNode;
+        } else if (this.reference_element.parentNode !== null) {
+            this.reference_element = this.reference_element.parentNode;
+            let previous = this.element;
+            this.element = this.element.parentNode;
             previous.remove();
             return true;
         } else {
@@ -241,19 +292,23 @@ function swap(array, idx) {
     array[idx+1] = tmp;
 }
 
-function makeMistakes(txt) {
-    // Force a copy of the text
-    let text = txt.split('');
-    let num_mistakes = text.length / 40 + getRandomInt(-5,5);
-    for (var i=0; i<num_mistakes; i++) {
-        if (getRandomInt(0,2)) {
-            // Swap two characters
-            let idx = getRandomInt(0, text.length-1);
-            swap(text, idx);
-        } else {
-            // Type neighbouring character
-            // TODO
+function makeMistakes(el) {
+    while (el !== null) {
+        if (el.nodeName === "#text") {
+            let num_mistakes = Math.max(getRandomInt(-5,5), 0);
+            let text = el.data.split('');
+            for (var i=0; i<num_mistakes; i++) {
+                if (getRandomInt(0,2)) {
+                    // Swap two characters
+                    let idx = getRandomInt(0, text.length-1);
+                    swap(text, idx);
+                } else {
+                    // Type neighbouring character
+                    // TODO
+                }
+            }
+            el.wrong_text = text.join('');
         }
+        el = next_element(el);
     }
-    return text.join('');
 }
