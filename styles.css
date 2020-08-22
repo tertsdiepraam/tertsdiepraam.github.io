@@ -1,11 +1,11 @@
 #text {
     display: inline;
     font-family: "Times New Roman", Times, serif;
-    font-size: 1.5em;
+    font-size: 1.5rem;
 }
 
 #cursor {
-    font-size: 1em;
+    font-size: 1rem;
     animation: blink-animation 1.7s steps(2, start) infinite;
 }
 
@@ -32,11 +32,11 @@ hr {
 }
 
 #banner-image {
-    height: 4em;
+    height: 4rem;
 }
 
 #banner-text {
-    font-size: 2.3em;
+    font-size: 2.3rem;
     font-family: sans-serif;
 }
 
@@ -46,7 +46,7 @@ hr {
 }
 
 [id*='button-'] {
-    font-size: 1em;
+    font-size: 1rem;
     margin: 5px;
     padding: 5px 10px;
     border: 2px solid #777;
