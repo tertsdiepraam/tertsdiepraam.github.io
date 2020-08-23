@@ -1,6 +1,6 @@
-const TEXT = {
+var TEXT = {
     "HOME":
-`# Hi!
+    marked(`# Hi!
 I'm Terts Diepraam and I am a
 
 - software engineer,
@@ -13,39 +13,9 @@ Want to get in contact? [Send me an email!](mailto:terts.diepraam@gmail.com)
 My personal projects mostly live on GitLab. [Check it out!](https://gitlab.com/tertsdiepraam)
 
 A few projects are still on GitHub. [Check that out too!](https://github.com/tertsdiepraam)
-
-## More about me
-Non-exhaustive list of programming-related technologies I love:
-- Rust
-- Python
-- Godot
-- Emacs
-- LaTeX
-- ...
-
-I have worked with
-- Linux
-- Git
-- Python (including NumPy, Pandas & SciPy)
-- Rust
-- LaTeX
-- PHP
-- HTML + CSS + JavaScript
-- and more...
-`,
-             "RESUME":
-`# Resume
-## Education
- - Het 4e Gymnasium
- - Amsterdam University College
-
-## Experience
- - Machine Learning Programs
- - Bit
- - Bit Academy
-`,
-             "PROJECTS":
-`# Projects
+`),
+    "PROJECTS":
+    marked(`# Projects
 This page contains a (non-exhaustive) list of personal projects.
 ## Sorters
 A sorting algorithm visualizer for the browser written mostly in Rust with
@@ -53,20 +23,20 @@ WebAssembly. To my knowledge, this is one of the most feature-packed sorting
 algorithm visualizers available in the browser. It supports a variety of sorting
 algorithms, visualizations, colorschemes and more.
 
-[Live demo](https://tertsdiepraam.gitlab.io/Sorters/) | [GitLab repository](https://www.gitlab.com/TertsDiepraam/Sorters)
+[Live Demo](https://tertsdiepraam.gitlab.io/Sorters/) | [GitLab Repository](https://www.gitlab.com/TertsDiepraam/Sorters)
 
 ## Removing Confusion from Petri Nets (Bachelor's Thesis)
 Accompanying my bachelor's thesis, I wrote a Python implementation of the
 algorithm described in the thesis. More information can be found on the Gitlab
 repository and the thesis.
 
-[GitLab repository](https://gitlab.com/tertsdiepraam/petrinet) | [Thesis](Terts_Diepraam_Thesis.pdf)
+[GitLab Repository](https://gitlab.com/tertsdiepraam/petrinet) | [Thesis](Terts_Diepraam_Thesis.pdf)
 
 ## Conway's Game of Life
 Back in 2017, I implemented John Conway's Game of Life in JavaScript.
 
-[Live demo](https://tertsdiepraam.github.io/Conways-Game-of-Life/) | [GitHub repository](https://www.github.com/TertsDiepraam/Conways-Game-of-Life/)
-`,
+[Live Demo](https://tertsdiepraam.github.io/Conways-Game-of-Life/) | [GitHub Repository](https://www.github.com/TertsDiepraam/Conways-Game-of-Life/)
+`),
 };
 
 let text_str = "";
@@ -126,7 +96,7 @@ class Writer {
         this.key = key;
         this.next_key = null;
         this.reference_html = document.createElement('div');
-        this.reference_html.innerHTML = marked(TEXT[key])
+        this.reference_html.innerHTML = TEXT[key];
         this.reference_element = this.reference_html;
         this.html.innerHTML = "";
         this.element = this.html;
