@@ -1,7 +1,7 @@
 #text {
     display: inline;
     font-family: "Times New Roman", Times, serif;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
 }
 
 #cursor {
@@ -38,6 +38,10 @@ hr {
 #banner-image {
     height: 4rem;
     margin-right: 1em;
+}
+
+#phonetic, button {
+    cursor: pointer;
 }
 
 #banner-text {

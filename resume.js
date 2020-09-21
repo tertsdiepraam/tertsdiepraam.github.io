@@ -10,7 +10,7 @@ function gen_basics(resume) {
     let basics = resume['basics'];
     return `
 <p>
-  <strong>Email</strong>: <a href="${basics.email}">${basics.email}</a>
+  <strong>Email</strong>: <a href="mailto:${basics.email}">${basics.email}</a>
   <br>
   <strong>Phone</strong>: <a href="tel:${basics.phone}">${basics.phone}</a>
   <br>
