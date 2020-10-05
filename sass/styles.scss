@@ -2,6 +2,7 @@
 $background-color: #fdfdfd;
 $background-dark: #bbb5a9;
 $dark-accent: #ac311f;
+$darker-accent: #58190f;
 $light-accent:  #e5452c;
 
 /* BASIC TYPOGRAPHY                       */
@@ -44,7 +45,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
     color: #2a2a2a;
     line-height: 1.1;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Lato, Verdana, Geneva, sans-serif;
     font-weight: 700;
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -106,11 +107,11 @@ hr {
 }
 
 header {
-    padding-top: 1em;
+    font-family: 'Raleway', sans-serif;
 }
 
 footer {
-    padding-bottom: 1em;
+    margin: 0;
 }
 
 nav > a {
@@ -143,8 +144,8 @@ header > nav {
 footer > nav {
     grid-template-columns: 1fr repeat(2, auto) 1fr;
     align-items: start;
-    padding-top: 0;
-    margin-top: 0;
+    padding: 0;
+    margin: 0;
 }
 
 header, footer {
@@ -153,7 +154,8 @@ header, footer {
 
 nav {
     display: grid;
-    margin-top: 0.5em;
+    align-items: stretch;
+    margin-top: 0em;
     grid-gap: 10px;
     color: #090818;
 }
@@ -164,25 +166,67 @@ nav {
 
 header > nav > a {
     border-bottom: $rule;
+    display: inline-block;
+    height: 100%;
+}
+
+header > nav > a > div {
+    height: 100%;
+    display: flex;
+    align-items: end;
+}
+
+header > nav > a:before {
+    content: "";
+    position: absolute;
+    z-index:-1;
+    top: 0;  left: 0;  right: 0;  bottom: 0;
+    background: $dark-accent;
+    transform: scaleY(0);
+    transform-origin: 50% 100%;
+    transition: transform .2s ease-out;
+  }
+
+header > nav > a:hover:before {
+    transform: scaleY(1);
 }
 
 footer > nav > a {
     border-top: $rule;
     font-size: 1.5em;
+    padding-bottom: 1em;
+    margin-bottom: 0;
+}
+
+footer > nav > a:before {
+    content: "";
+    position: absolute;
+    z-index:-1;
+    top: 0;  left: 0;  right: 0;  bottom: 0;
+    background: $dark-accent;
+    transform: scaleY(0);
+    transform-origin: 50% 0;
+    transition: transform .2s ease-out;
+    
+}
+
+footer > nav > a:hover:before {
+    transform: scaleY(1);
 }
 
 nav > a {
     font-size: 0.9rem;
     padding: 5px 10px;
     border: none;
-    // color: #777;
+    color: #777;
     text-transform: uppercase;
     text-decoration: none;
     color: inherit;
+    position: relative;
 }
 
 nav > a:hover {
-    color: $dark-accent;
+    color: $background-color;
 }
 
 #home-button {
@@ -190,10 +234,7 @@ nav > a:hover {
     font-size: 1.5em;
     line-height: 1.2em;
     max-width: 28vw;
-}
-
-#home-button:hover {
-    color: $dark-accent;
+    padding-top: 1em;
 }
 
 main {
@@ -211,17 +252,17 @@ main > p > a > button {
 .post {
     text-decoration: none;
     color: inherit;
-    border: 2px solid #777;
+    border: 2px solid #090818;
     display: block;
     padding: 1em;
     margin-top: 1em;
 }
 
 .post:hover {
-    border-color: black;
+    border-color: $dark-accent;
     background-color: white;
     color: black;
-    box-shadow: #3a3a3a 2px 2px;
+    box-shadow: $dark-accent 2px 2px;
 }
 
 .post > h1 {

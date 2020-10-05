@@ -1,10 +1,10 @@
 {% macro large() %}
     <nav id="large-nav">
         <div></div>
-        <a href="{{ get_url(path='#/_index.md') }}" id="home-button">Terts Diepraam</a>
-        <a href="{{ get_url(path='@/blog/_index.md') }}">BLOG</a>
-        <a href="{{ get_url(path='@/resume.md') }}">RESUME</a>
-        <a href="{{ get_url(path='@/projects.md') }}">PROJECTS</a>
+        <a class="sweep-up" href="{{ get_url(path='#/_index.md') }}" id="home-button"><div>Terts Diepraam</div></a>
+        <a class="sweep-up" href="{{ get_url(path='@/blog/_index.md') }}"><div>BLOG</div></a>
+        <a class="sweep-up" href="{{ get_url(path='@/resume.md') }}"><div>RESUME</div></a>
+        <a class="sweep-up" href="{{ get_url(path='@/projects.md') }}"><div>PROJECTS</div></a>
         <div></div>
     </nav>
 {% endmacro %}
