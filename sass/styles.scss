@@ -4,6 +4,7 @@ $background-dark: #bbb5a9;
 $dark-accent: #ac311f;
 $darker-accent: #58190f;
 $light-accent:  #e5452c;
+$rule: 4px solid $dark-accent;
 
 /* BASIC TYPOGRAPHY                       */
 /* from https://github.com/oxalorg/sakura */
@@ -106,6 +107,11 @@ hr {
     border-top: 2px solid $background-dark;
 }
 
+// Header & Footer
+header, footer {
+    width: calc(100% - 2em);
+}
+
 header {
     font-family: 'Raleway', sans-serif;
 }
@@ -114,26 +120,12 @@ footer {
     margin: 0;
 }
 
-nav > a {
-    display: inline-block;
-}
-
-$rule: 4px solid $dark-accent;
-
-header > nav > div {
-    border-bottom: $rule;
-}
-
-footer > nav > div {
-    border-top: $rule;
-}
-
-nav > div {
-    width: 100%;
-}
-
-#phonetic, button {
-    cursor: pointer;
+nav {
+    display: grid;
+    align-items: stretch;
+    margin-top: 0em;
+    grid-gap: 10px;
+    color: #090818;
 }
 
 header > nav {
@@ -148,20 +140,46 @@ footer > nav {
     margin: 0;
 }
 
-header, footer {
-    width: calc(100% - 2em);
+nav > a {
+    display: inline-block;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    border: none;
+    color: #777;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
 }
 
-nav {
-    display: grid;
-    align-items: stretch;
-    margin-top: 0em;
-    grid-gap: 10px;
-    color: #090818;
+nav > a:before {
+    content: "";
+    position: absolute;
+    z-index:-1;
+    top: 0;  left: 0;  right: 0;  bottom: 0;
+    background: $dark-accent;
+    transform: scaleY(0);
+    transition: transform .2s ease-out;
 }
 
-#large-nav {
-    justify-content: center;
+nav > a:hover:before {
+    transform: scaleY(1);
+}
+
+nav > a:hover {
+    color: $background-color;
+}
+
+nav > div {
+    width: 100%;
+}
+
+header > nav > div {
+    border-bottom: $rule;
+}
+
+footer > nav > div {
+    border-top: $rule;
 }
 
 header > nav > a {
@@ -177,18 +195,7 @@ header > nav > a > div {
 }
 
 header > nav > a:before {
-    content: "";
-    position: absolute;
-    z-index:-1;
-    top: 0;  left: 0;  right: 0;  bottom: 0;
-    background: $dark-accent;
-    transform: scaleY(0);
     transform-origin: 50% 100%;
-    transition: transform .2s ease-out;
-  }
-
-header > nav > a:hover:before {
-    transform: scaleY(1);
 }
 
 footer > nav > a {
@@ -199,34 +206,7 @@ footer > nav > a {
 }
 
 footer > nav > a:before {
-    content: "";
-    position: absolute;
-    z-index:-1;
-    top: 0;  left: 0;  right: 0;  bottom: 0;
-    background: $dark-accent;
-    transform: scaleY(0);
     transform-origin: 50% 0;
-    transition: transform .2s ease-out;
-    
-}
-
-footer > nav > a:hover:before {
-    transform: scaleY(1);
-}
-
-nav > a {
-    font-size: 0.9rem;
-    padding: 5px 10px;
-    border: none;
-    color: #777;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: inherit;
-    position: relative;
-}
-
-nav > a:hover {
-    color: $background-color;
 }
 
 #home-button {
@@ -237,6 +217,7 @@ nav > a:hover {
     padding-top: 1em;
 }
 
+// Main
 main {
     max-width: calc(100% - 2em);
     width: 60ch;
@@ -248,7 +229,7 @@ main > p > a > button {
 }
 
 
-/* Post list */
+// Post list
 .post {
     text-decoration: none;
     color: inherit;
@@ -274,6 +255,7 @@ main > p > a > button {
     margin: 0;
 }
 
+// Page
 #title-div {
     margin: 2em 0;
 }
