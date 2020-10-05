@@ -1,0 +1,23 @@
+{%- extends "base.html" -%}
+{% import "macros/header.html" as header -%}
+
+{%- block title -%}
+    <title>{{ page.title }} | {{ config.title }}</title>
+{%- endblock title -%}
+
+{%- block header -%}
+    {{ header::large() }}
+{%- endblock header -%}
+
+{%- block main -%}
+    <div id="title-div">
+        <h1 id="title">{{ page.title }}</h1>
+        {% if page.date %}
+            <p class="date">Posted on {{ page.date | date(format="%d %B %Y") }}</p>
+        {% endif %}
+        {% if page.updated %}
+            <p class="date">Updated on {{ page.updated | date(format="%d %B %Y") }}</p>
+        {% endif %}
+    </div>
+    {{ page.content | safe }}
+{%- endblock main -%}

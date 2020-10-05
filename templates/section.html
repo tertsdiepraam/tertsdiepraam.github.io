@@ -1,0 +1,19 @@
+{%- extends "base.html" -%}
+
+{%- block title -%}
+    <title>{{ section.title }} | {{ config.title }}</title>
+{%- endblock title -%}
+
+{%- block main -%}
+    {%- for page in paginator.pages -%}
+        <a href="{{ page.permalink }}" class="post">
+            <h1 class="post-title">
+                {{ page.title }}
+            </h1>
+            <p class="date">{{ page.date }}</p>
+            {%  if page.description -%}
+                <p class="description">{{ page.description }}</p>
+            {%  endif -%}
+        </a>
+    {%- endfor -%}
+{%- endblock main -%}

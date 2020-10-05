@@ -1,0 +1,252 @@
+// Colors
+$background-color: #fdfdfd;
+$background-dark: #bbb5a9;
+$dark-accent: #ac311f;
+$light-accent:  #e5452c;
+
+/* BASIC TYPOGRAPHY                       */
+/* from https://github.com/oxalorg/sakura */
+html {
+    font-size: 1.2rem;
+    line-height: 1.618;
+    font-family: serif;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    color: #4a4a4a;
+    background-color: $background-color;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
+
+@media (max-width: 684px) {
+    html {
+      font-size: 1rem;
+    }
+}
+
+@media (max-width: 382px) {
+    html {
+      font-size: 0.8rem;
+    }
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #2a2a2a;
+    line-height: 1.1;
+    font-family: Verdana, Geneva, sans-serif;
+    font-weight: 700;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    margin-bottom: 0rem;
+    margin-top: 3rem;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.8em;
+}
+
+h3 {
+    font-size: 1.6em;
+}
+
+h4 {
+    font-size: 1.4em;
+}
+
+h5 {
+    font-size: 1.2em;
+}
+
+h6 {
+    font-size: 1em;
+}
+
+main > p {
+    margin-top: 0.7em;
+    margin-bottom: 1em;
+}
+
+/* end typography */
+
+#cursor {
+    font-size: 1rem;
+    animation: blink-animation 1.7s steps(2, start) infinite;
+}
+
+@keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
+}
+
+hr {
+    border: 0;
+    border-top: 2px solid $background-dark;
+}
+
+header {
+    padding-top: 1em;
+}
+
+footer {
+    padding-bottom: 1em;
+}
+
+nav > a {
+    display: inline-block;
+}
+
+$rule: 4px solid $dark-accent;
+
+header > nav > div {
+    border-bottom: $rule;
+}
+
+footer > nav > div {
+    border-top: $rule;
+}
+
+nav > div {
+    width: 100%;
+}
+
+#phonetic, button {
+    cursor: pointer;
+}
+
+header > nav {
+    grid-template-columns: 1fr repeat(4, auto) 1fr;
+    align-items: end;
+}
+
+footer > nav {
+    grid-template-columns: 1fr repeat(2, auto) 1fr;
+    align-items: start;
+    padding-top: 0;
+    margin-top: 0;
+}
+
+header, footer {
+    width: calc(100% - 2em);
+}
+
+nav {
+    display: grid;
+    margin-top: 0.5em;
+    grid-gap: 10px;
+    color: #090818;
+}
+
+#large-nav {
+    justify-content: center;
+}
+
+header > nav > a {
+    border-bottom: $rule;
+}
+
+footer > nav > a {
+    border-top: $rule;
+    font-size: 1.5em;
+}
+
+nav > a {
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    border: none;
+    // color: #777;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: inherit;
+}
+
+nav > a:hover {
+    color: $dark-accent;
+}
+
+#home-button {
+    font-weight: 700;
+    font-size: 1.5em;
+    line-height: 1.2em;
+    max-width: 28vw;
+}
+
+#home-button:hover {
+    color: $dark-accent;
+}
+
+main {
+    max-width: calc(100% - 2em);
+    width: 60ch;
+    flex: 1;
+}
+
+main > p > a > button {
+    margin: 10px 7px 0 0;
+}
+
+
+/* Post list */
+.post {
+    text-decoration: none;
+    color: inherit;
+    border: 2px solid #777;
+    display: block;
+    padding: 1em;
+    margin-top: 1em;
+}
+
+.post:hover {
+    border-color: black;
+    background-color: white;
+    color: black;
+    box-shadow: #3a3a3a 2px 2px;
+}
+
+.post > h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+.post > p {
+    margin: 0;
+}
+
+#title-div {
+    margin: 2em 0;
+}
+
+#title {
+    font-size: 2.5em;
+    margin: 0;
+}
+
+.date {
+    margin: 0;
+    font-size: 0.8em;
+}
+
+.phonetic {
+    font-size: 0.8em;
+}

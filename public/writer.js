@@ -1,58 +1,5 @@
-var TEXT = {
-    "HOME":
-    marked(`# Hi!
-I'm Terts Diepraam and I am a
-
-- software engineer,
-- open source lover,
-- film enthusiast,
-- bad typist (although I'm trying to improve).
-
-Want to get in contact? [Send me an email!](mailto:terts.diepraam@gmail.com)
-
-My personal projects mostly live on GitLab. [Check it out!](https://gitlab.com/tertsdiepraam)
-
-A few projects are still on GitHub. [Check that out too!](https://github.com/tertsdiepraam)
-`),
-    "PROJECTS":
-    marked(`# Projects
-This page contains a (non-exhaustive) list of personal projects.
-## Sorters
-A sorting algorithm visualizer for the browser written mostly in Rust with
-WebAssembly. To my knowledge, this is one of the most feature-packed sorting
-algorithm visualizers available in the browser. It supports a variety of sorting
-algorithms, visualizations, colorschemes and more.
-
-[Live Demo](https://tertsdiepraam.gitlab.io/Sorters/) | [GitLab Repository](https://www.gitlab.com/TertsDiepraam/Sorters)
-
-## Removing Confusion from Petri Nets (Bachelor's Thesis)
-Accompanying my bachelor's thesis, I wrote a Python implementation of the
-algorithm described in the thesis. More information can be found on the Gitlab
-repository and the thesis.
-
-[GitLab Repository](https://gitlab.com/tertsdiepraam/petrinet) | [Thesis](Terts_Diepraam_Thesis.pdf)
-
-## Conway's Game of Life
-Back in 2017, I implemented John Conway's Game of Life in JavaScript.
-
-[Live Demo](https://tertsdiepraam.github.io/Conways-Game-of-Life/) | [GitHub Repository](https://www.github.com/TertsDiepraam/Conways-Game-of-Life/)
-`),
-};
-
 let text_str = "";
-let text_el = document.getElementById('text');
-
-document.getElementById('button-home').onclick = () => {
-    writer.setText("HOME");
-}
-
-document.getElementById('button-resume').onclick = () => {
-    writer.setText("RESUME");
-}
-
-document.getElementById('button-projects').onclick = () => {
-    writer.setText("PROJECTS");
-}
+let text_el = document.getElementsByTagName('main')[0];
 
 // These serve as reference for the depth-first traversal of the DOM tree.
 function next_element(el) {
@@ -79,6 +26,7 @@ function previous_element(el) {
     return el.parentNode;
 }
 
+// STATES
 let WRITE = 0;
 let DELETE = 1;
 let CORRECT = 2;
@@ -87,16 +35,9 @@ let DONE = 3;
 class Writer {
     constructor() {
         this.html = text_el;
-        this.init('HOME');
         this.steps_past_mistake = null;
-    }
-
-    init(key) {
         this.STATE = WRITE;
-        this.key = key;
-        this.next_key = null;
-        this.reference_html = document.createElement('div');
-        this.reference_html.innerHTML = TEXT[key];
+        this.reference_html = text_el.cloneNode(true);
         this.reference_element = this.reference_html;
         this.html.innerHTML = "";
         this.element = this.html;
@@ -105,7 +46,6 @@ class Writer {
     }
 
     update() {
-        console.log(this.element);
         switch (this.STATE) {
         case WRITE:
             this.write();
@@ -118,15 +58,6 @@ class Writer {
             break;
         case DONE:
             break;
-        }
-    }
-
-    setText(key) {
-        this.next_key = key;
-        if (key === this.key) {
-            this.STATE = WRITE;
-        } else {
-            this.STATE = DELETE;
         }
     }
 
@@ -246,9 +177,8 @@ class Writer {
     }
 }
 
-
-writer = new Writer();
-interval = setInterval(() => {writer.update()}, 20);
+let writer = new Writer();
+let interval = setInterval(() => {writer.update()}, 20);
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);

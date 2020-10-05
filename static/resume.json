@@ -1,0 +1,95 @@
+{
+    "basics": {
+        "name": "Terts Diepraam",
+        "label": "Programmer",
+        "picture": "",
+        "email": "terts.diepraam@gmail.com",
+        "phone": "+31 6 34 11 60 44",
+        "website": "https://tertsdiepraam.gitlab.io",
+        "summary": "",
+        "location": {
+            "address": "Kwekerijlaan 18",
+            "postalCode": "1036 KC",
+            "city": "Amsterdam",
+            "countryCode": "NL",
+            "region": "North-Holland"
+        },
+        "profiles": [{
+            "network": "GitLab",
+            "username": "tertsdiepraam",
+            "url": "http://gitlab.com/tertsdiepraam"
+        }]
+    },
+    "work": [{
+            "company": "Bit",
+            "position": "Developer",
+            "website": "https://wearebit.com",
+            "startDate": "2019-10-01",
+            "summary": "Bit develops innovative prototypes from the ground up using cutting-edge technologies."
+        },{
+            "company": "Machine Learning Programs",
+            "position": "Data Science Intern",
+            "website": "https://www.mlprograms.com",
+            "startDate": "2019-09-01",
+            "endDate": "2019-12-31",
+            "summary": "MLP applies machine learning in the insurance industry."
+        }
+    ],
+    "education": [{
+        "institution": "Amsterdam University College",
+        "area": "Liberal Arts and Sciences (Physics & Information)",
+        "studyType": "Bachelor",
+        "startDate": "2017-09-01",
+        "endDate": "2020-08-01",
+        "gpa": "3.9",
+        "courses": [
+            "Introduction to Physics",
+            "Calculus",
+            "Theme Course: Information, Communication & Cognition: Introduction",
+            "Academic Writing Skills",
+            "Spanish A1",
+            "Logic, Information Flow and Argumentation",
+            "Introduction to Chemistry",
+            "Linear Algebra",
+            "Electricity & Magnetism",
+            "Statistics for Sciences",
+            "Global Identity Experience",
+            "Thermodynamics",
+            "Data Structure & Algorithms",
+            "Vector Calculus",
+            "Quantum Physics",
+            "Big Questions in Future Society",
+            "Spanish A2",
+            "Advanced Research Writing",
+            "Mathematical Logic",
+            "Electrodynamics",
+            "Astroparticle Physics",
+            "Advanced Programming",
+            "Physics Lab",
+            "Machine Learning",
+            "Discrete Mathematics & Algebra",
+            "Mathematics of Physics",
+            "Statistical Mechanics",
+            "Theme Course: Quantum Information & Quantum Computing",
+            "Modelling Real World Problems"
+        ]
+    }],
+    "skills": [{
+        "name": "Web Development",
+        "level": "Master",
+        "keywords": [
+            "HTML",
+            "CSS",
+            "JavaScript"
+        ]
+    }],
+    "languages": [
+        {
+            "language": "English",
+            "fluency": "Fluent"
+        },
+        {
+            "language": "Dutch",
+            "fluency": "Native speaker"
+        }]
+}

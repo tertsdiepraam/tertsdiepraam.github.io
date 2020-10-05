@@ -1,0 +1,9 @@
+{%- extends "base.html" -%}
+
+{%- block main -%}
+    {{ section.content | safe }}
+{%- endblock main -%}
+
+{%- block end -%}
+    <script src="{{ get_url(path='writer.js') }}"></script>
+{%- endblock end -%}

@@ -1,13 +1,23 @@
-# This file is a template, and might need editing before it works on your project.
-# Full project: https://gitlab.com/pages/plain-html
+variables:
+  # This variable will ensure that the CI runner pulls in your theme from the submodule
+  GIT_SUBMODULE_STRATEGY: recursive  
+  # Specify the zola version you want to use here
+  ZOLA_VERSION: "v0.12.0"
+
 pages:
-  stage: deploy
   script:
-    - mkdir .public
-    - cp -r * .public
-    - mv .public public
+    # Download the zola executable and store it in zola.tar.gz
+    - curl -L https://github.com/getzola/zola/releases/download/$ZOLA_VERSION/zola-$ZOLA_VERSION-x86_64-unknown-linux-gnu.tar.gz > zola.tar.gz
+    # Unpack the zola executable
+    - tar -xzf zola.tar.gz
+    # Execute zola build
+    - ./zola build
+    
   artifacts:
     paths:
+      # Path of our artifacts
       - public
+      
+  # This config will only publish changes that are pushed on the master branch
   only:
-    - master
+  - master

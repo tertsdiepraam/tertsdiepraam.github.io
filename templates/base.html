@@ -1,0 +1,47 @@
+{% import "macros/header.html" as header -%}
+{% import "macros/footer.html" as footer -%}
+
+<!DOCTYPE html>
+<html lang="{{ config.default_language }}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="{{ get_url(path='apple-touch-icon.png') }}">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" type="text/css" href="{{ get_url(path='styles.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        {%- block title -%}
+            <title>{{ config.title }}</title>
+        {%- endblock title -%}
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">
+            You are using an <strong>outdated</strong> browser. Please
+            <a href="http://browsehappy.com/">upgrade your browser</a> to improve
+            your experience.
+            </p>
+        <![endif]-->
+        <header>
+            {%- block header -%}
+                {{ header::large() }}
+            {%- endblock header -%}
+        </header>
+        <main>
+            {%- block main -%}
+            {%- endblock main -%}
+        </main>
+        <footer>
+            {%- block footer -%}
+                {{ footer::footer() }}
+            {%- endblock footer -%}
+        </footer>
+        {%- block end -%}
+        {%- endblock end -%}
+    </body>
+</html>
