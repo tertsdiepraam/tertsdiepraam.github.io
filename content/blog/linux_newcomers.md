@@ -15,8 +15,11 @@ Connect your phone to your KDE or Gnome desktop. It can:
  - control slideshows
  - run custom commands
 
-[<button>KDE Connect</button>](https://kdeconnect.kde.org/)
-[<button>GS Connect</button>](https://extensions.gnome.org/extension/1319/gsconnect/)
+You need to install both the app and the desktop application to get it to work.
+<span class="button-row">
+  [KDE Connect](https://kdeconnect.kde.org/)
+  [GS Connect](https://extensions.gnome.org/extension/1319/gsconnect/)
+</span>
 
 # Flatpak
 Flatpak is the best and easiest way to install a lot of apps. I
@@ -25,9 +28,10 @@ Pop!_OS). A lot of commercial software, such as Spotify, is not
 available through <code>apt</code>, but is available through
 Flatpak. Install Flatseal to manage the permissions of Flatpak
 apps. Snap is very similar to Flatpak and is also pretty good.
-<br>
-[<button>Flatpak Guide</button>](https://itsfoss.com/flatpak-guide/)
-[<button>Flathub</button>](https://flathub.org/home)
+<span class="button-row">
+  [Flatpak Guide](https://itsfoss.com/flatpak-guide/)
+  [Flathub](https://flathub.org/home)
+</span>
 
 # Gaming
 You can install Steam on Linux too. Look up how to use Proton to
@@ -35,10 +39,11 @@ run a lot of games that don't support Linux natively. Want to know
 whether a game will work well via Proton? Look the game up on
 ProtonDB. Lutris is an application that let's you manage and 
 install games from multiple sources, such as Steam and GOG.
-<br>
-[<button>Proton Guide</button>](https://segmentnext.com/2018/12/06/steam-proton-guide/)
-[<button>ProtonDB</button>](https://www.protondb.com/)
-[<button>Lutris</button>](https://lutris.net/)
+<span class="button-row">
+  [Proton Guide](https://segmentnext.com/2018/12/06/steam-proton-guide/)
+  [ProtonDB](https://www.protondb.com/)
+  [Lutris](https://lutris.net/)
+</span>
 
 # Alternatives to Windows Software
 A lot of commercial software, such as Microsoft Office and Adobe
@@ -76,13 +81,16 @@ familiarize yourself with the most common commands:
  - <code>pwd</code>: show present working directory
  - <code>apt</code>: install, update and remove software (on Debian derivatives, such as Ubuntu)
 
-[<button>Bash Guide for Beginners</button>](https://towardsdatascience.com/basics-of-bash-for-beginners-92e53a4c117a)
+A more in-depth guide can be found at the link below.
+<span class="button-row">
+  [Bash Guide for Beginners](https://towardsdatascience.com/basics-of-bash-for-beginners-92e53a4c117a)
+</span>
 
 There are some optional programs which can be really helpful, or just fun:
- - <code>bat</code>: a better <code>cat</code>/<code>less</code>
+ - <code>bat</code>: better <code>cat</code>/<code>less</code>
  - <code>ripgrep</code>: search the content of many files really quickly
- - <code>exa</code>: a better <code>ls</code>
- - <code>nnn</code>: a super fast command line file manager
+ - <code>exa</code>: better <code>ls</code>
+ - <code>nnn</code>: command line file manager
 
 If you are fed up with Bash, try other shells! Here are a few examples:
  - Zsh: basically Bash with extra features
@@ -108,9 +116,10 @@ it has a free hosted plan too.
 
 KeePass is a good locally hosted option, especially with the 
 KeePassXC frontend.
-<br>
-[<button>Bitwarden</button>](https://bitwarden.com)
-[<button>KeePassXC</button>](https://keepassxc.org/)
+<span class="button-row">
+  [Bitwarden](https://bitwarden.com)
+  [KeePassXC](https://keepassxc.org/)
+</span>
 
 # More Awesome Linux Stuff
 There is a lot more to explore. A good place to start is the [Awesome Linux Software list](https://github.com/luong-komorebi/Awesome-Linux-Software).
