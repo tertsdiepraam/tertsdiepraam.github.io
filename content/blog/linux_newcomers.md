@@ -4,7 +4,7 @@ date = 2020-10-05
 updated = 2020-10-07
 description = "What to do and install after installing Linux"
 +++
-A list of useful and cool linux utilities and tricks (in no particular order).
+What to do and install after installing Linux
 
 # KDE Connect / GSConnect
 Connect your phone to your KDE or Gnome desktop. It can:
