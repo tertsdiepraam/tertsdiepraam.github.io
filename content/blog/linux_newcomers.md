@@ -1,6 +1,7 @@
 +++
 title = "Linux for Newcomers"
-date = 2019-10-05
+date = 2020-10-05
+updated = 2020-10-07
 description = "What to do and install after installing Linux"
 +++
 A list of useful and cool linux utilities and tricks (in no particular order).
