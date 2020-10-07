@@ -22,11 +22,10 @@ You need to install both the app and the desktop application to get it to work.
 </span>
 
 # Flatpak
-Flatpak is the best and easiest way to install a lot of apps. I
+Flatpak is the best and easiest way to install a lot of apps that 
+complements your distribution's standard package manager. I
 recommend distro's that support Flatpak out of the box (e.g.
-Pop!_OS). A lot of commercial software, such as Spotify, is not
-available through <code>apt</code>, but is available through
-Flatpak. Install Flatseal to manage the permissions of Flatpak
+Pop!_OS). Install Flatseal to manage the permissions of Flatpak
 apps. Snap is very similar to Flatpak and is also pretty good.
 <span class="button-row">
   [Flatpak Guide](https://itsfoss.com/flatpak-guide/)
@@ -37,7 +36,7 @@ apps. Snap is very similar to Flatpak and is also pretty good.
 You can install Steam on Linux too. Look up how to use Proton to
 run a lot of games that don't support Linux natively. Want to know
 whether a game will work well via Proton? Look the game up on
-ProtonDB. Lutris is an application that let's you manage and 
+ProtonDB. Lutris is an application that lets you manage and 
 install games from multiple sources, such as Steam and GOG.
 <span class="button-row">
   [Proton Guide](https://segmentnext.com/2018/12/06/steam-proton-guide/)
@@ -53,12 +52,12 @@ note is that these are not always drop-in replacements, many
 work slightly differently and take some getting used to.
 However, they don't lack much in functionality once yoiu get
 used to them.
- - Microsoft Word &rarr; LibreOffice Writer
- - Microsoft PowerPoint &rarr; LibreOffice Impress
- - Microsoft Excel &rarr; LibreOffice Calc
+ - Microsoft Word &rarr; LibreOffice Writer (or OnlyOffice)
+ - Microsoft PowerPoint &rarr; LibreOffice Impress (or OnlyOffice)
+ - Microsoft Excel &rarr; LibreOffice Calc (or OnlyOffice)
  - Abobe Illustrator &rarr; Inkscape
  - Abobe Premiere &rarr; DaVinci Resolve (not open source), KDEnlive (open source)
- - Adobe AfterEffects &rarr; DaVinci Resolve (fusion, not open source), Blender
+ - Adobe AfterEffects &rarr; DaVinci Resolve (not open source), Blender
  - Adobe Photoshop &rarr; GIMP (photo manipulation), Krita (drawing)
  - Adobe Reader &rarr; Okular or Evince
  - Autodesk Maya &rarr; Blender
@@ -106,13 +105,10 @@ on the following criteria:
  - must have clients on all major platforms (Linux, Windows, Mac
    OSX, Android, iOS, Firefox & Chrome)
 
-The first two criteria are for security reasons, I want to be able
-to check whether it is secure, or, if I don't check myself, I want
-other's to have check it's security. The last criterium is just
+The first two criteria are for security reasons, The last criterium is just
 convenience, as I want it to work on all platforms I use currently
-and I might use in the future. All this brought me to Bitwarden,
-essentially the best (open source) password manager around. And
-it has a free hosted plan too.
+and I might use in the future. I ended up using Bitwarden,
+essentially the best (open source) password manager around.
 
 KeePass is a good locally hosted option, especially with the 
 KeePassXC frontend.
@@ -122,4 +118,5 @@ KeePassXC frontend.
 </span>
 
 # More Awesome Linux Stuff
-There is a lot more to explore. A good place to start is the [Awesome Linux Software list](https://github.com/luong-komorebi/Awesome-Linux-Software).
+There is a lot more to explore. A good place to start is the
+[Awesome Linux Software list](https://github.com/luong-komorebi/Awesome-Linux-Software).

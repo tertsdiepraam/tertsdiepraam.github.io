@@ -118,6 +118,7 @@ header {
 
 footer {
     margin: 0;
+    margin-top: 1em;
 }
 
 nav {
@@ -233,7 +234,7 @@ main > p > a > button {
 .post {
     text-decoration: none;
     color: inherit;
-    border: 2px solid #090818;
+    border: 3px solid #090818;
     display: block;
     padding: 1em;
     margin-top: 1em;
@@ -243,16 +244,16 @@ main > p > a > button {
     border-color: $dark-accent;
     background-color: white;
     color: black;
-    box-shadow: $dark-accent 2px 2px;
 }
 
 .post > h1 {
     margin: 0;
-    font-size: 2em;
+    font-size: 1.8em;
 }
 
 .post > p {
     margin: 0;
+    font-size: 0.9em;
 }
 
 // Page
