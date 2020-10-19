@@ -1,12 +1,5 @@
 {% macro from(path) %}
     <style>
-        table {
-            margin-top: 1em;
-        }
-        th {
-            text-align: center;
-            padding-right: 1em;
-        }
         a {
             text-decoration: none;
             color: inherit;
@@ -18,7 +11,7 @@
             margin-top: 1em;
             font-size: 1.3em;
         }
-        .location {
+        .company {
             font-size: 1.2em;
             margin-top: 0;
             margin-bottom: 0;
@@ -27,46 +20,73 @@
             margin: 0;
             font-size: 0.9em;
             color: #666666;
+            align-self: end;
         }
         hr {
             margin-top: 0.2em;
             border-color: #ac311f;
         }
+        .job-header {
+            display: grid;
+            grid-template-columns: 1fr auto;
+        }
+        .summary {
+            margin-bottom: 1em;
+        }
+        .social {
+            display: grid;
+            grid-template-columns: auto 1fr auto 1fr;
+            align-items: center;
+        }
+        @media only screen and (max-width: 600px) {
+            .social {
+                grid-template-columns: max-content max-content;
+                justify-content: center;
+            }
+        }
+        .fa {
+            padding: 0.5em;
+            justify-self: center;
+        }
     </style>
     {%- set resume = load_data(path=path) -%}
     {%- set basics = resume["basics"] -%}
-    <table>
-    <tr><th><i class="fa fa-globe"></i></th><td><a href='{{ basics.website }}'>{{ basics.website }}</a></td></tr>
-    <tr><th><i class="fa fa-envelope"></i></th><td><a href='mailto:{{ basics.email }}'>{{ basics.email }}</a></td></tr>
-    <tr><th><i class="fa fa-phone"></i></th><td><a href='tel:{{ basics.phone }}'>{{ basics.phone }}</a></td></tr>
-    <tr><th><i class="fa fa-map-marker"></i></th><td>{{ basics.location.city }}, {{ basics.location.countryCode }}</td></tr>
-    {%- for profile in basics.profiles -%}
-        <tr><th><i class="fa fa-{{ profile.network | lower }}"></i></th><td><a href='{{ profile.url }}'>{{ profile.username }}</a></td>
-    {%- endfor -%}
-    </table>
+    <div class="social">
+        <i class="fa fa-globe"></i><a href='{{ basics.website }}'>{{ basics.website }}</a>
+        <i class="fa fa-envelope"></i><a href='mailto:{{ basics.email }}'>{{ basics.email }}</a>
+        <i class="fa fa-phone"></i><a href='tel:{{ basics.phone }}'>{{ basics.phone }}</a>
+        <i class="fa fa-map-marker"></i><span>{{ basics.location.city }}, {{ basics.location.countryCode }}</span>
+        {%- for profile in basics.profiles -%}
+            <i class="fa fa-{{ profile.network | lower }}"></i><a href='{{ profile.url }}'>{{ profile.username }}</a>
+        {%- endfor -%}
+    </div>
 
     <h1>Work Experience</h1>
     <hr>
     {%- for job in resume["work"] -%}
-        <h2>{{ job.position }}</h2>
-        <p class="location"><a href="{{ job.website }}">{{ job.company }}</a></p>
-        <p class="date">
-            {{ job.startDate | date(format="%d %B %Y") }}
-            &#8212;
-            {% if job.endDate %}{{ job.endDate | date(format="%d %B %Y") }}{%- else -%}Present{%- endif -%}
-        </p>
-        <p>{{ job.summary }}</p>
+        <div class="job-header">
+            <h2>{{ job.position }}</h2>
+            <p class="date">
+                {{ job.startDate | date(format="%b %Y") }}
+                &#8212;
+                {% if job.endDate %}{{ job.endDate | date(format="%b %Y") }}{%- else -%}Present{%- endif -%}
+            </p>
+            <p class="company"><a href="{{ job.website }}">{{ job.company }}</a></p>
+        </div>
+        <p class="summary">{{ job.summary }}</p>
     {%- endfor -%}
     <h1>Education</h1>
     <hr>
     {%- for edu in resume["education"] -%}
-        <h2>{{ edu.studyType }} in {{ edu.area }}</h2>
-        <p class="location"><a href="{{ edu.url }}">{{ edu.institution }}</a>
-        <p class="date">
-            {{ edu.startDate | date(format="%d %B %Y") }}
-            &#8212;
-            {% if edu.endDate %}{{ edu.endDate | date(format="%d %B %Y") }}{%- else -%}Present{%- endif -%}
-        </p>
+        <div class="job-header">
+            <h2>{{ edu.studyType }} in {{ edu.area }}</h2>
+            <p class="date">
+                {{ edu.startDate | date(format="%b %Y") }}
+                &#8212;
+                {% if edu.endDate %}{{ edu.endDate | date(format="%b %Y") }}{%- else -%}Present{%- endif -%}
+            </p>
+        <p class="company"><a href="{{ edu.url }}">{{ edu.institution }}</a>
+        </div>
     {%- endfor -%}
     <h1>Skills</h1>
     <hr>

@@ -109,7 +109,9 @@ hr {
 
 // Header & Footer
 header, footer {
-    width: calc(100% - 2em);
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 header {
@@ -123,14 +125,15 @@ footer {
 
 nav {
     display: grid;
-    align-items: stretch;
-    margin-top: 0em;
-    grid-gap: 10px;
+    align-items: center;
+    width: calc(100% - 2em);
+    grid-column-gap: 10px;
     color: #090818;
 }
 
 header > nav {
     grid-template-columns: 1fr repeat(4, auto) 1fr;
+    justify-items: stretch;
     align-items: end;
 }
 
@@ -144,7 +147,7 @@ footer > nav {
 nav > a {
     display: inline-block;
     font-size: 0.9rem;
-    padding: 5px 10px;
+    padding: 5px 6px;
     border: none;
     color: #777;
     text-transform: uppercase;
