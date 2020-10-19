@@ -2,9 +2,11 @@
 {%- import "macros/resume_macros.html" as resume -%}
 
 {%- block main -%}
-    <span class="button-row">
-        <a href='{{ get_url(path="resume.pdf") }}'>Download PDF</a>
-        <a href='{{ get_url(path="resume.json") }}'>Download JSON</a>
-    </span>
+    <div style="text-align: center; margin-top: 1em;">
+        <span class="button-row">
+            <a href='{{ get_url(path="resume.pdf") }}'>Download PDF</a>
+            <a href='{{ get_url(path="resume.json") }}'>Download JSON</a>
+        </span>
+    </div>
     {{ resume::from(path="static/resume.json") }}
 {%- endblock main -%}
