@@ -1,4 +1,3 @@
-FROM debian
+FROM alpine
 
-RUN apt-get update; \
-    apt-get install -y --no-install-recommends wkhtmltopdf
+RUN apk add --no-cache curl wkhtmltopdf;
