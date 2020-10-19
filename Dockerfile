@@ -1,3 +1,4 @@
-FROM alpine
+FROM debian:stable-slim
 
-RUN apk add --no-cache curl tar wkhtmltopdf bash openssl;
+RUN apt-get update; \
+    apt-get install -y wkhtmltopdf curl;
