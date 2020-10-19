@@ -1,4 +1,3 @@
-FROM debian:stable-slim
+FROM alpine
 
-RUN apt-get update; \
-    apt-get install -y wkhtmltopdf curl;
+RUN apk add curl wkhtmltopdf;
