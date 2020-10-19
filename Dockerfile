@@ -1,3 +1,3 @@
 FROM alpine
 
-RUN apk add --no-cache curl tar wkhtmltopdf bash;
+RUN apk add --no-cache curl tar wkhtmltopdf bash openssl;
