@@ -11,7 +11,7 @@ pages:
     - curl -L https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_amd64.deb > wkhtmltox.deb
     # Unpack the zola executable
     - tar -xzf zola.tar.gz
-    - apt install ./whtmltox.deb
+    - apt install ./wkhtmltox.deb
     # Execute zola build
     - ./zola build
     # Generate resume HTML
