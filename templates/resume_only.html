@@ -1,0 +1,24 @@
+{%- extends "base.html" -%}
+{%- import "macros/resume_macros.html" as resume -%}
+
+{%- block header -%}
+{%- endblock header -%}
+
+{%- block footer -%}
+{%- endblock footer -%}
+
+{%- block main -%}
+    <style>
+        main {
+            width: 70ch;
+            padding-top: 80px;
+            font-family: Lato;
+        }
+    </style>
+    {%- set resume = load_data(path="static/resume.json") -%}
+    <div style="text-align: center;">
+    <h1 style="font-size: 2.5em; font-family: Raleway, sans-serif; text-transform: uppercase;">{{ resume.basics.name }}</h1>
+    <p>{{ resume.basics.label }}</p> 
+    </div>
+    {{ resume::from(path="static/resume.json") }}
+{%- endblock main -%}

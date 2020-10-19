@@ -1,0 +1,89 @@
+{% macro from(path) %}
+    <style>
+        table {
+            margin-top: 1em;
+        }
+        th {
+            text-align: center;
+            padding-right: 1em;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        h2 {
+            margin-top: 1em;
+            font-size: 1.3em;
+        }
+        .location {
+            font-size: 1.2em;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        .date {
+            margin: 0;
+            font-size: 0.9em;
+            color: #666666;
+        }
+        hr {
+            margin-top: 0.2em;
+            border-color: #ac311f;
+        }
+    </style>
+    {%- set resume = load_data(path=path) -%}
+    {%- set basics = resume["basics"] -%}
+    <table>
+    <tr><th><i class="fa fa-globe"></i></th><td><a href='{{ basics.website }}'>{{ basics.website }}</a></td></tr>
+    <tr><th><i class="fa fa-envelope"></i></th><td><a href='mailto:{{ basics.email }}'>{{ basics.email }}</a></td></tr>
+    <tr><th><i class="fa fa-phone"></i></th><td><a href='tel:{{ basics.phone }}'>{{ basics.phone }}</a></td></tr>
+    <tr><th><i class="fa fa-map-marker"></i></th><td>{{ basics.location.city }}, {{ basics.location.countryCode }}</td></tr>
+    {%- for profile in basics.profiles -%}
+        <tr><th><i class="fa fa-{{ profile.network | lower }}"></i></th><td><a href='{{ profile.url }}'>{{ profile.username }}</a></td>
+    {%- endfor -%}
+    </table>
+
+    <h1>Work Experience</h1>
+    <hr>
+    {%- for job in resume["work"] -%}
+        <h2>{{ job.position }}</h2>
+        <p class="location"><a href="{{ job.website }}">{{ job.company }}</a></p>
+        <p class="date">
+            {{ job.startDate | date(format="%d %B %Y") }}
+            &#8212;
+            {% if job.endDate %}{{ job.endDate | date(format="%d %B %Y") }}{%- else -%}Present{%- endif -%}
+        </p>
+        <p>{{ job.summary }}</p>
+    {%- endfor -%}
+    <h1>Education</h1>
+    <hr>
+    {%- for edu in resume["education"] -%}
+        <h2>{{ edu.studyType }} in {{ edu.area }}</h2>
+        <p class="location"><a href="{{ edu.url }}">{{ edu.institution }}</a>
+        <p class="date">
+            {{ edu.startDate | date(format="%d %B %Y") }}
+            &#8212;
+            {% if edu.endDate %}{{ edu.endDate | date(format="%d %B %Y") }}{%- else -%}Present{%- endif -%}
+        </p>
+    {%- endfor -%}
+    <h1>Skills</h1>
+    <hr>
+    {%- for skill in resume["skills"] -%}
+        <ul>
+            <li><strong>{{ skill.name }}</strong>&nbsp;&#8212;&nbsp;
+                {%- for kw in skill.keywords -%}
+                {{ kw }}{%- if not loop.last -%},&nbsp;{%- endif -%}
+                {%- endfor -%}
+            </li>
+        </ul>
+    {%- endfor -%}
+    <h1>Languages</h1>
+    <hr>
+    <ul>
+        {%- for language in resume["languages"] -%}
+            <li><strong>{{ language.language }}</strong>&nbsp;&#8212;&nbsp;{{ language.fluency }}</li>    
+        {%- endfor -%}
+    </ul>
+{% endmacro %}

@@ -38,11 +38,11 @@
     "education": [{
         "institution": "Amsterdam University College",
         "area": "Liberal Arts and Sciences",
-        "studyType": "BSc",
+        "studyType": "Bachelor",
         "startDate": "2017-09-01",
         "endDate": "2020-08-01",
         "gpa": "3.9",
-        "website": "https://www.auc.nl/",
+        "url": "https://www.auc.nl/",
         "courses": [
             "Introduction to Physics",
             "Calculus",
