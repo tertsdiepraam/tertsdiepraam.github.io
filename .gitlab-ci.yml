@@ -9,9 +9,7 @@ variables:
 pages:
   script:
     # Download Zola and wkhtmlto
-    - curl -L https://github.com/getzola/zola/releases/download/$ZOLA_VERSION/zola-$ZOLA_VERSION-x86_64-unknown-linux-gnu.tar.gz > zola.tar.gz
-    # Unpack the zola executable
-    - tar -xzf zola.tar.gz
+    - curl -L https://github.com/getzola/zola/releases/download/$ZOLA_VERSION/zola-$ZOLA_VERSION-x86_64-unknown-linux-gnu.tar.gz | tar -xvzf
     # Execute zola build
     - ./zola build
     # Generate resume HTML
