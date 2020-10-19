@@ -7,7 +7,7 @@ variables:
 pages:
   script:
     - zola build
-    - wkhtmltopdf ./public/resume_only.html resume.pdf
+    - wkhtmltopdf ./public/resume-only.html resume.pdf
     - mv resume.pdf public/
     
   artifacts:
