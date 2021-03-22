@@ -19,7 +19,7 @@ algorithm described in the thesis. More information can be found on the Gitlab
 repository and the thesis.
 <span class="button-row">
     [GitLab Repository](https://gitlab.com/tertsdiepraam/petrinet)
-    [Thesis](Terts_Diepraam_Thesis.pdf)
+    [Thesis](/Terts_Diepraam_Thesis.pdf)
 </span>
 
 ## Conway's Game of Life
