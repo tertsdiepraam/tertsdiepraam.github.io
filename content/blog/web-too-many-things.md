@@ -2,6 +2,7 @@
 title = "Is The Web Too Many Things?"
 date = 2020-10-19
 description = "The web is held back by all the things we expect it to be. Or is it?"
+draft = true
 +++
 
 # Part 1: The Web is Awesome

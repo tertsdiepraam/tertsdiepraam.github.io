@@ -3,6 +3,7 @@ title = "Linux for Newcomers"
 date = 2020-10-05
 updated = 2020-10-07
 description = "What to do and install after installing Linux"
+draft = true
 +++
 What to do and install after installing Linux
 
