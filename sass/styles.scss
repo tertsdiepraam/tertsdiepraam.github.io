@@ -109,13 +109,16 @@ hr {
 
 // Header & Footer
 header, footer {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+    width: calc(100% - 2em);
+    margin: 0 2em;
 }
 
 header {
     font-family: 'Raleway', sans-serif;
+    display: grid;
+    grid-template-columns: 1fr 64ch 1fr;
+    justify-items: stretch;
+    column-gap: 10px;
 }
 
 footer {
@@ -126,15 +129,27 @@ footer {
 nav {
     display: grid;
     align-items: center;
-    width: calc(100% - 2em);
     grid-column-gap: 10px;
     color: #090818;
 }
 
 header > nav {
-    grid-template-columns: 1fr repeat(4, auto) 1fr;
+    grid-template-columns: 1fr repeat(3, auto);
     justify-items: stretch;
+    justify-content: stretch;
     align-items: end;
+    width: 100%;
+}
+
+@media only screen and (max-width: 60ch) {
+    header {
+        grid-template-columns: 0 1fr 0;
+        grid-column-gap: 0;
+    }
+
+    #home-button > div {
+        font-size: 1rem;
+    }
 }
 
 footer > nav {
@@ -175,11 +190,7 @@ nav > a:hover {
     text-decoration: none;
 }
 
-nav > div {
-    width: 100%;
-}
-
-header > nav > div {
+header > div {
     border-bottom: $rule;
 }
 
@@ -197,6 +208,7 @@ header > nav > a > div {
     height: 100%;
     display: flex;
     align-items: end;
+    justify-content: center;
 }
 
 header > nav > a:before {
@@ -218,7 +230,6 @@ footer > nav > a:before {
     font-weight: 700;
     font-size: 1.5em;
     line-height: 1.2em;
-    max-width: 28vw;
     padding-top: 1em;
 }
 
