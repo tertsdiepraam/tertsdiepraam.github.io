@@ -5,7 +5,7 @@
         color: inherit;
     }
 
-    a:hover {
+    .social a:hover {
         text-decoration: underline;
     }
 
@@ -20,15 +20,32 @@
 
     .company {
         font-size: 1.1em;
-        margin-top: 0;
+        margin-top: -1.5em;
         margin-bottom: 0;
     }
 
+    .job-header {
+        text-align: justify;
+        padding-bottom: 0;
+    }
+
+    .job-header:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+        font-size: 0pt;
+    }
+
+    .job-header>h2 {
+        display: inline-block;
+    }
+
     .date {
-        margin: 0;
+        display: inline-block;
         font-size: 0.9em;
         color: #666666;
-        align-self: end;
+        text-align: right;
+        margin-left: auto;
     }
 
     hr {
@@ -36,26 +53,20 @@
         border-color: #ac311f;
     }
 
-    .job-header {
-        display: grid;
-        grid-template-columns: 1fr auto;
-    }
-
     .summary {
         margin-bottom: 1em;
     }
 
-    .social {
-        display: grid;
-        grid-template-columns: auto 1fr auto 1fr;
-        align-items: center;
+    .social>div {
+        display: inline-block;
+        width: 48%;
+        min-width: 300px;
     }
 
-    @media only screen and (max-width: 600px) {
-        .social {
-            grid-template-columns: max-content max-content;
-            justify-content: center;
-        }
+    .social>div>i {
+        width: 20px;
+        padding: 0.3em;
+        text-align: center;
     }
 
     .fa {
@@ -63,63 +74,73 @@
         justify-self: center;
     }
 </style>
-{%- set resume = load_data(path=path) -%}
-{%- set basics = resume["basics"] -%}
+{%- set resume = load_data(path=path) -%} {%- set basics = resume["basics"] -%}
 <div class="social">
-    <i class="fa fa-globe"></i><a href='{{ basics.website }}'>{{ basics.website }}</a>
-    <i class="fa fa-envelope"></i><a href='mailto:{{ basics.email }}'>{{ basics.email }}</a>
-    <i class="fa fa-phone"></i><a href='tel:{{ basics.phone }}'>{{ basics.phone }}</a>
-    <i class="fa fa-map-marker"></i><span>{{ basics.location.city }}, {{ basics.location.countryCode }}</span>
-    {%- for profile in basics.profiles -%}
-    <i class="fa fa-{{ profile.network | lower }}"></i><a href='{{ profile.url }}'>{{ profile.username }}</a>
+    <div>
+        <i class="fa fa-globe"></i><a href="https://{{ basics.website }}">{{ basics.website }}</a>
+    </div>
+    <div>
+        <i class="fa fa-envelope"></i><a href="mailto:{{ basics.email }}">{{ basics.email }}</a>
+    </div>
+    <div>
+        <i class="fa fa-phone"></i><a href="tel:{{ basics.phone }}">{{ basics.phone }}</a>
+    </div>
+    <div>
+        <i class="fa fa-map-marker"></i><span>{{ basics.location.city }}, {{ basics.location.countryCode }}</span>
+    </div>
+    {% for profile in basics.profiles %}
+    <div>
+        <i class="fa fa-{{ profile.network | lower }}"></i><a href="{{ profile.url }}">{{ profile.username }}</a>
+    </div>
     {%- endfor -%}
 </div>
 
 <h1>Experience</h1>
-<hr>
+<hr />
 {%- for job in resume["work"] -%}
-    <div class="job-header">
-        <h2>{{ job.position }}</h2>
-        <p class="date">
-            {{ job.startDate | date(format="%b %Y") }}
-            &#8212;
-            {% if job.endDate %}{{ job.endDate | date(format="%b %Y") }}{%- else -%}Present{%- endif -%}
-        </p>
-        <p class="company"><a href="{{ job.website }}">{{ job.company }}</a></p>
-    </div>
-    <p class="summary">{{ job.summary }}</p>
+<div class="job-header">
+    <h2>{{ job.position }}</h2>
+    <p class="date">
+        {{ job.startDate | date(format="%b %Y") }} &#8212; {% if job.endDate %}{{
+        job.endDate | date(format="%b %Y") }}{%- else -%}Present{%- endif -%}
+    </p>
+</div>
+<p class="company"><a href="{{ job.website }}">{{ job.company }}</a></p>
+<p class="summary">{{ job.summary }}</p>
 {%- endfor -%}
 <h1>Education</h1>
-<hr>
+<hr />
 {%- for edu in resume["education"] -%}
-    <div class="job-header">
-        <h2>{{ edu.studyType }} in {{ edu.area }}</h2>
-        <p class="date">
-            {{ edu.startDate | date(format="%b %Y") }}
-            &#8212;
-            {% if edu.endDate %}{{ edu.endDate | date(format="%b %Y") }}{%- else -%}Present{%- endif -%}
-        </p>
-        <p class="company"><a href="{{ edu.url }}">{{ edu.institution }}</a></p>
-    </div>
-    {%- if edu.gpa -%}
-        <p class="summary">GPA: {{ edu.gpa }}{%- if edu.honors -%}, {{ edu.honors }}{%- endif -%}</p>
-    {%- endif -%}
-    {%- if details and edu.courses -%}
-        <details>
-            <summary>Courses</summary>
-            <ul>
-            {%- for course in edu.courses -%}
-                <li>{{ course }}</li>
-            {%- endfor -%}
-            </ul>
-        </details>
-    {%- endif -%}
-{%- endfor -%}
+<div class="job-header">
+    <h2>{{ edu.studyType }} in {{ edu.area }}</h2>
+    <p class="date">
+        {{ edu.startDate | date(format="%b %Y") }} &#8212; {% if edu.endDate %}{{
+        edu.endDate | date(format="%b %Y") }}{%- else -%}Present{%- endif -%}
+    </p>
+</div>
+<p class="company"><a href="{{ edu.url }}">{{ edu.institution }}</a></p>
+{%- if edu.gpa -%}
+<p class="summary">
+    GPA: {{ edu.gpa }}{%- if edu.honors -%}, {{ edu.honors }}{%- endif -%}
+</p>
+{%- endif -%} {%- if details and edu.courses -%}
+<details>
+    <summary>Courses</summary>
+    <ul>
+        {%- for course in edu.courses -%}
+        <li>{{ course }}</li>
+        {%- endfor -%}
+    </ul>
+</details>
+{%- endif -%} {%- endfor -%}
 <h1>Languages</h1>
-<hr>
+<hr />
 <ul>
     {%- for language in resume["languages"] -%}
-    <li><strong>{{ language.language }}</strong>&nbsp;&#8212;&nbsp;{{ language.fluency }}</li>
+    <li>
+        <strong>{{ language.language }}</strong>&nbsp;&#8212;&nbsp;{{
+        language.fluency }}
+    </li>
     {%- endfor -%}
 </ul>
 {% endmacro %}

@@ -3,329 +3,340 @@ $background-color: #fdfdfd;
 $background-dark: #bbb5a9;
 $dark-accent: #ac311f;
 $darker-accent: #58190f;
-$light-accent:  #e5452c;
+$light-accent: #e5452c;
 $rule: 4px solid $dark-accent;
 
 /* BASIC TYPOGRAPHY                       */
 /* from https://github.com/oxalorg/sakura */
 html {
-    font-size: 1.2rem;
-    line-height: 1.618;
-    font-family: serif;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+  font-size: 1.2rem;
+  line-height: 1.618;
+  font-family: serif;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    color: #4a4a4a;
-    background-color: $background-color;
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-items: center;
-    align-items: center;
+  color: #4a4a4a;
+  background-color: $background-color;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
 }
 
 @media (max-width: 684px) {
-    html {
-      font-size: 1rem;
-    }
+  html {
+    font-size: 1rem;
+  }
 }
 
 @media (max-width: 382px) {
-    html {
-      font-size: 0.8rem;
-    }
+  html {
+    font-size: 0.8rem;
+  }
 }
 
-h1, h2, h3, h4, h5, h6 {
-    color: #2a2a2a;
-    line-height: 1.1;
-    font-family: Lato, Verdana, Geneva, sans-serif;
-    font-weight: 700;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    -ms-word-break: break-all;
-    word-break: break-word;
-    -ms-hyphens: auto;
-    -moz-hyphens: auto;
-    -webkit-hyphens: auto;
-    hyphens: auto;
-    margin-bottom: 0rem;
-    margin-top: 2rem;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #2a2a2a;
+  line-height: 1.1;
+  font-family: Lato, Verdana, Geneva, sans-serif;
+  font-weight: 700;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  margin-bottom: 0rem;
+  margin-top: 2rem;
 }
 
 h1 {
-    font-size: 2em;
+  font-size: 2em;
 }
 
 h2 {
-    font-size: 1.8em;
+  font-size: 1.8em;
 }
 
 h3 {
-    font-size: 1.6em;
+  font-size: 1.6em;
 }
 
 h4 {
-    font-size: 1.4em;
+  font-size: 1.4em;
 }
 
 h5 {
-    font-size: 1.2em;
+  font-size: 1.2em;
 }
 
 h6 {
-    font-size: 1em;
+  font-size: 1em;
 }
 
 main > p {
-    margin-top: 0.7em;
-    margin-bottom: 0.5em;
+  margin-top: 0.7em;
+  margin-bottom: 0.5em;
 }
 
 /* end typography */
 
 #cursor {
-    font-size: 1rem;
-    animation: blink-animation 1.7s steps(2, start) infinite;
+  font-size: 1rem;
+  animation: blink-animation 1.7s steps(2, start) infinite;
 }
 
 @keyframes blink-animation {
-    to {
-        visibility: hidden;
-    }
+  to {
+    visibility: hidden;
+  }
 }
 
 hr {
-    border: 0;
-    border-top: 2px solid $background-dark;
+  border: 0;
+  border-top: 2px solid $background-dark;
 }
 
 // Header & Footer
-header, footer {
-    width: calc(100% - 2em);
-    margin: 0 2em;
+header,
+footer {
+  width: calc(100% - 2em);
+  margin: 0 2em;
 }
 
 header {
-    font-family: 'Raleway', sans-serif;
-    display: grid;
-    grid-template-columns: 1fr 64ch 1fr;
-    justify-items: stretch;
-    column-gap: 10px;
+  font-family: "Raleway", sans-serif;
+  display: grid;
+  grid-template-columns: 1fr 40em 1fr;
+  justify-items: stretch;
+  column-gap: 10px;
 }
 
 footer {
-    margin: 0;
-    margin-top: 1em;
+  margin: 0;
+  margin-top: 1em;
 }
 
 nav {
-    display: grid;
-    align-items: center;
-    grid-column-gap: 10px;
-    color: #090818;
+  display: grid;
+  align-items: center;
+  grid-column-gap: 10px;
+  color: #090818;
 }
 
 header > nav {
-    grid-template-columns: 1fr repeat(3, auto);
-    justify-items: stretch;
-    justify-content: stretch;
-    align-items: end;
-    width: 100%;
+  grid-template-columns: 1fr repeat(2, auto);
+  justify-items: stretch;
+  justify-content: stretch;
+  align-items: end;
+  width: 100%;
 }
 
-@media only screen and (max-width: 60ch) {
-    header {
-        grid-template-columns: 0 1fr 0;
-        grid-column-gap: 0;
-    }
+@media only screen and (max-width: 40em) {
+  header {
+    grid-template-columns: 0 1fr 0;
+    grid-column-gap: 0;
+  }
 
-    #home-button > div {
-        font-size: 1rem;
-    }
+  #home-button > div {
+    font-size: 1rem;
+  }
 }
 
 footer > nav {
-    grid-template-columns: 1fr repeat(2, auto) 1fr;
-    align-items: start;
-    padding: 0;
-    margin: 0;
+  grid-template-columns: 1fr repeat(3, auto) 1fr;
+  align-items: start;
+  padding: 0;
+  margin: 0;
 }
 
 nav > a {
-    display: inline-block;
-    font-size: 0.9rem;
-    padding: 5px 6px;
-    border: none;
-    color: #777;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: inherit;
-    position: relative;
+  display: inline-block;
+  font-size: 0.9rem;
+  padding: 5px 6px;
+  border: none;
+  color: #777;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
 }
 
 nav > a:before {
-    content: "";
-    position: absolute;
-    z-index:-1;
-    top: 0;  left: 0;  right: 0;  bottom: 0;
-    background: $dark-accent;
-    transform: scaleY(0);
-    transition: transform .2s ease-out;
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: $dark-accent;
+  transform: scaleY(0);
+  transition: transform 0.2s ease-out;
 }
 
 nav > a:hover:before {
-    transform: scaleY(1);
+  transform: scaleY(1);
 }
 
 nav > a:hover {
-    color: $background-color;
-    text-decoration: none;
+  color: $background-color;
+  text-decoration: none;
 }
 
 header > div {
-    border-bottom: $rule;
+  border-bottom: $rule;
 }
 
 footer > nav > div {
-    border-top: $rule;
+  border-top: $rule;
 }
 
 header > nav > a {
-    border-bottom: $rule;
-    display: inline-block;
-    height: 100%;
+  border-bottom: $rule;
+  display: inline-block;
+  height: 100%;
 }
 
 header > nav > a > div {
-    height: 100%;
-    display: flex;
-    align-items: end;
-    justify-content: center;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 }
 
 header > nav > a:before {
-    transform-origin: 50% 100%;
+  transform-origin: 50% 100%;
 }
 
 footer > nav > a {
-    border-top: $rule;
-    font-size: 1.5em;
-    padding-bottom: 1em;
-    margin-bottom: 0;
+  border-top: $rule;
+  font-size: 1.5em;
+  padding-bottom: 1em;
+  margin-bottom: 0;
 }
 
 footer > nav > a:before {
-    transform-origin: 50% 0;
+  transform-origin: 50% 0;
 }
 
 #home-button {
-    font-weight: 700;
-    font-size: 1.5em;
-    line-height: 1.2em;
-    padding-top: 1em;
+  font-weight: 700;
+  font-size: 1.5em;
+  line-height: 1.2em;
+  padding-top: 1em;
 }
 
 // Main
 main {
-    max-width: calc(100% - 2em);
-    width: 60ch;
-    flex: 1;
+  max-width: calc(100% - 2em);
+  width: 39em;
+  flex: 1;
 }
 
 main > p > a > button {
-    margin: 10px 7px 0 0;
+  margin: 10px 7px 0 0;
 }
-
 
 // Post list
 .post {
-    text-decoration: none;
-    color: inherit;
-    border: 3px solid #090818;
-    display: block;
-    padding: 1em;
-    margin-top: 1em;
+  text-decoration: none;
+  color: inherit;
+  border: 3px solid #090818;
+  display: block;
+  padding: 1em;
+  margin-top: 1em;
 }
 
 .post:hover {
-    border-color: $dark-accent;
-    background-color: white;
-    color: black;
+  border-color: $dark-accent;
+  background-color: white;
+  color: black;
 }
 
 .post > h1 {
-    margin: 0;
-    font-size: 1.8em;
+  margin: 0;
+  font-size: 1.8em;
 }
 
 .post > p {
-    margin: 0;
-    font-size: 0.9em;
+  margin: 0;
+  font-size: 0.9em;
 }
 
 // Page
 #title-div {
-    margin: 2em 0;
+  margin: 2em 0;
 }
 
 #title {
-    font-size: 2.5em;
-    margin: 0;
+  font-size: 2.5em;
+  margin: 0;
 }
 
 .date {
-    margin: 0;
-    font-size: 0.8em;
+  margin: 0;
+  font-size: 0.8em;
 }
 
 .phonetic {
-    font-size: 0.8em;
+  font-size: 0.8em;
 }
 
 .highlight {
-    color: $dark-accent;
-    font-weight: bold;
+  color: $dark-accent;
+  font-weight: bold;
 }
 
 .button-row {
-    display: block;
-    margin-top: 0.2em;
+  display: block;
+  margin-top: 0.2em;
 }
 
 .button-row > a {
-    display: inline-block;
-    text-decoration: none;
-    padding: 3px 10px;
-    border: 3px solid $dark-accent;
-    color: $dark-accent;
-    position: relative;
-    transform: perspective(1px) translateZ(0);
-    transition: color 0.2s;
+  display: inline-block;
+  text-decoration: none;
+  padding: 3px 10px;
+  border: 3px solid $dark-accent;
+  color: $dark-accent;
+  position: relative;
+  transform: perspective(1px) translateZ(0);
+  transition: color 0.2s;
 }
 
 .button-row > a:hover {
-    color: white;
+  color: white;
 }
 
 .button-row > a:before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    top: 0;  left: 0;  right: 0;  bottom: 0;
-    background: $dark-accent;
-    transform: scaleX(0);
-    transform-origin: 0% 50%;
-    transition: transform 0.2s ease-out;
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: $dark-accent;
+  transform: scaleX(0);
+  transform-origin: 0% 50%;
+  transition: transform 0.2s ease-out;
 }
 
 .button-row > a:hover:before {
-    transform: scaleX(1);
+  transform: scaleX(1);
 }
