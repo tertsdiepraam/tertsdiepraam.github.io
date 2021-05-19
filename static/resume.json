@@ -27,11 +27,18 @@
     },
     "work": [
         {
+            "company": "Bit Academy",
+            "position": "Coach",
+            "website": "https://www.bit-academy.nl/",
+            "startDate": "2020-09-01",
+            "summary": "The Bit Academy teaches programming at MBO level. I coached MBO students, teaching them web programming and data science with technologies such as HTML, CSS, JS, PHP, SQL & Python."
+        },
+        {
             "company": "Bit",
             "position": "Developer",
             "website": "https://wearebit.com",
             "startDate": "2019-10-01",
-            "summary": "Bit develops innovative prototypes from the ground up using cutting-edge technologies."
+            "summary": "Bit develops innovative prototypes from the ground up using cutting-edge technologies. I work at Bit as a developer and have worked on many projects, from data science to mobile applications and advanced routing algorithms."
         },
         {
             "company": "Machine Learning Programs",
@@ -39,7 +46,7 @@
             "website": "https://www.mlprograms.com",
             "startDate": "2019-09-01",
             "endDate": "2019-12-31",
-            "summary": "MLP applies machine learning in the insurance industry."
+            "summary": "MLP applies machine learning in the insurance industry. I worked here as a data science intern, where I applied many machine learning strategies and techniques to real data."
         }
     ],
     "education": [
@@ -49,7 +56,8 @@
             "studyType": "Bachelor",
             "startDate": "2017-09-01",
             "endDate": "2020-08-01",
-            "gpa": "3.9",
+            "gpa": "3.92",
+            "honors": "summa cum laude",
             "url": "https://www.auc.nl/",
             "courses": [
                 "Introduction to Physics",
