@@ -5,7 +5,7 @@
         color: inherit;
     }
 
-    .social a:hover {
+    a:hover:not(.button-row a, header a, footer a) {
         text-decoration: underline;
     }
 
@@ -60,18 +60,13 @@
     .social>div {
         display: inline-block;
         width: 48%;
-        min-width: 300px;
+        min-width: 15ch;
     }
 
     .social>div>i {
         width: 20px;
         padding: 0.3em;
         text-align: center;
-    }
-
-    .fa {
-        padding: 0.5em;
-        justify-self: center;
     }
 </style>
 {%- set resume = load_data(path=path) -%} {%- set basics = resume["basics"] -%}
