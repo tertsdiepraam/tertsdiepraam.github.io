@@ -51,7 +51,7 @@
     ],
     "education": [
         {
-            "institution": "Amsterdam University College",
+            "institution": "Amsterdam University College (UvA/VU partnership)",
             "area": "Liberal Arts and Sciences",
             "studyType": "Bachelor",
             "startDate": "2017-09-01",
@@ -59,6 +59,7 @@
             "gpa": "3.92",
             "honors": "summa cum laude",
             "url": "https://www.auc.nl/",
+            "summary": "AUC is a partnership between the Universiteit van Amsterdam and Vrije Universiteit Amsterdam.",
             "courses": [
                 "Introduction to Physics",
                 "Calculus",
@@ -89,6 +90,25 @@
                 "Statistical Mechanics",
                 "Theme Course: Quantum Information & Quantum Computing",
                 "Modelling Real World Problems"
+            ]
+        },
+        {
+            "institution": "Het 4e Gymnasium Amsterdam",
+            "studyType": "Gymnasium (Voorbereidend Wetenschappelijk Onderwijs)",
+            "startDate": "2012-09-01",
+            "endDate": "2017-08-01",
+            "honors": "cum laude",
+            "summary": "Grade: cum laude",
+            "url": "https://het4egymnasium.nl/",
+            "courses": [
+                "Dutch",
+                "Greek",
+                "English",
+                "Mathematics",
+                "German",
+                "History",
+                "Physics",
+                "Art"
             ]
         }
     ],
