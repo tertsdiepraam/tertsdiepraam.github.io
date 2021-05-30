@@ -107,7 +107,7 @@
 {%- endif -%}
 {%- if edu.summary -%}
 <p class="summary">
-    {{ edu.summary }}
+    {{ edu.summary | safe }}
 </p>
 {%- endif -%}
 {%- if details and edu.courses -%}
@@ -131,7 +131,7 @@
     </p>
 </div>
 <p class="company"><a href="{{ job.website }}">{{ job.company }}</a></p>
-<p class="summary">{{ job.summary }}</p>
+<p class="summary">{{ job.summary | safe }}</p>
 {%- endfor -%}
 <h1>Languages</h1>
 <hr />
@@ -140,6 +140,15 @@
     <li>
         <strong>{{ language.language }}</strong>&nbsp;&#8212;&nbsp;{{
         language.fluency }}
+    </li>
+    {%- endfor -%}
+</ul>
+<h1>Interests</h1>
+<hr />
+<ul>
+    {%- for interest in resume["interests"] -%}
+    <li>
+        <strong>{{ interest }}</strong>
     </li>
     {%- endfor -%}
 </ul>

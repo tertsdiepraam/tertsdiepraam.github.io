@@ -47,6 +47,14 @@
             "startDate": "2019-09-01",
             "endDate": "2019-12-31",
             "summary": "MLP applies machine learning in the insurance industry. I worked here as a data science intern, where I applied many machine learning strategies and techniques to real data."
+        },
+        {
+            "company": "Stedelijk Museum Amsterdam",
+            "position": "Blikopener",
+            "website": "https://www.stedelijk.nl/",
+            "startDate": "2015-09-01",
+            "endDate": "2018-12-01",
+            "summary": "The <a href='https://www.stedelijk.nl/en/museum/blikopeners'>Blikopeners</a> are young Amsterdam residents who aim to awaken their friends and other peers’ enthusiasm for art and culture. They look at art from a fresh perspective and share their ideas about current affairs, programs and exhibitions. The Blikopeners also organize tours, workshops & events in the museum."
         }
     ],
     "education": [
@@ -149,5 +157,12 @@
             "language": "Dutch",
             "fluency": "Native speaker"
         }
+    ],
+    "interests": [
+        "Bouldering",
+        "Filmmaking",
+        "Programming",
+        "Physics",
+        "Art"
     ]
 }
