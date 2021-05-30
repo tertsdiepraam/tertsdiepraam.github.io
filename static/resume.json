@@ -60,14 +60,18 @@
     "education": [
         {
             "institution": "Amsterdam University College (UvA/VU partnership)",
-            "area": "Liberal Arts and Sciences",
+            "area": "Liberal Arts and Sciences (Honours Programme)",
             "studyType": "Bachelor",
             "startDate": "2017-09-01",
             "endDate": "2020-08-01",
             "gpa": "3.92",
+            "thesis": {
+                "title": "Removing Confusion in Locally Finite Petri Nets (A+, Thesis of Distinction)",
+                "url": "https://tertsdiepraam.gitlab.io/Terts_Diepraam_Thesis.pdf"
+            },
             "honors": "summa cum laude",
             "url": "https://www.auc.nl/",
-            "summary": "AUC is a partnership between the Universiteit van Amsterdam and Vrije Universiteit Amsterdam.",
+            "summary": "AUC is a partnership between the Universiteit van Amsterdam and Vrije Universiteit Amsterdam. All students develop their individual study plan by taking courses from the Academic Core, their major and a variety of elective courses. My curriculum was focused on Computer Science, Mathematics & Physics.",
             "courses": [
                 "Introduction to Physics",
                 "Calculus",
@@ -107,6 +111,7 @@
             "endDate": "2017-08-01",
             "honors": "cum laude",
             "summary": "Grade: cum laude",
+            "profile": "Economy & Society, Culture & Society",
             "url": "https://het4egymnasium.nl/",
             "courses": [
                 "Dutch",

@@ -105,8 +105,18 @@
     GPA: {{ edu.gpa }}{%- if edu.honors -%}, {{ edu.honors }}{%- endif -%}
 </p>
 {%- endif -%}
-{%- if edu.summary -%}
+{%- if edu.profile -%}
 <p class="summary">
+    Profile: {{ edu.profile }}
+</p>
+{%- endif -%}
+{%- if edu.thesis -%}
+<p class="summary">
+    Thesis: <em><a href="{{ edu.thesis.url }}">{{ edu.thesis.title }}</a></em>
+</p>
+{%- endif -%}
+{%- if edu.summary -%}
+<p class=" summary">
     {{ edu.summary | safe }}
 </p>
 {%- endif -%}
