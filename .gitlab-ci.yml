@@ -7,7 +7,7 @@ variables:
 pages:
   script:
     - zola build
-    - wkhtmltopdf ./public/resume-only/index.html resume.pdf
+    - wkhtmltopdf --page-size A4 -T 30mm -B 30mm -L 30mm -R 30mm --print-media-type ./public/resume-only/index.html resume.pdf
     - mv resume.pdf public/
     
   artifacts:

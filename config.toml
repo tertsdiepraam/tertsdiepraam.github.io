@@ -5,6 +5,8 @@ title = "Terts Diepraam"
 
 description = "I am Terts, I am developer"
 
+default_language = "en"
+
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
 

@@ -92,56 +92,61 @@
 <h1>Education</h1>
 <hr />
 {%- for edu in resume["education"] -%}
-<div class="job-header">
-    <h2>{{ edu.studyType }}{% if edu.area %} in {{ edu.area }}{% endif %}</h2>
-    <p class="date">
-        {{ edu.startDate | date(format="%b %Y") }} &#8212; {% if edu.endDate %}{{
-        edu.endDate | date(format="%b %Y") }}{%- else -%}Present{%- endif -%}
+<div class="dontbreak">
+    <div class="job-header">
+        <h2>{{ edu.studyType }}{% if edu.area %} in {{ edu.area }}{% endif %}</h2>
+        <p class="date">
+            {{ edu.startDate | date(format="%b %Y") }} &#8212; {% if edu.endDate %}{{
+            edu.endDate | date(format="%b %Y") }}{%- else -%}Present{%- endif -%}
+        </p>
+    </div>
+    <p class="company"><a href="{{ edu.url }}">{{ edu.institution }}</a></p>
+    {%- if edu.gpa -%}
+    <p class="summary">
+        GPA: {{ edu.gpa }}{%- if edu.honors -%}, {{ edu.honors }}{%- endif -%}
     </p>
-</div>
-<p class="company"><a href="{{ edu.url }}">{{ edu.institution }}</a></p>
-{%- if edu.gpa -%}
-<p class="summary">
-    GPA: {{ edu.gpa }}{%- if edu.honors -%}, {{ edu.honors }}{%- endif -%}
-</p>
-{%- endif -%}
-{%- if edu.profile -%}
-<p class="summary">
-    Profile: {{ edu.profile }}
-</p>
-{%- endif -%}
-{%- if edu.thesis -%}
-<p class="summary">
-    Thesis: <em><a href="{{ edu.thesis.url }}">{{ edu.thesis.title }}</a></em>
-</p>
-{%- endif -%}
-{%- if edu.summary -%}
-<p class=" summary">
-    {{ edu.summary | safe }}
-</p>
-{%- endif -%}
-{%- if details and edu.courses -%}
-<details>
-    <summary>Courses</summary>
-    <ul>
-        {%- for course in edu.courses -%}
-        <li>{{ course }}</li>
-        {%- endfor -%}
-    </ul>
-</details>
-{%- endif -%} {%- endfor -%}
+    {%- endif -%}
+    {%- if edu.profile -%}
+    <p class="summary">
+        Profile: {{ edu.profile }}
+    </p>
+    {%- endif -%}
+    {%- if edu.thesis -%}
+    <p class="summary">
+        Thesis: <em><a href="{{ edu.thesis.url }}">{{ edu.thesis.title }}</a></em>
+    </p>
+    {%- endif -%}
+    {%- if edu.summary -%}
+    <p class="summary">
+        {{ edu.summary | safe }}
+    </p>
+    {%- endif -%}
+    {%- if details and edu.courses -%}
+    <details>
+        <summary>Courses</summary>
+        <ul>
+            {%- for course in edu.courses -%}
+            <li>{{ course }}</li>
+            {%- endfor -%}
+        </ul>
+    </details>
+    {%- endif -%}
+    </div>
+{%- endfor -%}
 <h1>Experience</h1>
 <hr />
 {%- for job in resume["work"] -%}
-<div class="job-header">
-    <h2>{{ job.position }}</h2>
-    <p class="date">
-        {{ job.startDate | date(format="%b %Y") }} &#8212; {% if job.endDate %}{{
-        job.endDate | date(format="%b %Y") }}{%- else -%}Present{%- endif -%}
-    </p>
+<div class="dontbreak">
+    <div class="job-header">
+        <h2>{{ job.position }}</h2>
+        <p class="date">
+            {{ job.startDate | date(format="%b %Y") }} &#8212; {% if job.endDate %}{{
+            job.endDate | date(format="%b %Y") }}{%- else -%}Present{%- endif -%}
+        </p>
+    </div>
+    <p class="company"><a href="{{ job.website }}">{{ job.company }}</a></p>
+    <p class="summary">{{ job.summary | safe }}</p>
 </div>
-<p class="company"><a href="{{ job.website }}">{{ job.company }}</a></p>
-<p class="summary">{{ job.summary | safe }}</p>
 {%- endfor -%}
 <h1>Languages</h1>
 <hr />
