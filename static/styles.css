@@ -141,6 +141,7 @@ header > nav {
 
 header > nav > a {
   height: 100%;
+  border-bottom: var(--rule);
   display: inline-block;
 }
 
@@ -153,7 +154,6 @@ header > nav > a > div {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  border-bottom: var(--rule);
 }
 
 footer {

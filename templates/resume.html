@@ -1,6 +1,10 @@
 {%- extends "base.html" -%}
 {%- import "macros/resume_macros.html" as resume -%}
 
+{%- block title -%}
+    <title>Resume | {{ config.title }}</title>
+{%- endblock title -%}
+
 {%- block main -%}
 <div style="text-align: center; margin: 1.5em;">
     <span class="button-row">
