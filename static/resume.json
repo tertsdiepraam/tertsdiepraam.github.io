@@ -27,18 +27,19 @@
     },
     "work": [
         {
-            "company": "Bit Academy",
-            "position": "Coach",
-            "website": "https://www.bit-academy.nl/",
-            "startDate": "2020-09-01",
-            "summary": "The Bit Academy teaches programming at MBO level. I coached MBO students, teaching them web programming and data science with technologies such as HTML, CSS, JS, PHP, SQL & Python."
-        },
-        {
             "company": "Bit",
             "position": "Developer",
             "website": "https://wearebit.com",
             "startDate": "2019-10-01",
             "summary": "Bit develops innovative prototypes from the ground up using cutting-edge technologies. I work at Bit as a developer and have worked on many projects, from data science to mobile applications and advanced routing algorithms."
+        },
+        {
+            "company": "Bit Academy",
+            "position": "Coach",
+            "website": "https://www.bit-academy.nl/",
+            "startDate": "2020-09-01",
+            "endDate": "2021-08-01",
+            "summary": "The Bit Academy teaches programming at MBO level. I coached MBO students, teaching them web programming and data science with technologies such as HTML, CSS, JS, PHP, SQL & Python."
         },
         {
             "company": "Machine Learning Programs",
@@ -58,6 +59,15 @@
         }
     ],
     "education": [
+        {
+            "institution": "Technische Universiteit Delft",
+            "area": "Computer Science",
+            "studyType": "Master",
+            "startDate": "2021-09-01",
+            "summary": "",
+            "courses": [],
+            "url": "http://www.tudelft.nl"
+        },
         {
             "institution": "Amsterdam University College (UvA/VU partnership)",
             "area": "Liberal Arts and Sciences (Honours Programme)",

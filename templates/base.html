@@ -14,19 +14,23 @@
 
         <link rel="stylesheet" type="text/css" href="{{ get_url(path='styles.css') }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link href="https://fonts.googleapis.com/css2?family=Lato&family=Raleway&display=swap" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css2?family=Lato&family=Raleway&display=swap" rel="stylesheet">
         {%- block title -%}
             <title>{{ config.title }}</title>
         {%- endblock title -%}
     </head>
     <body>
+        <div class="hide-on-phone"></div>
         {%- block header -%}
             {{ header::large() }}
         {%- endblock header -%}
+        <div class="hide-on-phone"></div>
+        <div class="hide-on-phone"></div>
         <main>
             {%- block main -%}
             {%- endblock main -%}
         </main>
+        <div class="hide-on-phone"></div>
         <footer>
             {%- block footer -%}
                 {{ footer::footer() }}

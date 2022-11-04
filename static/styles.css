@@ -1,10 +1,12 @@
-// Colors
-$background-color: #fdfdfd;
-$background-dark: #bbb5a9;
-$dark-accent: #ac311f;
-$darker-accent: #58190f;
-$light-accent: #e5452c;
-$rule: 4px solid $dark-accent;
+/* Colors */
+:root {
+  --background-color: #fdfdfd;
+  --background-dark: #bbb5a9;
+  --dark-accent: #ac311f;
+  --darker-accent: #58190f;
+  --light-accent: #e5452c;
+  --rule: 4px solid var(--dark-accent);
+}
 
 /* BASIC TYPOGRAPHY                       */
 /* from https://github.com/oxalorg/sakura */
@@ -20,15 +22,27 @@ html {
 
 body {
   color: #4a4a4a;
-  background-color: $background-color;
+  background-color: var(--background-color);
   margin: 0;
   padding: 0;
   height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-items: center;
-  align-items: center;
+  width: calc(100% - 2em);
+  display: grid;
+  grid-template-columns: 1fr 40em 1fr;
+  grid-template-rows: min-content 1fr min-content;
+  column-gap: 16px;
+  margin: 0 1em;
+}
+
+@media only screen and (max-width: 40em) {
+  body {
+    grid-template-columns: 0 100% 0;
+    grid-column-gap: 0;
+  }
+
+  #home-button > div {
+    font-size: 1rem;
+  }
 }
 
 @media (max-width: 684px) {
@@ -55,11 +69,7 @@ h6 {
   font-weight: 700;
   overflow-wrap: break-word;
   word-wrap: break-word;
-  -ms-word-break: break-all;
   word-break: break-word;
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
   hyphens: auto;
   margin-bottom: 0rem;
   margin-top: 2rem;
@@ -109,53 +119,47 @@ main > p {
 
 hr {
   border: 0;
-  border-top: 2px solid $background-dark;
+  border-top: 2px solid var(--background-dark);
 }
 
-// Header & Footer
-header,
-footer {
-  width: calc(100% - 2em);
-  margin: 0 2em;
+/* Header & Footer */
+body > div:nth-child(1),
+body > div:nth-child(3) {
+  border-bottom: var(--rule);
 }
 
 header {
   font-family: "Raleway", sans-serif;
-  display: grid;
-  grid-template-columns: 1fr 40em 1fr;
+}
+
+header > nav {
+  grid-template-columns: 1fr repeat(3, min-content);
   justify-items: stretch;
-  column-gap: 10px;
+  justify-content: stretch;
+  align-items: end;
+}
+
+header > nav > a {
+  height: 100%;
+  display: inline-block;
+}
+
+header > nav > a:before {
+  transform-origin: 50% 100%;
+}
+
+header > nav > a > div {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-bottom: var(--rule);
 }
 
 footer {
   margin: 0;
   margin-top: 1em;
-}
-
-nav {
-  display: grid;
-  align-items: center;
-  grid-column-gap: 10px;
-  color: #090818;
-}
-
-header > nav {
-  grid-template-columns: 1fr repeat(2, auto);
-  justify-items: stretch;
-  justify-content: stretch;
-  align-items: end;
-  width: 100%;
-}
-
-@media only screen and (max-width: 40em) {
-  header {
-    grid-template-columns: 0 1fr 0;
-    grid-column-gap: 0;
-  }
-
-  #home-button > div {
-    font-size: 1rem;
-  }
+  grid-column: span 3;
 }
 
 footer > nav {
@@ -163,6 +167,28 @@ footer > nav {
   align-items: start;
   padding: 0;
   margin: 0;
+}
+
+footer > nav > div {
+  border-top: var(--rule);
+}
+
+footer > nav > a {
+  border-top: var(--rule);
+  font-size: 1.5em;
+  padding-bottom: 1em;
+  margin-bottom: 0;
+}
+
+footer > nav > a:before {
+  transform-origin: 50% 0;
+}
+
+nav {
+  display: grid;
+  align-items: center;
+  grid-column-gap: 10px;
+  color: #090818;
 }
 
 nav > a {
@@ -185,54 +211,18 @@ nav > a:before {
   left: 0;
   right: 0;
   bottom: 0;
-  background: $dark-accent;
+  background: var(--dark-accent);
   transform: scaleY(0);
   transition: transform 0.2s ease-out;
 }
 
-nav > a:hover:before {
-  transform: scaleY(1);
-}
-
 nav > a:hover {
-  color: $background-color;
+  color: var(--background-color);
   text-decoration: none;
 }
 
-header > div {
-  border-bottom: $rule;
-}
-
-footer > nav > div {
-  border-top: $rule;
-}
-
-header > nav > a {
-  border-bottom: $rule;
-  display: inline-block;
-  height: 100%;
-}
-
-header > nav > a > div {
-  height: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-header > nav > a:before {
-  transform-origin: 50% 100%;
-}
-
-footer > nav > a {
-  border-top: $rule;
-  font-size: 1.5em;
-  padding-bottom: 1em;
-  margin-bottom: 0;
-}
-
-footer > nav > a:before {
-  transform-origin: 50% 0;
+nav > a:hover:before {
+  transform: scaleY(1);
 }
 
 #home-button {
@@ -242,10 +232,8 @@ footer > nav > a:before {
   padding-top: 1em;
 }
 
-// Main
+/* Main */
 main {
-  max-width: calc(100% - 2em);
-  width: 39em;
   flex: 1;
 }
 
@@ -253,7 +241,7 @@ main > p > a > button {
   margin: 10px 7px 0 0;
 }
 
-// Post list
+/* Post list */
 .post {
   text-decoration: none;
   color: inherit;
@@ -264,7 +252,7 @@ main > p > a > button {
 }
 
 .post:hover {
-  border-color: $dark-accent;
+  border-color: var(--dark-accent);
   background-color: white;
   color: black;
 }
@@ -279,7 +267,7 @@ main > p > a > button {
   font-size: 0.9em;
 }
 
-// Page
+/* Page */
 #title-div {
   margin: 2em 0;
 }
@@ -299,7 +287,7 @@ main > p > a > button {
 }
 
 .highlight {
-  color: $dark-accent;
+  color: var(--dark-accent);
   font-weight: bold;
 }
 
@@ -312,8 +300,8 @@ main > p > a > button {
   display: inline-block;
   text-decoration: none;
   padding: 3px 10px;
-  border: 3px solid $dark-accent;
-  color: $dark-accent;
+  border: 3px solid var(--dark-accent);
+  color: var(--dark-accent);
   position: relative;
   transform: perspective(1px) translateZ(0);
   transition: color 0.2s;
@@ -331,7 +319,7 @@ main > p > a > button {
   left: 0;
   right: 0;
   bottom: 0;
-  background: $dark-accent;
+  background: var(--dark-accent);
   transform: scaleX(0);
   transform-origin: 0% 50%;
   transition: transform 0.2s ease-out;
@@ -339,4 +327,21 @@ main > p > a > button {
 
 .button-row > a:hover:before {
   transform: scaleX(1);
+}
+
+pre[class^="language"] {
+  padding: 1em;
+  border-radius: 0.5em;
+  overflow-x: auto;
+}
+
+.footnote-definition > * {
+  display: inline;
+}
+
+code:not([class^="language"]) {
+  background: #eee;
+  color: #ac311f;
+  padding: 0 0.2em;
+  border-radius: 0.2em;
 }
