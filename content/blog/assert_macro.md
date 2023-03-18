@@ -1,6 +1,10 @@
 +++
 
+<<<<<<< HEAD
 title = "Rewriting assert! to assert_eq! with a declarative macro"
+=======
+title = "Trying to rewrite assert! to assert_eq! with a declarative macro"
+>>>>>>> 61d4c1a (first version of assert macro post)
 
 +++
 
@@ -18,13 +22,20 @@ that the assertion failed.
 
 This brings up an interesting question: why can the macro not just detect that
 the expression in `assert!` is `A == B` or `A != B` and use `assert_eq!` or
-`assert_ne!` automatically?
+`assert_ne!` automatically? In many cases that would be a bit easier to read. Compare these calls:
+
+```rust
+assert!([1,2,3] == [4,5,6]);
+assert_eq!([1,2,3], [4,5,6]);
+```
+
+It's not much of a difference, but I like the first one just a bit better.
 
 A proc macro could definitely do this (as for example the
 [`assert2`](https://crates.io/crates/assert2) crate proves), but is it also
-possible with a declarative macro? Turns out the answer is yes and if you want
-to know how, you can scroll to the end of this post, but I'd like to take you
-along our journey of how we got to the final solution.
+possible with a declarative macro?
+
+**Before you continue, I want to spoil the end: I failed.** I was able to cover the most common cases, but there are expressions which I couldn't find a solution for. Still, I think it's interesting to investigate why this problem is hard and what techniques I used along the way.
 
 # Why the simple solution does not work
 
@@ -63,10 +74,10 @@ not that advanced. So it seems like we can't use expressions for this purpose.
 
 # Matching on token trees
 
-Luckily, Rust also allows us to match on token trees, which are single tokens of
-a list of tokens enclosed by matching delimiters like `()`, `[]` and `{}`. So
-instead of matching on the expression, we'll match on a list of token trees and
-find the `==` ourselves.
+Luckily, Rust also allows us to match on token trees, which are single tokens or
+tokens in matching delimiters like `()`, `[]` and `{}`. So instead of matching
+on the expression, we'll match on a list of token trees and find the `==`
+ourselves.
 
 Here's the general idea: we have some marker token in the token tree that we
 move recursively through the list of token trees. When we encounter a `==` or
@@ -300,31 +311,107 @@ help: split the comparison into two
    |                                +++++++
 ```
 
-That is exactly what we wanted, so I think that we've made the perfect[^1]
-macro!
+Problem solved! Right?
+
+# Lower precedence operators
+
+What if we follow the suggestion from the compiler in that last error message? That would not work because it would expand to
+
+```
+assert_eq!(true, true && true == true);
+```
+
+That's using the wrong precedence.
+
+So if any of these tokens appear, we need to fall back to `assert!`. So before we use our `interal_assert` macro, we can first scan for those tokens. Luckily, we can do that with a similar technique to above.
+
+```rust
+macro_rules! scan_lower_precedence {
+    ({ $($prev:tt)* } { && $($next:tt)* }) => {
+        assert!($($prev)* && $($next)*)
+    };
+    ({ $($prev:tt)* } { || $($next:tt)* }) => {
+        assert!($($prev)* || $($next)*)
+    };
+    ({ $($prev:tt)* } {}) => {
+        internal_assert!({} {$($prev)*})
+    };
+    ({ $($prev:tt)* } { $curr:tt $($next:tt)* }) => {
+        scan_lower_precedence!({ $($prev)* $curr } { $($next)* })
+    };
+}
+
+macro_rules! fancy_assert {
+    ($($t:tt)*) => { is_expr!($($t)*); scan_lower_precedence!({} { $($t)* }) }
+}
+```
+
+# If expressions
+
+At this point, I really thought I was done and I was ready to put this all in a crate and publish it with great fanfare. But it turned out there were bigger problems than `&&` and `||`.
+
+The problem lies with `if`, `match`, `for` & `while` which can all contain `==` in their expressions without them being enclosed within delimiters.
+
+I kept trying an I got `if` expressions mostly working, by using a stack to keep track of nested `if` statements. Here it is:
+
+```rust
+// The first argument is the callback for the macro with
+// which we should continue execution when the stack is
+// empty.
+//
+// The second argument is a stack of if's and matches that
+// we are currently in. The base case is [] and each item
+// wraps the last [if [if []]].
+//
+// If we find an `if`, we push it to the stack, if we find
+// the end we pop it.
+macro_rules! parse_cond {
+    // Found the end of an if expression and if is at the top of the stack
+    ($cb:ident [if $stack:tt] { $($prev:tt)* } { $then:block else $else:block $($next:tt)* }) => {
+        parse_cond_or_callback!($cb $stack { $($prev)* $then else $else } { $($next)* })
+    };
+    // Found the start of an if expression, put it on the stack and continue
+    ($cb:ident $stack:tt { $($prev:tt)* } { if $($next:tt)* }) => {
+        parse_cond!($cb [if $stack] { $($prev)* if } { $($next)* })
+    };
+    // Some other token, we just recurse
+    ($cb:ident $stack:tt { $($prev:tt)* } { $curr:tt $($next:tt)* }) => {
+        parse_cond!($cb $stack { $($prev)* $curr } { $($next)* })
+    };
+}
+
+// Expand to the callback if the stack is empty or recurse otherwise
+macro_rules! parse_cond_or_callback {
+    ($cb:ident [] $prev:tt $next:tt) => { $cb!($prev $next) };
+    ($cb:ident $stack:tt $prev:tt $next:tt) => { parse_cond!($cb $stack $prev $next)};
+}
+
+// For the macros below other cases are the same as before.
+macro_rules! internal_assert {
+    ({ $($prev:tt)* } { if $($next:tt)* }) => {
+        parse_cond!(internal_assert [if []] { $($prev)* if } { $($next)* })
+    };
+    /* snip */
+}
+
+macro_rules! scan_lower_precedence {
+    ({ $($prev:tt)* } { if $($next:tt)* }) => {
+        parse_cond!(scan_lower_precedence [if []] { $($prev)* if } { $($next)* })
+    };
+    /* snip */
+}
+```
+
+This works, but I couldn't find a solution for the other cases like `match` and the code would frankly become too complicated. Instead the "solution" would just be to give a compile-time error if we encounter any `match`, `while` or `for`. It's unsatisfying, but maybe someone with better macro-fu skills can do better.
 
 # Ending this madness
 
-I'm not sure I recommend using this in real code. I think it works, but I didn't
-do any checks for compile times. It was a fun experiment, though!
+The truth is that were only working with crude approximations of Rust syntax and that it is extremely hard to prove that it covers all cases. Instead of using the code from this post, I recommend `assert2`, which has this feature and much more and is actually able to parse the code.
 
-The recursive macro calls might slow down compilation a bit, but it might still
-it might be faster than a similar proc macro. I haven't measured the
-differences.
+I would like to see some of the functionality of `assert2` in the standard `assert`, since it would greatly improve the default testing facilities in Rust. I'd love to see some discussion in that space.
 
-There are some interesting directions to take this idea further. First, we could
-support more comparison operators, like `>=` and `<`, but there are no built-in
-macros to rewrite too, so that requires some more work.
-
-The technique for parsing is also interesting on its own. For example, it should
-be possible to parse arithmetic expressions with operator precedence with this,
-but that's a can of worms I won't open here.
-
-In any case, I hope this inspires many macro crimes!
+This whole ordeal was a fun experiment though! The technique for parsing is also interesting on its own. The Little Book of Rust Macros has a section on this technique, which they call [TT munching](https://veykril.github.io/tlborm/decl-macros/patterns/tt-muncher.html). It's a powerful technique, but also has quadratic time complexity, so use with caution. I can highly recommend looking at the Little Book if you need some advanced macro techniques. They also explain other techniques I used, like [callbacks](https://veykril.github.io/tlborm/decl-macros/patterns/callbacks.html) and [TT bundling](https://veykril.github.io/tlborm/decl-macros/patterns/tt-bundling.html). I foolishly figured these out myself, because I forgot about the book, but I recommend checking it out!
 
 ---
 
-Thanks to Lucas, Jonathan & Arav for solving this problem with me.
-
-[^1]: I'm sure it breaks in more cases and if you find any, I'd love to hear
-about it!
+Thanks to Lucas, Jonathan & Arav for solving this problem with me, providing interesting test cases and proofreading drafts of this post.
