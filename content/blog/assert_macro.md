@@ -1,10 +1,6 @@
 +++
 
-<<<<<<< HEAD
-title = "Rewriting assert! to assert_eq! with a declarative macro"
-=======
 title = "Trying to rewrite assert! to assert_eq! with a declarative macro"
->>>>>>> 61d4c1a (first version of assert macro post)
 
 +++
 
