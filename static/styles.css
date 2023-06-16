@@ -163,7 +163,7 @@ footer {
 }
 
 footer > nav {
-  grid-template-columns: 1fr repeat(3, auto) 1fr;
+  grid-template-columns: 1fr repeat(4, auto) 1fr;
   align-items: start;
   padding: 0;
   margin: 0;
