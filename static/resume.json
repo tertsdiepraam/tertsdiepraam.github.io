@@ -135,34 +135,6 @@
             ]
         }
     ],
-    "skills": [
-        {
-            "name": "Software Development",
-            "level": "Master",
-            "keywords": [
-                "Git",
-                "Agile & Scrum"
-            ]
-        },
-        {
-            "name": "Rust",
-            "level": "Novice",
-            "keywords": [
-                "Systems Programming",
-                "WebAssembly"
-            ]
-        },
-        {
-            "name": "Web Development",
-            "level": "Master",
-            "keywords": [
-                "HTML",
-                "CSS",
-                "JavaScript",
-                "PHP"
-            ]
-        }
-    ],
     "languages": [
         {
             "language": "English",
@@ -173,11 +145,4 @@
             "fluency": "Native speaker"
         }
     ],
-    "interests": [
-        "Bouldering",
-        "Filmmaking",
-        "Programming",
-        "Physics",
-        "Art"
-    ]
 }

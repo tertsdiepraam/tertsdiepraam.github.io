@@ -1,5 +1,69 @@
 {%- extends "base.html" -%}
-{%- import "macros/resume_macros.html" as resume -%}
+
+{%- block head -%}
+<style>
+    .company a, .social a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    a:hover:not(.button-row a, header a, footer a) {
+        text-decoration: underline;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        padding-bottom: 0.5em;
+        border-bottom: 2px solid #ac311f;
+    }
+
+    h2 {
+        margin-top: 1em;
+        font-size: 1.2em;
+    }
+
+    .job-header {
+        display: grid;
+        grid-template-columns: auto max-content;
+        align-items: end;
+    }
+
+    .company {
+        font-size: 1.1em;
+        margin-top: 0.2em;
+        margin-bottom: 0;
+    }
+
+    .date {
+        display: inline-block;
+        font-size: 0.9em;
+        color: #666666;
+        text-align: right;
+        margin-left: auto;
+    }
+
+    .summary {
+        margin-bottom: 1em;
+    }
+
+    .social {
+        margin: auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(0, 17em));
+        justify-content: center;
+    }
+
+    .social>div {
+        display: inline-block;
+    }
+
+    .social>div>i {
+        width: 20px;
+        padding: 0.3em;
+        text-align: center;
+    }
+</style>
+{%- endblock head -%}
 
 {%- block title -%}
     <title>Resume | {{ config.title }}</title>
@@ -11,5 +75,7 @@
         <a href='{{ get_url(path="resume.pdf") }}'>Download as PDF</a>
     </span>
 </div>
-{{ resume::from(path="static/resume.json") }}
+
+{{ page.content | safe }}
+
 {%- endblock main -%}
