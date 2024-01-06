@@ -2,25 +2,25 @@
 title = "Terts Diepraam"
 +++
 
-# Hi!
-I'm <span class="highlight">Terts Diepraam</span> ({{phonetic(text="/tɛrts ˈdipraːm/", audio="terts_diepraam.mpga")}}) and I am a
+Hi! I'm <span class="highlight">Terts Diepraam</span> ({{phonetic(text="/tɛrts ˈdipraːm/", audio="terts_diepraam.mpga")}}) and I am a software developer based in the Netherlands.
 
-- software engineer,
-- open source lover,
-- film enthusiast,
-- bad typist (although I'm trying to improve).
+I am a maintainer on the [uutils project](https://github.com/uutils). I mostly work with Rust, Python and TypeScript.
 
 Want to get in contact?
 <span class="button-row">
     [Send me an email!](mailto:terts.diepraam@gmail.com)
 </span>
 
-My personal projects mostly live on GitLab.
+My projects are on GitHub:
 <span class="button-row">
-    [Check it out!](https://gitlab.com/tertsdiepraam)
+    [Personal GitHub](https://github.com/tertsdiepraam)
+    [uutils GitHub](https://github.com/uutils)
 </span>
 
-A few projects are still on GitHub.
+
+You can also find me on:
 <span class="button-row">
-    [Check that out too!](https://github.com/tertsdiepraam)
+    [Mastodon](https://mastodon.online/@terts)
+    [Matrix](https://matrix.to/#/@terts:matrix.org)
+    [LinkedIn](https://www.linkedin.com/in/terts-diepraam-6b058097/)
 </span>
