@@ -1,6 +1,4 @@
 # The URL the site will be built for
-base_url = "https://tertsdiepraam.gitlab.io/"
-
 title = "Terts Diepraam"
 
 description = "I am Terts, I am developer"
