@@ -1,4 +1,6 @@
 # The URL the site will be built for
+base_url = "https://terts.dev"
+
 title = "Terts Diepraam"
 
 description = "I am Terts, I am developer"
