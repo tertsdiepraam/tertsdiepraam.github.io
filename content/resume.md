@@ -35,6 +35,34 @@ title = "Resume"
     url = "http://www.tudelft.nl"
 ) }}
 
+Track: Software Technology
+
+Thesis: 
+[Elaine: Elaborations of Higher-Order Effects as First-Class Language Feature](https://repository.tudelft.nl/islandora/object/uuid%3Af6c38be6-853f-499b-aa4e-cfa2ce219bf5)
+
+At TU Delft, I followed Computer Science with a focus on Programming Languages. For my thesis, I designed a language with support for higher-order effects, allowing concepts such as exception catching to be defined within the language.
+
+<details>
+<summary>Courses</summary>
+
+- Seminar Programming Languages
+- Software Verification
+- Compiler Construction A
+- Compiler Construction B
+- Language-Based Software Security
+- Analysis of Concurrent and Distributed Programs
+- Category Theory for Programmers
+- Introduction to High Performance Computing
+- Data Visualization
+- Distributed Algorithms
+- 3D Computer Graphics and Animation
+- Security and Cryptography
+- Seminar Computer Graphics
+- Advanced Algorithms
+- System Validation
+
+</details>
+
 {{ resumeheader(
     title = "Bachelor in Liberal Arts and Sciences",
     date = "Sep 2017 — Aug 2020",

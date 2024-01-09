@@ -4,7 +4,9 @@ title = "Terts Diepraam"
 
 Hi! I'm <span class="highlight">Terts Diepraam</span> ({{phonetic(text="/tɛrts ˈdipraːm/", audio="terts_diepraam.mpga")}}) and I am a software developer based in the Netherlands.
 
-I am a maintainer on the [uutils project](https://github.com/uutils). I mostly work with Rust, Python and TypeScript.
+I am a maintainer on the [uutils project](https://github.com/uutils), where we are rewriting the coreutils in Rust. From my work on uutils, I have extensive experience with both contributing to and maintaining open source code.
+
+I like to work on making software as reliable as possible. Therefore, I love to work with Rust. However, I also have worked with Python, web technology & Haskell.
 
 Want to get in contact?
 <span class="button-row">
