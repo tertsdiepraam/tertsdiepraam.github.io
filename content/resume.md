@@ -125,8 +125,17 @@ Grade: cum laude
 # Experience
 
 {{ resumeheader(
+    title ="Open Source Software Maintainer & Developer",
+    date = "Aug 2020 —  Present",
+    company = "uutils"
+    url = "https://uutils.github.io/"
+) }}
+
+I am a maintainer on the uutils project, which aims to reimplement the GNU coreutils in Rust. The project is entirely open source with an active community on GitHub. We strive for perfect compatibility with the existing GNU utilities.
+
+{{ resumeheader(
     title ="Developer",
-    date = "Oct 2019 — Aug 2023",
+    date = "Oct 2019 —  Aug 2023",
     company = "Bit"
     url = "https://wearebit.com/"
 ) }}
@@ -135,7 +144,7 @@ Bit develops innovative prototypes from the ground up using cutting-edge technol
 
 {{ resumeheader(
     title ="Coach",
-    date = "Sep 2020 — Aug 2021",
+    date = "Sep 2020 —  Aug 2021",
     company = "Bit Academy"
     url = "https://www.bit-academy.nl/"
 ) }}
@@ -144,7 +153,7 @@ The Bit Academy teaches programming at MBO level. I coached MBO students, teachi
 
 {{ resumeheader(
     title ="Data Science Intern",
-    date = "Sep 2019 — Dec 2019",
+    date = "Sep 2019 —  Dec 2019",
     company = "Machine Learning Programs"
     url = "https://www.mlprograms.com/"
 ) }}
@@ -153,7 +162,7 @@ MLP applies machine learning in the insurance industry. I worked here as a data 
 
 {{ resumeheader(
     title = "Blikopener",
-    date = "Sep 2015 — Dec 2018",
+    date = "Sep 2015 —  Dec 2018",
     company = "Stedelijk Museum Amsterdam"
     url = "https://www.stedelijk.nl/"
 ) }}
