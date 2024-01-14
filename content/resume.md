@@ -7,22 +7,28 @@ title = "Resume"
 
 <div class="social">
     <div>
-        <i class="fa fa-globe"></i><a href="https://terts.dev">terts.dev</a>
+        {{ icon(name="globe") }}
+        <a href="https://terts.dev">terts.dev</a>
     </div>
     <div>
-        <i class="fa fa-envelope"></i><a href="mailto:terts.diepraam@gmail.com">terts.diepraam@gmail.com</a>
+        {{ icon(name="envelope") }}
+        <a href="mailto:terts.diepraam@gmail.com">terts.diepraam@gmail.com</a>
     </div>
     <div>
-        <i class="fa fa-phone"></i><a href="tel:+31 6 34 11 60 44">+31 6 34 11 60 44</a>
+        {{ icon(name="phone") }}
+        <a href="tel:+31 6 34 11 60 44">+31 6 34 11 60 44</a>
     </div>
     <div>
-        <i class="fa fa-map-marker"></i><span>Amsterdam, NL</span>
+        {{ icon(name="location-dot") }}
+        <span>Amsterdam, NL</span>
     </div>
     <div>
-        <i class="fa-brands fa-github"></i><a href="http://github.com/tertsdiepraam">tertsdiepraam</a>
+        {{ icon(name="github") }}
+        <a href="http://github.com/tertsdiepraam">tertsdiepraam</a>
     </div>
     <div>
-        <i class="fa-brands fa-mastodon"></i><a href="https://mastodon.online/@terts">@terts@mastodon.online</a>
+        {{ icon(name="mastodon") }}
+        <a href="https://mastodon.online/@terts">@terts@mastodon.online</a>
     </div>
 </div>
 

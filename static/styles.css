@@ -209,6 +209,14 @@ nav > a:hover {
   text-decoration: none;
 }
 
+nav > a > img {
+  transition: filter 0.2s ease-out;
+}
+
+nav a:hover > img {
+  filter: invert(100%);
+}
+
 nav > a:hover:before {
   transform: scaleY(1);
 }
@@ -338,4 +346,17 @@ code:not([class^="language"]) {
   color: #ac311f;
   padding: 0 0.2em;
   border-radius: 0.2em;
+}
+
+/* Icons */
+.icon {
+  width: 1.1em;
+  height: 1.1em;
+  vertical-align: middle;
+  margin: 0 0.1em;
+}
+
+footer img {
+  height: 1.2em;
+  width: 1.2em;
 }
