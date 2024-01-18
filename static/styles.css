@@ -13,7 +13,7 @@
 html {
   font-size: 1.1rem;
   line-height: 1.618;
-  font-family: serif;
+  font-family: 'Noto Serif', serif;
   height: 100%;
   width: 100%;
   margin: 0;
@@ -118,7 +118,7 @@ body > div:nth-child(3) {
 }
 
 header {
-  font-family: "Raleway", sans-serif;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 header > nav {
@@ -222,6 +222,7 @@ nav > a:hover:before {
 }
 
 #home-button {
+  font-weight: 500;
   font-size: 1.5em;
   line-height: 1.2em;
   padding-top: 1em;

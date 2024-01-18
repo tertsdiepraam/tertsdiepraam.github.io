@@ -19,7 +19,6 @@ My projects are on GitHub:
     [uutils GitHub](https://github.com/uutils)
 </span>
 
-
 You can also find me on:
 <span class="button-row">
     [Mastodon](https://mastodon.online/@terts)
