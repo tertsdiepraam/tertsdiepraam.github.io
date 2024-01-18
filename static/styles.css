@@ -65,7 +65,7 @@ h5,
 h6 {
   color: #2a2a2a;
   line-height: 1.1;
-  font-family: Lato, Verdana, Geneva, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-weight: 700;
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -222,7 +222,6 @@ nav > a:hover:before {
 }
 
 #home-button {
-  font-weight: 700;
   font-size: 1.5em;
   line-height: 1.2em;
   padding-top: 1em;
@@ -290,7 +289,7 @@ a {
 
 .highlight {
   color: var(--dark-accent);
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .button-row {
