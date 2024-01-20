@@ -11,6 +11,14 @@ title = "Resume"
         <a href="https://terts.dev">terts.dev</a>
     </div>
     <div>
+        {{ icon(name="calendar") }}
+        <span>7-5-1999</span>
+    </div>
+    <div>
+        {{ icon(name="location-dot") }}
+        <a href="https://www.openstreetmap.org/relation/47811#map=12/52.3546/4.9181">Amsterdam, NL</a>
+    </div>
+    <div>
         {{ icon(name="envelope") }}
         <a href="mailto:terts.diepraam@gmail.com">terts.diepraam@gmail.com</a>
     </div>
@@ -19,16 +27,16 @@ title = "Resume"
         <a href="tel:+31 6 34 11 60 44">+31 6 34 11 60 44</a>
     </div>
     <div>
-        {{ icon(name="location-dot") }}
-        <span>Amsterdam, NL</span>
-    </div>
-    <div>
         {{ icon(name="github") }}
         <a href="http://github.com/tertsdiepraam">tertsdiepraam</a>
     </div>
     <div>
         {{ icon(name="mastodon") }}
         <a href="https://mastodon.online/@terts">@terts@mastodon.online</a>
+    </div>
+    <div>
+        {{ icon(name="linkedin") }}
+        <a href="https://www.linkedin.com/in/terts-diepraam-6b058097/">Terts Diepraam</a>
     </div>
 </div>
 
