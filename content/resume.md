@@ -32,6 +32,53 @@ title = "Resume"
     </div>
 </div>
 
+# Experience
+
+{{ resumeheader(
+    title ="Open Source Software Maintainer & Developer",
+    date = "Aug 2020 —  Present",
+    company = "uutils"
+    url = "https://uutils.github.io/"
+) }}
+
+I am a maintainer on the uutils project, which aims to reimplement the GNU coreutils in Rust. The project is entirely open source with an active community on GitHub. We strive for perfect compatibility with the existing GNU utilities.
+
+{{ resumeheader(
+    title ="Developer",
+    date = "Oct 2019 —  Aug 2023",
+    company = "Bit"
+    url = "https://wearebit.com/"
+) }}
+
+Bit develops innovative prototypes from the ground up using cutting-edge technologies. I work at Bit as a developer and have worked on many projects, from data science to mobile applications and advanced routing algorithms.
+
+{{ resumeheader(
+    title ="Coach",
+    date = "Sep 2020 —  Aug 2021",
+    company = "Bit Academy"
+    url = "https://www.bit-academy.nl/"
+) }}
+
+The Bit Academy teaches programming at MBO level. I coached MBO students, teaching them web programming and data science with technologies such as HTML, CSS, JS, PHP, SQL & Python.
+
+{{ resumeheader(
+    title ="Data Science Intern",
+    date = "Sep 2019 —  Dec 2019",
+    company = "Machine Learning Programs"
+    url = "https://www.mlprograms.com/"
+) }}
+
+MLP applies machine learning in the insurance industry. I worked here as a data science intern, where I applied many machine learning strategies and techniques to real data.
+
+{{ resumeheader(
+    title = "Blikopener",
+    date = "Sep 2015 —  Dec 2018",
+    company = "Stedelijk Museum Amsterdam"
+    url = "https://www.stedelijk.nl/"
+) }}
+
+The Blikopeners are young Amsterdam residents who aim to awaken their friends and other peers’ enthusiasm for art and culture. They look at art from a fresh perspective and share their ideas about current affairs, programs and exhibitions. The Blikopeners also organize tours, workshops & events in the museum.
+
 # Education
 
 {{ resumeheader(
@@ -128,52 +175,18 @@ Profile: Economy & Society, Culture & Society
 
 Grade: cum laude
 
-# Experience
+For my final project, I created a smartwatch based on a Raspberry Pi, including custom software and bluetooth connection with a smartphone.
 
-{{ resumeheader(
-    title ="Open Source Software Maintainer & Developer",
-    date = "Aug 2020 —  Present",
-    company = "uutils"
-    url = "https://uutils.github.io/"
-) }}
+# Talks
 
-I am a maintainer on the uutils project, which aims to reimplement the GNU coreutils in Rust. The project is entirely open source with an active community on GitHub. We strive for perfect compatibility with the existing GNU utilities.
+- _"uutils/coreutils & the quest for compatibility"_ at the Rust at TU Delft meetup. [video link](https://www.youtube.com/watch?v=fu2sxy6OR54)
 
-{{ resumeheader(
-    title ="Developer",
-    date = "Oct 2019 —  Aug 2023",
-    company = "Bit"
-    url = "https://wearebit.com/"
-) }}
+# Recreation
 
-Bit develops innovative prototypes from the ground up using cutting-edge technologies. I work at Bit as a developer and have worked on many projects, from data science to mobile applications and advanced routing algorithms.
-
-{{ resumeheader(
-    title ="Coach",
-    date = "Sep 2020 —  Aug 2021",
-    company = "Bit Academy"
-    url = "https://www.bit-academy.nl/"
-) }}
-
-The Bit Academy teaches programming at MBO level. I coached MBO students, teaching them web programming and data science with technologies such as HTML, CSS, JS, PHP, SQL & Python.
-
-{{ resumeheader(
-    title ="Data Science Intern",
-    date = "Sep 2019 —  Dec 2019",
-    company = "Machine Learning Programs"
-    url = "https://www.mlprograms.com/"
-) }}
-
-MLP applies machine learning in the insurance industry. I worked here as a data science intern, where I applied many machine learning strategies and techniques to real data.
-
-{{ resumeheader(
-    title = "Blikopener",
-    date = "Sep 2015 —  Dec 2018",
-    company = "Stedelijk Museum Amsterdam"
-    url = "https://www.stedelijk.nl/"
-) }}
-
-The Blikopeners are young Amsterdam residents who aim to awaken their friends and other peers’ enthusiasm for art and culture. They look at art from a fresh perspective and share their ideas about current affairs, programs and exhibitions. The Blikopeners also organize tours, workshops & events in the museum.
+- Bouldering (6c)
+- Playing bass guitar
+- Going to concerts and the cinema
+- Building & designing programming languages
 
 # Languages
 
