@@ -13,8 +13,6 @@ compile_sass = true
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
 
-paginate_by = 10
-
 [markdown]
 highlight_code = true
 highlight_theme = "OneHalfLight"
