@@ -3,6 +3,7 @@ title = "Projects"
 +++
 
 This page contains a (non-exhaustive) list of personal projects.
+
 ## Sorters
 A sorting algorithm visualizer for the browser written mostly in Rust with
 WebAssembly. To my knowledge, this is one of the most feature-packed sorting
