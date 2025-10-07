@@ -25,6 +25,7 @@ Will be added once it's published.
 
 - Demo: [repo](https://github.com/tertsdiepraam/roto-demo)
 - Roto: [repo](https://github.com/NLnetLabs/roto), [docs](https://roto.docs.nlnetlabs.nl)
+- Rotonda: [repo](https://github.com/NLnetLabs/rotonda), [docs](https://rotonda.docs.nlnetlabs.nl)
 - RustWeek: [website](http://rustweek.org)
-- NLnet Labs: [website](https://nlnetlabs.nl), [GitHub](https://github.com/NLnetLabs)
+- NLnet Labs: [website](https://nlnetlabs.nl), [GitHub](https://github.com/NLnetLabs), [Mastodon](https://social.nlnetlabs.nl/@nlnetlabs)
 - Me: [website](https://terts.dev), [GitHub](https://github.com/tertsdiepraam), [Mastodon](https://mastodon.online/@terts), [more](https://terts.dev/links)
