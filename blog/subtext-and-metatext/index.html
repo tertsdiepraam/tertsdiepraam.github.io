@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="https://terts.dev/apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" type="text/css" href="https://terts.dev/styles.css"><title>The Subtext and Metatext of Code | Terts Diepraam</title>
+    <script type="text/javascript">
+        window.addEventListener('load', function() {
+            for (const ref of document.getElementsByClassName('footnote-reference')) {
+                const hash = ref.children[0].hash.substring(1);
+                const refhash = 'ref:' + hash;
+                ref.id = refhash;
+            }
+    
+            for (const footnote of document.getElementsByClassName('footnote-definition')) {
+                const hash = footnote.id;
+                const refhash = 'ref:' + hash;
+                const backlink = document.createElement('a');
+                backlink.href = '#' + refhash;
+                backlink.className = 'footnote-backlink';
+                backlink.innerText = '↩';
+                backlink.style.paddingLeft = "1ch"
+                const paras = footnote.children;
+                const lastPara = paras[paras.length - 1];
+                lastPara.appendChild(backlink);
+            }
+        });
+    </script></head>
+    <body>
+        <div class="hide-on-phone"></div>
+<header>
+    <div></div>
+    <nav id="large-nav">
+        <a class="sweep-up" href="https://terts.dev/" id="home-button">
+            <div>Terts Diepraam</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/blog/">
+            <div>BLOG</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/resume/">
+            <div>RESUME</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/projects/">
+            <div>PROJECTS</div>
+        </a>
+    </nav>
+    <div></div>
+</header>
+<div class="hide-on-phone"></div>
+        <div class="hide-on-phone"></div>
+        <main><div id="title-div">
+        <h1 id="title">The Subtext and Metatext of Code</h1>
+        
+            <p class="date">Posted on 01 November 2022</p>
+        
+        
+    </div>
+    <p>Programming relies heavily on implicit information, probably even more than we
+would like to admit. When we come across foreign code, we make bold assumptions
+and rely on conventions to try to build a mental model of the code. If that's
+easy to do, we call the code "clear", but that term is too vague. Instead, I
+would like to propose that we borrow some concepts from linguistics: subtext and
+metatext.</p>
+<p>If we want our code to be understood by others, we need to explain the intent
+and context behind the code to the reader. We can do this explicitly via
+comments or implicitly, by including signals that hint toward the function of
+the code (e.g. choosing clear variable names). I call these hints the <em>subtext</em>
+of the code. Similarly, I call the direct explanation via comments <em>metatext</em>,
+because they are a part of the code that explains the code and are therefore
+self-referential.</p>
+<h1 id="text-subtext-metatext">Text, subtext &amp; metatext</h1>
+<p>Let's make these definitions a bit more formal.</p>
+<ul>
+<li>The <strong><em>text</em></strong> is all the source code for a library or application.</li>
+<li>The <strong><em>subtext</em></strong> is the context, intent and reasoning behind the code implied
+by the text.</li>
+<li>The <strong><em>metatext</em></strong> is anything that directly explains the code. For example,
+comments and documentation.</li>
+</ul>
+<p>The code below is basically devoid of subtext and metatext. It is a function
+calculating the factorial of a natural number, but nothing in the code hints to
+that functionality.</p>
+<pre data-lang="python" style="background-color:#fafafa;color:#383a42;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#a626a4;">def </span><span style="color:#0184bc;">a</span><span>(</span><span style="color:#e45649;">b</span><span>):
+</span><span>    </span><span style="color:#a626a4;">if </span><span>b </span><span style="color:#a626a4;">== </span><span style="color:#c18401;">0</span><span>:
+</span><span>        </span><span style="color:#a626a4;">return </span><span style="color:#c18401;">1
+</span><span>    </span><span style="color:#a626a4;">else</span><span>:
+</span><span>        </span><span style="color:#a626a4;">return </span><span>b </span><span style="color:#a626a4;">* </span><span style="color:#e45649;">a</span><span>(b</span><span style="color:#a626a4;">-</span><span style="color:#c18401;">1</span><span>)
+</span></code></pre>
+<p>Our goal is to change the text such that it includes hints to the intent, that
+is, to add the subtext. We can start doing this by choosing better names. The
+<code>factorial</code> name explains that this defines a function that computes a
+factorial. <code>n</code> implies by convention that the input should be a natural number.
+The result is much clearer!</p>
+<pre data-lang="python" style="background-color:#fafafa;color:#383a42;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#a626a4;">def </span><span style="color:#0184bc;">factorial</span><span>(</span><span style="color:#e45649;">n</span><span>):
+</span><span>    </span><span style="color:#a626a4;">if </span><span>n </span><span style="color:#a626a4;">== </span><span style="color:#c18401;">0</span><span>:
+</span><span>        </span><span style="color:#a626a4;">return </span><span style="color:#c18401;">1
+</span><span>    </span><span style="color:#a626a4;">else</span><span>:
+</span><span>        </span><span style="color:#a626a4;">return </span><span>n </span><span style="color:#a626a4;">* </span><span style="color:#e45649;">factorial</span><span>(n</span><span style="color:#a626a4;">-</span><span style="color:#c18401;">1</span><span>)
+</span></code></pre>
+<p>Finally, we can add metatext with comments and type hints. Note that in
+statically typed languages, types are a part of the text, not the metatext, but
+in this post, I'm using untypechecked Python where type hints are nothing more
+than comments in disguise.</p>
+<p>In the metatext, we can explain anything not immediately obvious from the code.
+We explicitly state that <code>n</code> should be an <code>int</code> and that <code>n</code> should be a natural
+number (i.e. greater than zero). We also state the limitations of the code in
+the metatext.</p>
+<pre data-lang="python" style="background-color:#fafafa;color:#383a42;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#a626a4;">def </span><span style="color:#0184bc;">factorial</span><span>(</span><span style="color:#e45649;">n</span><span>: int) -&gt; int:
+</span><span>    </span><span style="color:#a0a1a7;">&quot;&quot;&quot;
+</span><span style="color:#a0a1a7;">    Computes the factorial of a natural number `n`
+</span><span style="color:#a0a1a7;">
+</span><span style="color:#a0a1a7;">    Warning: this function will not terminate if `n` is negative.
+</span><span style="color:#a0a1a7;">    &quot;&quot;&quot;
+</span><span>    </span><span style="color:#a0a1a7;"># TODO: Rewrite without recursion for better performance.
+</span><span>
+</span><span>    </span><span style="color:#a0a1a7;"># We calculate the factorial by recursion. The base case of
+</span><span>    </span><span style="color:#a0a1a7;"># the recursion comes from the fact that 0! = 1.
+</span><span>    </span><span style="color:#a626a4;">if </span><span>n </span><span style="color:#a626a4;">== </span><span style="color:#c18401;">0</span><span>:
+</span><span>        </span><span style="color:#a626a4;">return </span><span style="color:#c18401;">1
+</span><span>    </span><span style="color:#a626a4;">else</span><span>:
+</span><span>        </span><span style="color:#a626a4;">return </span><span>n </span><span style="color:#a626a4;">* </span><span style="color:#e45649;">factorial</span><span>(n</span><span style="color:#a626a4;">-</span><span style="color:#c18401;">1</span><span>)
+</span></code></pre>
+<p>It should be obvious that good code has both good subtext and good metatext. In
+most cases, neither is sufficient to convey the intent efficiently. However,
+your opinion on what constitutes good sub- or metatext might differ from my
+opinion and that's okay. It also depends on the context and purpose of the code.
+For example, the requirements change depending on whether it is production code
+or code written for educational purposes.</p>
+<h1 id="basic-subtext">Basic subtext</h1>
+<p>Now, let's explore how we can use subtext to our advantage. We start with this
+example of some intentionally bad Python code:</p>
+<pre data-lang="python" style="background-color:#fafafa;color:#383a42;" class="language-python "><code class="language-python" data-lang="python"><span>x </span><span style="color:#a626a4;">= </span><span>[</span><span style="color:#c18401;">4</span><span>, </span><span style="color:#c18401;">10</span><span>, </span><span style="color:#c18401;">2</span><span>]
+</span><span>z </span><span style="color:#a626a4;">= </span><span style="color:#c18401;">0
+</span><span style="color:#a626a4;">for </span><span>y </span><span style="color:#a626a4;">in </span><span>x:
+</span><span>    z </span><span style="color:#a626a4;">+= </span><span>x
+</span></code></pre>
+<p>The code above computes the sum of 3 numbers, but you have to read the full code
+to understand it, because the subtext is missing. We can add subtext with better
+variable names:</p>
+<pre data-lang="python" style="background-color:#fafafa;color:#383a42;" class="language-python "><code class="language-python" data-lang="python"><span>numbers </span><span style="color:#a626a4;">= </span><span>[</span><span style="color:#c18401;">4</span><span>, </span><span style="color:#c18401;">10</span><span>, </span><span style="color:#c18401;">2</span><span>]
+</span><span>total_sum </span><span style="color:#a626a4;">= </span><span style="color:#c18401;">0
+</span><span style="color:#a626a4;">for </span><span>number </span><span style="color:#a626a4;">in </span><span>numbers:
+</span><span>    total_sum </span><span style="color:#a626a4;">+= </span><span>number
+</span></code></pre>
+<p>Now, when you see the variables <code>numbers</code> and <code>total_sum</code>, you can already guess
+what the rest of the code is going to do and you only have to check that
+assumption. Of course, subtext can also imply incorrect information, for
+example, if the variable names do not match the actual computation<sup class="footnote-reference"><a href="#1">1</a></sup>:</p>
+<pre data-lang="python" style="background-color:#fafafa;color:#383a42;" class="language-python "><code class="language-python" data-lang="python"><span>numbers </span><span style="color:#a626a4;">= </span><span>[</span><span style="color:#c18401;">4</span><span>, </span><span style="color:#c18401;">10</span><span>, </span><span style="color:#c18401;">2</span><span>]
+</span><span>total_product </span><span style="color:#a626a4;">= </span><span style="color:#c18401;">0
+</span><span style="color:#a626a4;">for </span><span>number </span><span style="color:#a626a4;">in </span><span>numbers:
+</span><span>    total_product </span><span style="color:#a626a4;">+= </span><span>number
+</span></code></pre>
+<p>Changing variable names is not all we can do to improve subtext. To show our
+intent even more clearly, we can call the <code>sum</code> function instead of using a
+<code>for</code> loop. The difference is that a <code>for</code> loop is a general construct for all
+kinds of loops, but that <code>sum</code> can only be used for, well, summing things. So
+<code>sum</code> carries the subtext that our intent is to sum things.</p>
+<pre data-lang="python" style="background-color:#fafafa;color:#383a42;" class="language-python "><code class="language-python" data-lang="python"><span>numbers </span><span style="color:#a626a4;">= </span><span>[</span><span style="color:#c18401;">4</span><span>, </span><span style="color:#c18401;">10</span><span>, </span><span style="color:#c18401;">2</span><span>]
+</span><span>total_sum </span><span style="color:#a626a4;">= </span><span style="color:#0184bc;">sum</span><span>(numbers)
+</span></code></pre>
+<p>In this final version, the code is immediately obvious, because the subtext
+supports the text. When people say that code should be "self-documenting", this
+is what they mean: that the subtext resolves most questions about the code.</p>
+<p>Note that there are also multiple pieces of the code signalling that we are
+summing the numbers (the variable and function name). If there is consistency
+between multiple signals, that will help the reader to confidently build a
+mental model of the code.</p>
+<p>Code organization is also part of the subtext. Putting functions next to each
+other in a file can implies that they are linked in some way. Similarly, if a
+function is defined far away from where it is called it is taken out of its own
+context and therefore harder to understand. This is often the case when there is
+some catch-all <code>utils</code> module, which tend to contain a bunch of unrelated
+functions.</p>
+<hr />
+<p><strong>Basic subtext guidelines</strong></p>
+<ul>
+<li>Give variables, functions and types descriptive names.</li>
+<li>Give source files descriptive names.</li>
+<li>Break complicated expressions up into several steps (with descriptive names).</li>
+<li>Use specialized functions and language constructs instead general functions
+and language constructs.</li>
+<li>Organize the source files in a logical way.</li>
+</ul>
+<h1 id="conventional-subtext">Conventional subtext</h1>
+<p>Subtext is also about convention, both within a codebase and within the larger
+programming community. For example, <code>n</code> implies that a variable holds an integer
+and <code>f</code> is often used for functions. Using other names, like <code>b</code> and <code>k</code>, could
+be confusing to other programmers. Similarly, using <code>f</code> for an integer would
+also be confusing.</p>
+<p>Python has two main constructs for applying some function to the elements of a
+list: <code>map</code> and list comprehensions.</p>
+<pre data-lang="python" style="background-color:#fafafa;color:#383a42;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#a626a4;">def </span><span style="color:#0184bc;">double</span><span>(</span><span style="color:#e45649;">x</span><span>: int) -&gt; int:
+</span><span>    </span><span style="color:#a626a4;">return </span><span style="color:#c18401;">2 </span><span style="color:#a626a4;">* </span><span>x
+</span><span>
+</span><span>numbers </span><span style="color:#a626a4;">= </span><span>[</span><span style="color:#c18401;">4</span><span>, </span><span style="color:#c18401;">10</span><span>, </span><span style="color:#c18401;">2</span><span>]
+</span><span>
+</span><span style="color:#a0a1a7;"># map
+</span><span>doubled </span><span style="color:#a626a4;">= </span><span style="color:#e45649;">list</span><span>(</span><span style="color:#0184bc;">map</span><span>(double, numbers))
+</span><span>
+</span><span style="color:#a0a1a7;"># list comprehension
+</span><span>doubled </span><span style="color:#a626a4;">= </span><span>[</span><span style="color:#e45649;">double</span><span>(n) </span><span style="color:#a626a4;">for </span><span>n </span><span style="color:#a626a4;">in </span><span>numbers]
+</span></code></pre>
+<p>In my experience, most python programmers prefer the list comprehension and will
+use that instinctively. So, the list comprehension should be used, even if you
+do not agree with that preference (e.g. if you have a background in functional
+programming), because it carries subtext by convention established in the Python
+community.</p>
+<p>However, if <code>map</code>, <code>filter</code> and <code>fold</code> are already used a lot in the codebase,
+then the <code>map</code> might be more appropriate, because it carries subtext by
+convention established in the codebase itself, overriding the conventions from
+the larger Python community.</p>
+<p>Conventions are usually difficult to pick up for programmers that are new to a
+language or framework, because you usually pick them up over time. Relying too
+much on conventional subtext is therefore a pitfall. If you're learning a new
+technology or codebase it's therefore a good idea to study existing code to
+figure out the conventions, so you can apply them (in moderation) to your own
+code.</p>
+<hr />
+<p><strong>Conventional subtext guidelines</strong></p>
+<ul>
+<li>Study the conventions of languages, frameworks and codebases.</li>
+<li>Establish and maintain clear conventions (e.g. by using a consistent naming
+scheme).</li>
+<li>Do not break with convention without a good reason.</li>
+<li>Be aware that newcomers might have a hard time understanding code that relies
+solely on conventional subtext.</li>
+</ul>
+<h1 id="metatext">Metatext</h1>
+<p>Subtext is often not enough to explain the full context and intent of the code.
+For instance, it is really difficult to express assumptions and edge cases in
+text and subtext alone. In these cases, we need to resort to metatext. Metatext
+is the text in the code that directly explains the code. Some examples are
+comments, docstrings and type hints. None of these have any influence on what
+the code does, but they exist to explain what the code does and why.</p>
+<p>Metatext is constantly in danger of going out of sync with the text, even more
+so than subtext. So it's important to update documentation along with changes to
+the code.</p>
+<p>Because comments appear alongside the code, it is only useful when it doesn't
+repeat information that is already easily gathered from the text or subtext. If
+a comment is necessary to explain the basic operation, you should first consider
+improving the subtext. But that doesn't mean that all code can (or should) be
+entirely self-documenting, because context is hard to convey via subtext. Below
+is an example of a bad and good comment.</p>
+<pre data-lang="python" style="background-color:#fafafa;color:#383a42;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#a0a1a7;"># Bad: states the obvious
+</span><span style="color:#a0a1a7;"># Divide x by 100
+</span><span>x </span><span style="color:#a626a4;">/= </span><span style="color:#c18401;">100
+</span><span>
+</span><span style="color:#a0a1a7;"># Good: gives reason for division
+</span><span style="color:#a0a1a7;"># Convert percentage into fraction
+</span><span>x </span><span style="color:#a626a4;">/= </span><span style="color:#c18401;">100
+</span></code></pre>
+<p>On the other hand, docstrings should state some things that are obvious from the
+code, because we cannot assume that a user of the function will look at the
+function body. An ideal docstring contains everything that a caller of a
+function might want to know and nothing more.</p>
+<hr />
+<p><strong>Metatext guidelines</strong></p>
+<ul>
+<li>Use comments mostly for information that cannot be put into subtext (context,
+reasoning, etc.).</li>
+<li>Docstrings should contain all that a caller needs to know.</li>
+<li>Keep metatext up to date with the code.</li>
+</ul>
+<h1 id="conclusion">Conclusion</h1>
+<p>Clear code is code where the text, subtext and metatext all support each other
+to convey the intent, reasoning and context behind a computation. For every
+change you make to code, you should consider how you can update and improve the
+subtext and metatext such that your change becomes clear to others.</p>
+<hr style="margin: 2em 0;">
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>One might call this code "ironic", because the text and subtext do not
+match, but that concept does not seem particularly useful in the context of
+programming. If you know an application for ironic code, please let me know!</p>
+</div>
+</main>
+        <div class="hide-on-phone"></div>
+        <footer>
+<nav>
+    <div></div>
+    <a href="mailto:terts.diepraam@gmail.com" title="Mail"><img src="/icons/envelope.svg" /></a>
+    <a href="https://github.com/tertsdiepraam" title="GitHub"><img src="/icons/github.svg" /></a>
+    <a rel="me" href="https://mastodon.online/@terts" title="Mastodon"><img src="/icons/mastodon.svg" /></a>
+    <div></div>
+</nav>
+</footer></body>
+</html>

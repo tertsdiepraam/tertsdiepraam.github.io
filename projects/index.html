@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="https://terts.dev/apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" type="text/css" href="https://terts.dev/styles.css"><title>Projects | Terts Diepraam</title>
+    <script type="text/javascript">
+        window.addEventListener('load', function() {
+            for (const ref of document.getElementsByClassName('footnote-reference')) {
+                const hash = ref.children[0].hash.substring(1);
+                const refhash = 'ref:' + hash;
+                ref.id = refhash;
+            }
+    
+            for (const footnote of document.getElementsByClassName('footnote-definition')) {
+                const hash = footnote.id;
+                const refhash = 'ref:' + hash;
+                const backlink = document.createElement('a');
+                backlink.href = '#' + refhash;
+                backlink.className = 'footnote-backlink';
+                backlink.innerText = '↩';
+                backlink.style.paddingLeft = "1ch"
+                const paras = footnote.children;
+                const lastPara = paras[paras.length - 1];
+                lastPara.appendChild(backlink);
+            }
+        });
+    </script></head>
+    <body>
+        <div class="hide-on-phone"></div>
+<header>
+    <div></div>
+    <nav id="large-nav">
+        <a class="sweep-up" href="https://terts.dev/" id="home-button">
+            <div>Terts Diepraam</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/blog/">
+            <div>BLOG</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/resume/">
+            <div>RESUME</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/projects/">
+            <div>PROJECTS</div>
+        </a>
+    </nav>
+    <div></div>
+</header>
+<div class="hide-on-phone"></div>
+        <div class="hide-on-phone"></div>
+        <main><div id="title-div">
+        <h1 id="title">Projects</h1>
+        
+        
+    </div>
+    <p>This page contains a (non-exhaustive) list of personal projects.</p>
+<h2 id="sorters">Sorters</h2>
+<p>A sorting algorithm visualizer for the browser written mostly in Rust with
+WebAssembly. To my knowledge, this is one of the most feature-packed sorting
+algorithm visualizers available in the browser. It supports a variety of sorting
+algorithms, visualizations, colorschemes and more.
+<span class="button-row">
+<a href="https://tertsdiepraam.gitlab.io/Sorters/">Live Demo</a>
+<a href="https://www.gitlab.com/TertsDiepraam/Sorters">GitLab Repository</a>
+</span></p>
+<h2 id="removing-confusion-from-petri-nets-bachelor-s-thesis">Removing Confusion from Petri Nets (Bachelor's Thesis)</h2>
+<p>Accompanying my bachelor's thesis, I wrote a Python implementation of the
+algorithm described in the thesis. More information can be found on the Gitlab
+repository and the thesis.
+<span class="button-row">
+<a href="https://gitlab.com/tertsdiepraam/petrinet">GitLab Repository</a>
+<a href="/Terts_Diepraam_Thesis.pdf">Thesis</a>
+</span></p>
+<h2 id="conway-s-game-of-life">Conway's Game of Life</h2>
+<p>Back in 2017, I implemented John Conway's Game of Life in JavaScript.
+<span class="button-row">
+<a href="https://tertsdiepraam.github.io/Conways-Game-of-Life/">Live Demo</a>
+<a href="https://www.github.com/TertsDiepraam/Conways-Game-of-Life/">GitHub Repository</a>
+</span></p>
+</main>
+        <div class="hide-on-phone"></div>
+        <footer>
+<nav>
+    <div></div>
+    <a href="mailto:terts.diepraam@gmail.com" title="Mail"><img src="/icons/envelope.svg" /></a>
+    <a href="https://github.com/tertsdiepraam" title="GitHub"><img src="/icons/github.svg" /></a>
+    <a rel="me" href="https://mastodon.online/@terts" title="Mastodon"><img src="/icons/mastodon.svg" /></a>
+    <div></div>
+</nav>
+</footer></body>
+</html>

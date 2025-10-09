@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="https://terts.dev/apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" type="text/css" href="https://terts.dev/styles.css"><title>Analyzing uutils coreutils dependencies | Terts Diepraam</title>
+    <script type="text/javascript">
+        window.addEventListener('load', function() {
+            for (const ref of document.getElementsByClassName('footnote-reference')) {
+                const hash = ref.children[0].hash.substring(1);
+                const refhash = 'ref:' + hash;
+                ref.id = refhash;
+            }
+    
+            for (const footnote of document.getElementsByClassName('footnote-definition')) {
+                const hash = footnote.id;
+                const refhash = 'ref:' + hash;
+                const backlink = document.createElement('a');
+                backlink.href = '#' + refhash;
+                backlink.className = 'footnote-backlink';
+                backlink.innerText = '↩';
+                backlink.style.paddingLeft = "1ch"
+                const paras = footnote.children;
+                const lastPara = paras[paras.length - 1];
+                lastPara.appendChild(backlink);
+            }
+        });
+    </script></head>
+    <body>
+        <div class="hide-on-phone"></div>
+<header>
+    <div></div>
+    <nav id="large-nav">
+        <a class="sweep-up" href="https://terts.dev/" id="home-button">
+            <div>Terts Diepraam</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/blog/">
+            <div>BLOG</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/resume/">
+            <div>RESUME</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/projects/">
+            <div>PROJECTS</div>
+        </a>
+    </nav>
+    <div></div>
+</header>
+<div class="hide-on-phone"></div>
+        <div class="hide-on-phone"></div>
+        <main><div id="title-div">
+        <h1 id="title">Analyzing uutils coreutils dependencies</h1>
+        
+        
+    </div>
+    <p>uutils is a full rewrite of the GNU coreutils in Rust. That's a big effort and the project is quite large. As a result, the dependency graph is huge too. A large dependency graph is hard to reason about and to keep up to date, so it makes development harder.</p>
+<p>In this post I want to investigate how we can analyze large dependency trees and how we can keep them in check.This is an exploration and I don't pretend to have all the answers, but hopefully this is useful.</p>
+<h1 id="what-sparked-this-investigation">What sparked this investigation</h1>
+<p>When uutils is posted to HackerNews or some other forum, we always get criticism about our number of dependencies. The lazy version of that criticism is that somebody just looks at the <code>Cargo.lock</code>, counts the entries in it and cries something along the lines of "382 dependencies?! For coreutils?! These devs are useless!"</p>
+<blockquote>
+<p>If you want to verify this number, an easy command is using <code>ripgrep</code> to count the <code>[[package]]</code> entries:
+rg -F '[[package]]' Cargo.lock --count</p>
+</blockquote>
+<p>Of course, if you know a bit about <code>cargo</code>, you know that this is not quite fair. There's many kinds of dependencies, and only some are important to most people. For example, nobody cares about the number of dependencies that are only used in testing and aren't part of the actual shipped binaries. Also, more than 100 of those entries are not dependencies; they are our own crates.</p>
+<p>Nevertheless, there are good reasons to care about dependencies:</p>
+<ul>
+<li>Dependencies need to be kept up to date in the project</li>
+<li>Dependencies need to be maintained</li>
+<li>Dependencies need to be reviewed</li>
+<li>Dependencies need to be deduplicated (more about that later)</li>
+</ul>
+<p>So, I set out to do a more in depth analysis, so that I can decide for myself how bad our dependencies actually are.</p>
+<h1 id="a-better-dependency-count">A better dependency count</h1>
+<p>Let's start with some simple analysis of <code>Cargo.lock</code>. While <code>ripgrep</code> is amazing, <code>Cargo.lock</code> is structured data, so it's not the best tool for the job. Instead, I'll be using <code>nu</code>.</p>
+<p>We can open and load <code>Cargo.lock</code> like this:</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; open Cargo.lock | from toml
+</span><span>╭─────────┬──────────────────╮
+</span><span>│ package │ [table 382 rows] │
+</span><span>│ version │ 3                │
+</span><span>╰─────────┴──────────────────╯
+</span></code></pre>
+<blockquote>
+<p>Note: nushell usually parses TOML automatically, but it only does that for files with the <code>.toml</code> extension.</p>
+</blockquote>
+<p>That's handy! We get the count for free! Since we don't care about the version, let's limit ourselves to the <code>package</code> field:</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; let package = (open Cargo.lock | from toml | get package)
+</span></code></pre>
+<p>This gives us a giant table with the following columns:</p>
+<ul>
+<li>checksum</li>
+<li>name</li>
+<li>source</li>
+<li>version</li>
+<li>dependencies</li>
+</ul>
+<p>We can now easily filter our own crates out because those do not have a <code>source</code>:</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; $package | compact source
+</span></code></pre>
+<p>We are now left with a table of 273 external crates. However, some of those are duplicated. I'll talk more about that later. For now, let's deduplicate.</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; let $external = ($package | compact source | uniq-by name)
+</span></code></pre>
+<p>That leaves us with 259 external crates.</p>
+<h1 id="transitive-dependencies">Transitive dependencies</h1>
+<p>So now, let's see which ones are direct dependencies and which are transitive. There's probably tools for doing this, but I'm having with <code>nu</code>, so I'll stick with it.</p>
+<p>First, let's get a list of the names of direct dependencies:</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; let direct = ($package | where source? == null | get dependencies? | flatten | compact | sort | uniq)
+</span></code></pre>
+<p>This includes our own crates so we have to filter them out. I'm not a nushell expert so there's probably a better way to do this, but this is the command I came up with:</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; let direct_external = ($direct | where {|name| $external | any {|ex| $ex.name == $name}})
+</span></code></pre>
+<p>This gives us a list of 94 dependencies, which means we have 165 transitive dependencies.</p>
+<h1 id="counting-projects-instead-of-crates">Counting projects instead of crates</h1>
+<p>So, that's about as far as I can go with only <code>Cargo.lock</code>. Luckily, <code>crates.io</code> has an API! Let's see if we can use it from <code>nu</code>:</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; http get crates.io/api/v1/crates/clap
+</span><span>╭────────────┬────────────────────╮
+</span><span>│ categories │ [table 1 row]      │
+</span><span>│ crate      │ {record 19 fields} │
+</span><span>│ keywords   │ [table 5 rows]     │
+</span><span>│ versions   │ [table 360 rows]   │
+</span><span>╰────────────┴────────────────────╯
+</span></code></pre>
+<p>That seems to work! Let's do that for all our external dependencies.</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; let external2 = (
+</span><span>    $external 
+</span><span>    | get name 
+</span><span>    | each {|name| 
+</span><span>        print $name; 
+</span><span>        http get $&quot;https://crates.io/api/v1/crates/($name)&quot; | get crate
+</span><span>    }
+</span><span>)
+</span></code></pre>
+<p>Time to apply an assumption: two crates belong to the same "project" if they have the same repository. It's not 100% true, but it's close enough for me.</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; $external2 | uniq-by repository | length
+</span><span>202
+</span></code></pre>
+<p>Ok, now let's do the same for direct external dependencies:</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; let direct_external2 = ($direct_external | each {|name| print $name; http get $&quot;https://crates.io/api/v1/crates/($name)&quot; | get crate})
+</span><span>&gt; $direct_external2 | uniq-by repository | length
+</span><span>86
+</span></code></pre>
+<h1 id="who-are-we-depending-on">Who are we depending on?</h1>
+<p>Who's in charge of these dependencies? Crates have owners, but I think the github organisation/owner is a better indicator of owner in this case. Let's see where that leads us.</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; let owners = ($external2 | compact repository | group-by { get repository | url parse | get path | path split | get 1 })
+</span><span>&gt; $owners | columns | length
+</span><span>126
+</span></code></pre>
+<p>Many owners are well-known and trusted individuals and organisations in the Rust community. Names like "dtolnay", "BurntSushi", "matklad", "seanmonstar", "rust-cli", "clap-rs", "rust-lang", "chronotope", "crossbeam-rs" and, of course, "nushell". However, there are plenty of names that are unfamiliar to me. That does not mean that the project is bad, but it does mean that we need to be more careful with those dependencies.</p>
+<p>If you're interested, here are the organisations with the most crates used by uutils:</p>
+<ul>
+<li><code>rust-lang</code>: 21</li>
+<li><code>RustCrypto</code>: 11</li>
+<li><code>dtolnay</code>: 10</li>
+<li><code>microsoft</code>: 9</li>
+<li><code>rust-cli</code>: 8</li>
+<li><code>BurntSushi</code>: 8</li>
+</ul>
+<p>I got those counts with this command:</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; $owners | transpose | insert size { get column1 | length } | sort-by size
+</span></code></pre>
+<h1 id="what-s-actually-used-on-unix">What's actually used (on Unix)?</h1>
+<p>Coming back to something I talked about before: which dependencies are actually relevant. <code>Cargo.lock</code> includes much more than what we're actually using. <code>Cargo.lock</code> contains the entire dependency graph, including dependencies that we are not using, either because they are optional or because we don't use the feature of a depedency that enables that dependency. We need a better way to get that info.</p>
+<p>Luckily, we have that info in the form of <code>cargo tree</code>. I'll let <code>cargo tree</code> print out all the non-dev dependencies, which are the ones that end up in the final binary. I'll also limit to the features that can be enabled on Unix and leave out Windows and other platforms. Cargo tree gives us a string output, so parsing it is a bit ugly, but this seems to work:</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; let used_crates = (
+</span><span>    cargo tree -e no-dev --features unix 
+</span><span>    | rg &quot;[a-zA-Z_-]+ v[0-9.]+&quot; -o
+</span><span>    | lines
+</span><span>    | each { |line| str substring 0..($line | str index-of &quot; &quot;) }
+</span><span>    | uniq
+</span><span>)
+</span></code></pre>
+<p>Again, let's intersect with the external deps:</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; let used_external = ($external.name | where {|name| $used_crates | any {|used| $used == $name }})
+</span><span>&gt; $used_external | length
+</span><span>158
+</span></code></pre>
+<p>And external &amp; direct:</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>&gt; let used_direct_external = ($direct_external | where {|name| $used_crates | any {|used| $used == $name }})
+</span><span>&gt; $used_direct_external | length
+</span><span>70
+</span></code></pre>
+<h1 id="concluding-the-counts">Concluding the counts</h1>
+<p>So we have several "dependency counts" now. Here's an overview:</p>
+<ul>
+<li>External crates: 259</li>
+<li>External "projects": 202</li>
+<li>External used crates: 158</li>
+<li>Direct external crates: 94</li>
+<li>Direct external "projects": 84</li>
+<li>Direct external used crates: 70</li>
+</ul>
+<p>Which one you care about is up to you.</p>
+<h1 id="making-a-good-nu-script-for-this">Making a good nu script for this</h1>
+<p>All the commands above we're just improvised. We can probably do a bit better.</p>
+</main>
+        <div class="hide-on-phone"></div>
+        <footer>
+<nav>
+    <div></div>
+    <a href="mailto:terts.diepraam@gmail.com" title="Mail"><img src="/icons/envelope.svg" /></a>
+    <a href="https://github.com/tertsdiepraam" title="GitHub"><img src="/icons/github.svg" /></a>
+    <a rel="me" href="https://mastodon.online/@terts" title="Mastodon"><img src="/icons/mastodon.svg" /></a>
+    <div></div>
+</nav>
+</footer></body>
+</html>

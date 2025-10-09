@@ -1,0 +1,358 @@
+/* Colors */
+:root {
+  --background-color: #fdfdfd;
+  --background-dark: #bbb5a9;
+  --dark-accent: #ac311f;
+  --darker-accent: #58190f;
+  --light-accent: #e5452c;
+  --rule: 4px solid var(--dark-accent);
+}
+
+/* BASIC TYPOGRAPHY                       */
+/* from https://github.com/oxalorg/sakura */
+html {
+  font-size: 1.1rem;
+  line-height: 1.618;
+  font-family: 'Noto Serif', serif;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: #4a4a4a;
+  background-color: var(--background-color);
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: calc(100% - 2em);
+  display: grid;
+  grid-template-columns: 1fr 40em 1fr;
+  grid-template-rows: min-content 1fr min-content;
+  column-gap: 16px;
+  margin: 0 1em;
+}
+
+@media only screen and (max-width: 40em) {
+  body {
+    grid-template-columns: 0 100% 0;
+    grid-column-gap: 0;
+  }
+
+  #home-button > div {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 684px) {
+  html {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 382px) {
+  html {
+    font-size: 0.8rem;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #2a2a2a;
+  line-height: 1.1;
+  font-family: Verdana, Geneva, sans-serif;
+  font-weight: 700;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+  margin-bottom: 0rem;
+  margin-top: 2rem;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.8em;
+}
+
+h3 {
+  font-size: 1.6em;
+}
+
+h4 {
+  font-size: 1.4em;
+}
+
+h5 {
+  font-size: 1.2em;
+}
+
+h6 {
+  font-size: 1em;
+}
+
+main > p {
+  margin-top: 0.7em;
+  margin-bottom: 0.5em;
+}
+
+/* end typography */
+
+hr {
+  border: 0;
+  border-top: 2px solid var(--background-dark);
+}
+
+/* Header & Footer */
+body > div:nth-child(1),
+body > div:nth-child(3) {
+  border-bottom: var(--rule);
+}
+
+header {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+header > nav {
+  grid-template-columns: 1fr repeat(3, min-content);
+  justify-items: stretch;
+  justify-content: stretch;
+  align-items: end;
+}
+
+header > nav > a {
+  height: 100%;
+  border-bottom: var(--rule);
+  display: inline-block;
+}
+
+header > nav > a:before {
+  transform-origin: 50% 100%;
+}
+
+header > nav > a > div {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+footer {
+  margin: 0;
+  grid-column: span 3;
+}
+
+footer > nav {
+  grid-template-columns: 1fr repeat(3, auto) 1fr;
+  align-items: start;
+  padding: 0;
+  margin: 0;
+}
+
+footer > nav > div {
+  border-top: var(--rule);
+}
+
+footer > nav > a {
+  border-top: var(--rule);
+  font-size: 1.5em;
+  padding-bottom: 1em;
+  margin-bottom: 0;
+}
+
+footer > nav > a:before {
+  transform-origin: 50% 0;
+}
+
+nav {
+  display: grid;
+  align-items: center;
+  grid-column-gap: 10px;
+  color: #090818;
+}
+
+nav > a {
+  display: inline-block;
+  font-size: 0.9rem;
+  padding: 5px 6px;
+  border: none;
+  color: #777;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+nav > a:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--dark-accent);
+  transform: scaleY(0);
+  transition: transform 0.2s ease-out;
+}
+
+nav > a:hover {
+  color: var(--background-color);
+  text-decoration: none;
+}
+
+nav > a > img {
+  transition: filter 0.2s ease-out;
+}
+
+nav a:hover > img {
+  filter: invert(100%);
+}
+
+nav > a:hover:before {
+  transform: scaleY(1);
+}
+
+#home-button {
+  font-weight: 500;
+  font-size: 1.5em;
+  line-height: 1.2em;
+  padding-top: 1em;
+}
+
+/* Main */
+main {
+  flex: 1;
+  margin: 2em 0;
+}
+
+main > p > a > button {
+  margin: 10px 7px 0 0;
+}
+
+/* Post list */
+.post {
+  text-decoration: none;
+  color: inherit;
+  border: 3px solid #090818;
+  display: block;
+  padding: 1em;
+  margin-top: 1em;
+}
+
+.post:hover {
+  border-color: var(--dark-accent);
+  background-color: white;
+  color: black;
+}
+
+.post > h1 {
+  margin: 0;
+  font-size: 1.8em;
+}
+
+.post > p {
+  margin: 0;
+  font-size: 0.9em;
+}
+
+/* Page */
+
+a {
+  color: var(--dark-accent);
+}
+
+#title-div {
+  margin: 0 0 2em 0;
+}
+
+#title {
+  font-size: 2.5em;
+  margin: 0;
+}
+
+.date {
+  margin: 0;
+  font-size: 0.8em;
+}
+
+.highlight {
+  color: var(--dark-accent);
+  font-weight: 700;
+}
+
+.button-row {
+  display: block;
+  margin-top: 0.2em;
+}
+
+.button-row > a {
+  display: inline-block;
+  text-decoration: none;
+  padding: 3px 10px;
+  border: 3px solid var(--dark-accent);
+  color: var(--dark-accent);
+  position: relative;
+  transform: perspective(1px) translateZ(0);
+  transition: color 0.2s;
+}
+
+.button-row > a:hover {
+  color: white;
+}
+
+.button-row > a:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--dark-accent);
+  transform: scaleX(0);
+  transform-origin: 0% 50%;
+  transition: transform 0.2s ease-out;
+}
+
+.button-row > a:hover:before {
+  transform: scaleX(1);
+}
+
+pre[class^="language"] {
+  padding: 1em;
+  border-radius: 0.5em;
+  overflow-x: auto;
+}
+
+.footnote-definition > * {
+  display: inline;
+}
+
+code:not([class^="language"]) {
+  background: #eee;
+  color: #ac311f;
+  padding: 0 0.2em;
+  border-radius: 0.2em;
+}
+
+/* Icons */
+.icon {
+  width: 1.1em;
+  height: 1.1em;
+  vertical-align: middle;
+  margin: 0 0.1em;
+}
+
+footer img {
+  height: 1.2em;
+  width: 1.2em;
+}

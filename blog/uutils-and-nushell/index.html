@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="https://terts.dev/apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" type="text/css" href="https://terts.dev/styles.css"><title>uutils ❤️ nushell | Terts Diepraam</title>
+    <script type="text/javascript">
+        window.addEventListener('load', function() {
+            for (const ref of document.getElementsByClassName('footnote-reference')) {
+                const hash = ref.children[0].hash.substring(1);
+                const refhash = 'ref:' + hash;
+                ref.id = refhash;
+            }
+    
+            for (const footnote of document.getElementsByClassName('footnote-definition')) {
+                const hash = footnote.id;
+                const refhash = 'ref:' + hash;
+                const backlink = document.createElement('a');
+                backlink.href = '#' + refhash;
+                backlink.className = 'footnote-backlink';
+                backlink.innerText = '↩';
+                backlink.style.paddingLeft = "1ch"
+                const paras = footnote.children;
+                const lastPara = paras[paras.length - 1];
+                lastPara.appendChild(backlink);
+            }
+        });
+    </script></head>
+    <body>
+        <div class="hide-on-phone"></div>
+<header>
+    <div></div>
+    <nav id="large-nav">
+        <a class="sweep-up" href="https://terts.dev/" id="home-button">
+            <div>Terts Diepraam</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/blog/">
+            <div>BLOG</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/resume/">
+            <div>RESUME</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/projects/">
+            <div>PROJECTS</div>
+        </a>
+    </nav>
+    <div></div>
+</header>
+<div class="hide-on-phone"></div>
+        <div class="hide-on-phone"></div>
+        <main><div id="title-div">
+        <h1 id="title">uutils ❤️ nushell</h1>
+        
+        
+    </div>
+    <p>The uutils and nushell teams have an exciting announcement: we are collaborating!</p>
+<p>For those unaware, here is a short summary of each project:</p>
+<ul>
+<li><a href="https://uutils.github.io/">uutils</a> reimplements unix utilities in Rust, with a focus on the coreutils and aiming for full compatibility with the GNU utilities.</li>
+<li><a href="https://www.nushell.sh/">nushell</a> is a new shell based on structured data (as opposed to text), also written in Rust.</li>
+</ul>
+<h2 id="the-collaboration">The Collaboration</h2>
+<p>The goals of the projects seems incompatible at first: uutils is backwards compatible, while nu bravely breaks with all tradition to do their own thing.
+Yet, there are many utils that users simply expect to work in nu. For example, people expect to use <code>cp</code> with at least some of the traditional flags.</p>
+<p>So the current situation is as follows: nu wants to support more of the traditional utilities, as long as they fit in the nu philosophy and uutils has extensive implementations of these utilities.
+Why not integrate them over to nu?</p>
+<p>After some back and forth between the projects, we came up with a way to do that. First, uutils will expose some of the internals of the utilities. For instance, in <code>cp</code>, there is a function
+<code>copy</code> which takes some paths and a <code>CpOptions</code> struct, which we expose. nushell then wraps these functions with their own custom argument parser. This gets us the best of both worlds:</p>
+<ul>
+<li>We get the beautiful nu error messages and help text.</li>
+<li>We get the extensive set of options that uutils supports.</li>
+<li>We can accept nu data types as arguments.</li>
+<li>We can redesign the arguments to fit more in the nu ecosystem.</li>
+</ul>
+<p>To do this for all<sup class="footnote-reference"><a href="#1">1</a></sup> utilities will take a while, so we will be taking a "crawl, walk, run" approach and tackle this incrementally. For the next nushell release, we will include only the <code>cp</code> command.</p>
+<p>We could use your help! On the uutils side we can use some help with exposing all the necessary functionality, cleaning up the API and improving documentation. On the nushell side, you can help
+with writing the argument parsers. TODO: Add links to issues.</p>
+<h2 id="what-this-means-for-nushell">What this means for nushell</h2>
+<p>nushell will gain more commands and more options for commands. These won't be exactly compatible with GNU or uutils, but follow that distinct nushell style that we all love.</p>
+<h2 id="what-this-means-for-uutils">What this means for uutils</h2>
+<p><code>uutils</code> will start exposing a library of functions with the functionality of the utils. In a sense, it's the "librarification" of uutils. This library can of course be used by anyone!
+If you're building a shell, a busybox-style binary or maybe a graphical interface to common utilities, this library might be of use to you. If you have any questions about this, do let us know!</p>
+<h2 id="final-words">Final words</h2>
+<p>-- Terts Diepraam &amp; [insert nushell authors]</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>There are several utilities that nu won't need, so "all" means all applicable utils.</p>
+</div>
+</main>
+        <div class="hide-on-phone"></div>
+        <footer>
+<nav>
+    <div></div>
+    <a href="mailto:terts.diepraam@gmail.com" title="Mail"><img src="/icons/envelope.svg" /></a>
+    <a href="https://github.com/tertsdiepraam" title="GitHub"><img src="/icons/github.svg" /></a>
+    <a rel="me" href="https://mastodon.online/@terts" title="Mastodon"><img src="/icons/mastodon.svg" /></a>
+    <div></div>
+</nav>
+</footer></body>
+</html>

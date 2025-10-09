@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="https://terts.dev/apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" type="text/css" href="https://terts.dev/styles.css"><title>Coreutils Args | Terts Diepraam</title>
+    <script type="text/javascript">
+        window.addEventListener('load', function() {
+            for (const ref of document.getElementsByClassName('footnote-reference')) {
+                const hash = ref.children[0].hash.substring(1);
+                const refhash = 'ref:' + hash;
+                ref.id = refhash;
+            }
+    
+            for (const footnote of document.getElementsByClassName('footnote-definition')) {
+                const hash = footnote.id;
+                const refhash = 'ref:' + hash;
+                const backlink = document.createElement('a');
+                backlink.href = '#' + refhash;
+                backlink.className = 'footnote-backlink';
+                backlink.innerText = '↩';
+                backlink.style.paddingLeft = "1ch"
+                const paras = footnote.children;
+                const lastPara = paras[paras.length - 1];
+                lastPara.appendChild(backlink);
+            }
+        });
+    </script></head>
+    <body>
+        <div class="hide-on-phone"></div>
+<header>
+    <div></div>
+    <nav id="large-nav">
+        <a class="sweep-up" href="https://terts.dev/" id="home-button">
+            <div>Terts Diepraam</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/blog/">
+            <div>BLOG</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/resume/">
+            <div>RESUME</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/projects/">
+            <div>PROJECTS</div>
+        </a>
+    </nav>
+    <div></div>
+</header>
+<div class="hide-on-phone"></div>
+        <div class="hide-on-phone"></div>
+        <main><div id="title-div">
+        <h1 id="title">Coreutils Args</h1>
+        
+        
+    </div>
+    <blockquote>
+<p><strong>Note</strong>: This design is a work in progress and there is no implementation.</p>
+</blockquote>
+<p>TODO list for design:</p>
+<ul>
+<li>Parsing
+<ul>
+<li>Flags
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+Flags based on <code>bool</code></li>
+<li><input disabled="" type="checkbox"/>
+Flags based on <code>enum</code></li>
+<li><input disabled="" type="checkbox"/>
+Inferring long flags/options</li>
+</ul>
+</li>
+<li>Options
+<ul>
+<li><input disabled="" type="checkbox"/>
+Options (with <code>Option&lt;T&gt;</code>)</li>
+<li><input disabled="" type="checkbox"/>
+Options with default values</li>
+<li><input disabled="" type="checkbox"/>
+Options with optional values</li>
+<li><input disabled="" type="checkbox"/>
+Options with multiple values/occurrences</li>
+<li><input disabled="" type="checkbox"/>
+Options based on <code>enum</code></li>
+<li><input disabled="" type="checkbox"/>
+Option values parsing?</li>
+<li><input disabled="" type="checkbox"/>
+Default values from environment variables</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"/>
+Error handling</li>
+<li><input disabled="" type="checkbox"/>
+Position arguments</li>
+<li><input disabled="" type="checkbox"/>
+Trailing var arg</li>
+<li><input disabled="" type="checkbox"/>
+Conflicts</li>
+<li><input disabled="" type="checkbox"/>
+<code>dd</code> style arguments? (Probably not worth it)</li>
+</ul>
+</li>
+<li>Help &amp; Version
+<ul>
+<li><input disabled="" type="checkbox"/>
+Help</li>
+<li><input disabled="" type="checkbox"/>
+Usage</li>
+<li><input disabled="" type="checkbox"/>
+Version</li>
+<li><input disabled="" type="checkbox"/>
+Help and version override default flags</li>
+<li><input disabled="" type="checkbox"/>
+Defining metadata (author, license, etc.)</li>
+<li><input disabled="" type="checkbox"/>
+Defining short/long help</li>
+<li><input disabled="" type="checkbox"/>
+Help strings from external markdown file</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"/>
+Completion</li>
+<li><input disabled="" type="checkbox"/>
+<code>mdbook</code> generation</li>
+<li><input disabled="" type="checkbox"/>
+<code>man</code> generation</li>
+</ul>
+<p>In uutils, we have been using <code>clap</code> as our argument parser. <code>clap</code> is an
+excellent library and still improving at a steady rate. However, our needs are
+extremely specific and we have to work around several limitations of <code>clap</code>,
+e.g. by manually checking certain indices.</p>
+<p>One such example is the <code>-f</code> flag of <code>rm</code>, which does two things:</p>
+<ol>
+<li>It suppresses warnings.</li>
+<li>It disables interactive prompts.</li>
+</ol>
+<p>This means that the behaviour or <code>rm -fi</code> (<code>-i</code> is interactive), is different
+from <code>rm -if</code>. In the first one, warnings are suppressed and we have
+interactive prompts, in the second one, we have the behaviour of <code>rm -f</code>.
+I'm gonna call this "partial overrides".</p>
+<p>Let's imagine a shiny future where we have a derive API for argument parsing
+that supports this case and other weird cases in <code>coreutils</code>. This is purely
+hypothetical for now, as both implementation and migration to this new API,
+would take a long time.</p>
+<p>I'll be distinguishing three types of parameters:</p>
+<ol>
+<li>Flags: arguments without a value, just present or not, like <code>--opt</code>.</li>
+<li>Options: arguments with a value like <code>--opt=value</code> or <code>--opt value</code>.</li>
+<li>Positional arguments.</li>
+</ol>
+<h1 id="the-big-idea">The big idea</h1>
+<p><code>clap</code> and other <code>derive</code>-based API's use an approach to the definition of the
+arguments where each field is an argument. This leads to a 1-1 relation between
+arguments and settings (n-1 if you count aliases). I think this is great for most
+applications, but it leads to friction when implementing the <code>coreutils</code>. In
+the GNU coreutils, each arguments is lexed and then applied to the settings.
+Hence, some utils have a n-m relation between arguments and settings.</p>
+<p>The solution is then to decouple arguments and how they map to settings.
+Instead, we define a <code>Settings</code> struct and define through attributes how the
+flags map to these settings.</p>
+<p>As a small teaser, consider this example:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#a626a4;">struct </span><span>Settings {
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-x, -z)]
+</span><span>    </span><span style="color:#e45649;">a</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-x, -y, -z)]
+</span><span>    </span><span style="color:#e45649;">b</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-y, -z)]
+</span><span>    </span><span style="color:#e45649;">c</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>}
+</span></code></pre>
+<p>The flags <code>-x</code>, <code>-y</code> and <code>-z</code> all set multiple values, hence we have a n-m
+relationship. The equivalent code in <code>clap</code> would require a manual mapping
+from the parsed arguments to the settings.</p>
+<p>Arguably, the example above is bad API design and <code>clap</code>'s approach is
+therefore better. In uutils, however, we don't have the luxury to define our
+own API; we have to follow the GNU utils to maintain compatibility.</p>
+<h1 id="simple-flags">Simple Flags</h1>
+<p>I'm calling our library <code>magic</code> for now, because it does not exist. Let's start
+by supporting flags.</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#a626a4;">use </span><span>magic::{Options};
+</span><span>
+</span><span>#[</span><span style="color:#e45649;">derive</span><span>(Options, Default)]
+</span><span style="color:#a626a4;">struct </span><span>Settings {
+</span><span>    </span><span style="color:#a0a1a7;">// -o and --one are implicit
+</span><span>    </span><span style="color:#a0a1a7;">// if the field name has only one character, then only the short flag is
+</span><span>    </span><span style="color:#a0a1a7;">// implied
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>]
+</span><span>    </span><span style="color:#e45649;">one</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    
+</span><span>    </span><span style="color:#a0a1a7;">// Only -t, not --two
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-t)]
+</span><span>    </span><span style="color:#e45649;">two</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    
+</span><span>    </span><span style="color:#a0a1a7;">// Only --three, not -t
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(--three)]
+</span><span>    </span><span style="color:#e45649;">three</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>
+</span><span>    </span><span style="color:#a0a1a7;">// Explicit form of `#[flag]`
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-f, --four)]
+</span><span>    </span><span style="color:#e45649;">four</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    
+</span><span>    </span><span style="color:#a0a1a7;">// We can define as many flags as we want
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-a, -b, --five, --six)]
+</span><span>    </span><span style="color:#e45649;">five</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    
+</span><span>    </span><span style="color:#a0a1a7;">// Cannot be set by an argument
+</span><span>    </span><span style="color:#e45649;">six</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>}
+</span></code></pre>
+<p>This would expand to:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#a626a4;">struct </span><span>Settings {
+</span><span>    </span><span style="color:#e45649;">one</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    </span><span style="color:#e45649;">two</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    </span><span style="color:#e45649;">three</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    </span><span style="color:#e45649;">four</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    </span><span style="color:#e45649;">five</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    </span><span style="color:#e45649;">six</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>}
+</span><span>
+</span><span style="color:#a626a4;">impl </span><span>Options </span><span style="color:#a626a4;">for </span><span>Settings {
+</span><span>    </span><span style="color:#a626a4;">fn </span><span style="color:#0184bc;">parse</span><span>(</span><span style="color:#e45649;">args</span><span>: impl Iterator&lt;</span><span style="color:#a626a4;">&amp;</span><span>OsStr&gt;) -&gt; Result&lt;</span><span style="color:#a626a4;">Self</span><span>, magic::Error&gt; {
+</span><span>        </span><span style="color:#a626a4;">let mut </span><span style="color:#e45649;">self </span><span style="color:#a626a4;">= Self</span><span>::default();
+</span><span>
+</span><span>        </span><span style="color:#a626a4;">use </span><span>magic::Token::{Short, Long};
+</span><span>        </span><span style="color:#a626a4;">for</span><span> s </span><span style="color:#a626a4;">in </span><span style="color:#0184bc;">lexer</span><span>(args) {
+</span><span>            </span><span style="color:#a626a4;">match</span><span> s {
+</span><span>                Short(</span><span style="color:#50a14f;">&#39;o&#39;</span><span>) </span><span style="color:#a626a4;">|</span><span> Long(</span><span style="color:#50a14f;">&quot;one&quot;</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span style="color:#e45649;">self</span><span>.one </span><span style="color:#a626a4;">= </span><span style="color:#c18401;">true</span><span>,
+</span><span>                Short(</span><span style="color:#50a14f;">&#39;t&#39;</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span style="color:#e45649;">self</span><span>.two </span><span style="color:#a626a4;">= </span><span style="color:#c18401;">true</span><span>,
+</span><span>                Long(</span><span style="color:#50a14f;">&quot;three&quot;</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span style="color:#e45649;">self</span><span>.three </span><span style="color:#a626a4;">= </span><span style="color:#c18401;">true</span><span>,
+</span><span>                Short(</span><span style="color:#50a14f;">&#39;f&#39;</span><span>) </span><span style="color:#a626a4;">|</span><span> Long(</span><span style="color:#50a14f;">&quot;four&quot;</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span style="color:#e45649;">self</span><span>.four </span><span style="color:#a626a4;">= </span><span style="color:#c18401;">true</span><span>,
+</span><span>                Short(</span><span style="color:#50a14f;">&#39;a&#39;</span><span>) </span><span style="color:#a626a4;">|</span><span> Short(</span><span style="color:#50a14f;">&#39;b&#39;</span><span>) </span><span style="color:#a626a4;">|</span><span> Long(</span><span style="color:#50a14f;">&quot;five&quot;</span><span>) </span><span style="color:#a626a4;">|</span><span> Long(</span><span style="color:#50a14f;">&quot;six&quot;</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>                    </span><span style="color:#e45649;">self</span><span>.five </span><span style="color:#a626a4;">= </span><span style="color:#c18401;">true</span><span>,
+</span><span>                }
+</span><span>            }
+</span><span>        }
+</span><span>        </span><span style="color:#e45649;">self
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>Now here is the nice part for our <code>rm</code> usecase. Nothing is stopping us for
+specifying the same flag multiple times. <code>rm</code> with just those flags is simply:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#a626a4;">struct </span><span>Settings {
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>]
+</span><span>    </span><span style="color:#e45649;">force</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>]
+</span><span>    #[</span><span style="color:#e45649;">hidden_flag</span><span>(-f, --force, false)]
+</span><span>    </span><span style="color:#e45649;">interactive</span><span>: </span><span style="color:#a626a4;">bool
+</span><span>}
+</span></code></pre>
+<p>Where <code>hidden_flag</code> functions just like <code>flag</code>, but will be hidden in the
+<code>--help</code> (more on that later).</p>
+<blockquote>
+<p><strong>Note</strong>: the rules for the arguments of <code>(hidden_)flag</code> are <code>-</code> specifies
+a short flag, <code>--</code> a long flag and another value is a value to set.</p>
+</blockquote>
+<p>Which expands to something along these lines (though probably less pretty
+because it will be autogenerated):</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#a626a4;">impl </span><span>Options </span><span style="color:#a626a4;">for </span><span>Settings {
+</span><span>    </span><span style="color:#a626a4;">fn </span><span style="color:#0184bc;">parse</span><span>(</span><span style="color:#e45649;">args</span><span>: impl Iterator&lt;</span><span style="color:#a626a4;">&amp;</span><span>OsStr&gt;) -&gt; Result&lt;</span><span style="color:#a626a4;">Self</span><span>, magic::Error&gt; {
+</span><span>        </span><span style="color:#a626a4;">let mut </span><span style="color:#e45649;">self </span><span style="color:#a626a4;">= Self</span><span>::default();
+</span><span>        </span><span style="color:#a626a4;">for</span><span> s </span><span style="color:#a626a4;">in </span><span style="color:#0184bc;">lex</span><span>(args) {
+</span><span>            </span><span style="color:#a626a4;">match</span><span> s {
+</span><span>                Short(</span><span style="color:#50a14f;">&#39;f&#39;</span><span>) </span><span style="color:#a626a4;">|</span><span> Long(</span><span style="color:#50a14f;">&quot;force&quot;</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>                    </span><span style="color:#e45649;">self</span><span>.force </span><span style="color:#a626a4;">= </span><span style="color:#c18401;">true</span><span>;
+</span><span>                    </span><span style="color:#e45649;">self</span><span>.interactive </span><span style="color:#a626a4;">= </span><span style="color:#c18401;">false</span><span>;
+</span><span>                }
+</span><span>                Short(</span><span style="color:#50a14f;">&#39;i&#39;</span><span>) </span><span style="color:#a626a4;">|</span><span> Long(</span><span style="color:#50a14f;">&quot;interactive&quot;</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>                    </span><span style="color:#e45649;">self</span><span>.interactive </span><span style="color:#a626a4;">= </span><span style="color:#c18401;">true</span><span>;
+</span><span>                }
+</span><span>            }
+</span><span>        }
+</span><span>        </span><span style="color:#e45649;">self
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<h1 id="help-generation">Help generation</h1>
+<p>We can do help generation like <code>clap</code>'s derive API, but we could build in
+markdown support from the start. Note that help is not added by default and
+must by added explicitly.</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#a0a1a7;">/// help for the entire application goes here
+</span><span>#[</span><span style="color:#e45649;">derive</span><span>(Options, Default)]
+</span><span>#[</span><span style="color:#e45649;">help</span><span>(-h, --help)] </span><span style="color:#a0a1a7;">// or #[help]
+</span><span style="color:#a626a4;">struct </span><span>Settings {
+</span><span>    </span><span style="color:#a0a1a7;">/// Some help in *markdown*
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>]
+</span><span>    </span><span style="color:#e45649;">force</span><span>: </span><span style="color:#a626a4;">bool
+</span><span>}
+</span></code></pre>
+<p>The markdown is parsed at compile-time, but rendered at runtime to fit the
+terminal width. The markdown parser will therefore not be part of the
+executable.</p>
+<blockquote>
+<p><strong>Note</strong>: markdown help should probably be feature gated. The alternative is
+just printing the string.</p>
+</blockquote>
+<p>But, because we have the n-m relationship, not each flag has a nicely defined
+field in the struct. To document these flags we can create dummy fields, which
+will be optimized away at runtime by the compiler. The type can be anything,
+but making it zero-size is probablty a good idea (so either <code>()</code> or
+<code>PhantomData</code>). A <code>dummy_flag</code> attribute then specifies to treat this as a
+<code>flag</code> for help generation, but not for parsing.</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#e45649;">derive</span><span>(Options, Default)]
+</span><span style="color:#a626a4;">struct </span><span>Settings {
+</span><span>    </span><span style="color:#a0a1a7;">/// Some help for `-a`
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>]
+</span><span>    #[</span><span style="color:#e45649;">hidden_flag</span><span>(-c)]
+</span><span>    </span><span style="color:#e45649;">a</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    
+</span><span>    </span><span style="color:#a0a1a7;">/// Some help for `-b`
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>]
+</span><span>    #[</span><span style="color:#e45649;">hidden_flag</span><span>(-c)]
+</span><span>    </span><span style="color:#e45649;">b</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    
+</span><span>    </span><span style="color:#a0a1a7;">/// Some help for `-c`
+</span><span>    #[</span><span style="color:#e45649;">dummy_flag</span><span>]
+</span><span>    </span><span style="color:#e45649;">c</span><span>: (),
+</span><span>}
+</span></code></pre>
+<p>So the <code>--help</code> would look roughly like this</p>
+<pre data-lang="txt" style="background-color:#fafafa;color:#383a42;" class="language-txt "><code class="language-txt" data-lang="txt"><span>  -a  Some help for `-a`
+</span><span>  -b  Some help for `-b`
+</span><span>  -c  Some help for `-c`
+</span></code></pre>
+<p>Similarly, we can do something like this:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#e45649;">derive</span><span>(Options, Default)]
+</span><span style="color:#a626a4;">struct </span><span>Settings {
+</span><span>    </span><span style="color:#a0a1a7;">/// Enable long format
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-l, --long)]
+</span><span>    #[</span><span style="color:#e45649;">hidden_flag</span><span>(-s, --short, false)]
+</span><span>    </span><span style="color:#e45649;">long_format</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    
+</span><span>    </span><span style="color:#a0a1a7;">/// Disable long format
+</span><span>    #[</span><span style="color:#e45649;">dummy_flag</span><span>(-s, --short)]
+</span><span>    </span><span style="color:#e45649;">short_format</span><span>: ()
+</span><span>}
+</span></code></pre>
+<p>Note that this has overriding behaviour by default. That is, <code>-sl</code> will use the
+long format and <code>-ls</code> will use the short format. I'm leaving conflicts for
+later because most coreutils have overriding behaviour.</p>
+<p>There's also a chance for
+this to be error prone, because there's no syncing of the flags between the
+different attributes. Another possible representation could be:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#e45649;">derive</span><span>(Options)]
+</span><span style="color:#a626a4;">struct </span><span>Settings {
+</span><span>    </span><span style="color:#a0a1a7;">/// Enable long format
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-l, --long)]
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-s, --short, false, help </span><span style="color:#a626a4;">= </span><span style="color:#50a14f;">&quot;Disable long format&quot;</span><span>)]
+</span><span>    </span><span style="color:#e45649;">long_format</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>}
+</span></code></pre>
+<p>We'll have to see what works best in practice.</p>
+<h1 id="options">Options</h1>
+<p>Often options take a few possible values, which we can model with enums:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#e45649;">derive</span><span>(FromOpt, Default)]
+</span><span style="color:#a626a4;">enum </span><span>Color {
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    Always,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">default</span><span>]
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    Auto,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    Never
+</span><span>}
+</span><span>
+</span><span>#[</span><span style="color:#e45649;">derive</span><span>(Options, Default)]
+</span><span style="color:#a626a4;">struct </span><span>Settings {
+</span><span>    #[</span><span style="color:#e45649;">option</span><span>(--color)]
+</span><span>    </span><span style="color:#e45649;">color</span><span>: Color; 
+</span><span>}
+</span></code></pre>
+<p>Sometimes we need flags that are shortcuts for option values, we can support
+this by adding <code>flag</code> attributes to the <code>enum</code>.</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#e45649;">derive</span><span>(FromOpt, Default)]
+</span><span style="color:#a626a4;">enum </span><span>Sort {
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-U)]
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    None,
+</span><span>    
+</span><span>    #[</span><span style="color:#e45649;">default</span><span>]
+</span><span>    Name,
+</span><span>    
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-S)]
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    Size,
+</span><span>    
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-t)]
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    Time,
+</span><span>    
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-v)]
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    Version,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-X)]
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    Extension,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    Width,
+</span><span>}
+</span><span>
+</span><span>#[</span><span style="color:#e45649;">derive</span><span>(Options, Default)]
+</span><span style="color:#a626a4;">struct </span><span>Settings {
+</span><span>    #[</span><span style="color:#e45649;">option</span><span>(--sort)]
+</span><span>    </span><span style="color:#e45649;">sort</span><span>: Sort; 
+</span><span>}
+</span></code></pre>
+<p>This models the <code>--sort</code>, <code>-U</code>, <code>-S</code>, <code>-t</code>, <code>-v</code> <code>-X</code> options of <code>ls</code>, and
+though it may look complex, I would argue it is very efficient for 5 flags and
+an option with 6 possible values and a default value. Note that we were able to
+also specify that <code>Width</code> does not have a flag and that <code>Name</code> cannot be
+expressed at all, apart from being the default.</p>
+<p>We can also express multiple values per variant, take for instance the <code>format</code>
+argument of <code>ls</code>:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#e45649;">derive</span><span>(FromOpt, Default)]
+</span><span style="color:#a626a4;">enum </span><span>Format {
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>(</span><span style="color:#50a14f;">&quot;long&quot;</span><span>, </span><span style="color:#50a14f;">&quot;verbose&quot;</span><span>)]
+</span><span>    Long,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    SingleColumn,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">default</span><span>]
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>(</span><span style="color:#50a14f;">&quot;columns&quot;</span><span>, </span><span style="color:#50a14f;">&quot;vertical&quot;</span><span>)]
+</span><span>    Columns,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>(</span><span style="color:#50a14f;">&quot;across&quot;</span><span>, </span><span style="color:#50a14f;">&quot;horizontal&quot;</span><span>)]
+</span><span>    Across,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    Commas,
+</span><span>}
+</span><span>
+</span><span>#[</span><span style="color:#e45649;">derive</span><span>(Options, Default)]
+</span><span style="color:#a626a4;">struct </span><span>Settings {
+</span><span>    #[</span><span style="color:#e45649;">option</span><span>(--format)]
+</span><span>    </span><span style="color:#e45649;">format</span><span>: Format,
+</span><span>}
+</span></code></pre>
+<p>Let's expand on this example with <code>-o</code>, <code>-n</code> and <code>-g</code>:</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>  -g                      like -l, but do not list owner
+</span><span>  -o                      like -l, but do not list group information
+</span><span>  -n, --numeric-uid-gid   like -l, but list numeric user and group IDs
+</span></code></pre>
+<p>The text here is deceptively simple, because they can stack and they are not
+overridden by <code>-l</code>. Here's how we can handle them:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span>
+</span><span>#[</span><span style="color:#e45649;">derive</span><span>(FromOpt, Default)]
+</span><span style="color:#a626a4;">enum </span><span>Format {
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-l)]
+</span><span>    #[</span><span style="color:#e45649;">hidden_flag</span><span>(-g, -o, -n, --numeric-uid-gid)]
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>(</span><span style="color:#50a14f;">&quot;long&quot;</span><span>, </span><span style="color:#50a14f;">&quot;verbose&quot;</span><span>)]
+</span><span>    Long,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    SingleColumn,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">default</span><span>]
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-C)]
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>(</span><span style="color:#50a14f;">&quot;columns&quot;</span><span>, </span><span style="color:#50a14f;">&quot;vertical&quot;</span><span>)]
+</span><span>    Columns,
+</span><span>    
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-x)]
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>(</span><span style="color:#50a14f;">&quot;across&quot;</span><span>, </span><span style="color:#50a14f;">&quot;horizontal&quot;</span><span>)]
+</span><span>    Across,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-m)]
+</span><span>    Commas,
+</span><span>}
+</span><span>
+</span><span>#[</span><span style="color:#e45649;">derive</span><span>(Options, Default)]
+</span><span style="color:#a626a4;">struct </span><span>Settings {
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-g)]
+</span><span>    </span><span style="color:#e45649;">long_hide_owner</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-o)]
+</span><span>    </span><span style="color:#e45649;">long_hide_group</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-n, --numeric-uid-gid)]
+</span><span>    </span><span style="color:#e45649;">long_numeric_id</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">option</span><span>(--format)]
+</span><span>    </span><span style="color:#e45649;">format</span><span>: Format,
+</span><span>}
+</span></code></pre>
+<p>There's one final complication: <code>-1</code> is ineffective after <code>--long</code>, which is
+actually distinct from <code>--format=single-column</code>. Here's a way to handle that,
+even though I'm not very happy with it:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#a626a4;">enum </span><span>Format {
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-l)]
+</span><span>    Long,
+</span><span>
+</span><span>    #[</span><span style="color:#e45649;">default</span><span>]
+</span><span>    #[</span><span style="color:#e45649;">value</span><span>]
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-C)]
+</span><span>    Columns,
+</span><span>}
+</span><span>
+</span><span style="color:#a626a4;">struct </span><span>Settings {
+</span><span>    #[</span><span style="color:#e45649;">flag</span><span>(-1, -l)]
+</span><span>    #[</span><span style="color:#e45649;">hidden_flag</span><span>(-C, false)]
+</span><span>    #[</span><span style="color:#e45649;">option</span><span>(--format</span><span style="color:#a626a4;">=</span><span>single-column)]
+</span><span>    </span><span style="color:#e45649;">single_column</span><span>: </span><span style="color:#a626a4;">bool</span><span>,
+</span><span>    
+</span><span>    #[</span><span style="color:#e45649;">option</span><span>(--format)]
+</span><span>    </span><span style="color:#e45649;">format</span><span>: Format,
+</span><span>}
+</span></code></pre>
+<p>We would now display a single column if <code>format == Format::SingleColumn</code> or
+<code>single_column == true</code>. Luckily, there's only one such case that I know of
+that needs this.</p>
+</main>
+        <div class="hide-on-phone"></div>
+        <footer>
+<nav>
+    <div></div>
+    <a href="mailto:terts.diepraam@gmail.com" title="Mail"><img src="/icons/envelope.svg" /></a>
+    <a href="https://github.com/tertsdiepraam" title="GitHub"><img src="/icons/github.svg" /></a>
+    <a rel="me" href="https://mastodon.online/@terts" title="Mastodon"><img src="/icons/mastodon.svg" /></a>
+    <div></div>
+</nav>
+</footer></body>
+</html>

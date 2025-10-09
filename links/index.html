@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="https://terts.dev/apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" type="text/css" href="https://terts.dev/styles.css"><title>Links | Terts Diepraam</title>
+    <script type="text/javascript">
+        window.addEventListener('load', function() {
+            for (const ref of document.getElementsByClassName('footnote-reference')) {
+                const hash = ref.children[0].hash.substring(1);
+                const refhash = 'ref:' + hash;
+                ref.id = refhash;
+            }
+    
+            for (const footnote of document.getElementsByClassName('footnote-definition')) {
+                const hash = footnote.id;
+                const refhash = 'ref:' + hash;
+                const backlink = document.createElement('a');
+                backlink.href = '#' + refhash;
+                backlink.className = 'footnote-backlink';
+                backlink.innerText = '↩';
+                backlink.style.paddingLeft = "1ch"
+                const paras = footnote.children;
+                const lastPara = paras[paras.length - 1];
+                lastPara.appendChild(backlink);
+            }
+        });
+    </script></head>
+    <body>
+        <div class="hide-on-phone"></div>
+<header>
+    <div></div>
+    <nav id="large-nav">
+        <a class="sweep-up" href="https://terts.dev/" id="home-button">
+            <div>Terts Diepraam</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/blog/">
+            <div>BLOG</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/resume/">
+            <div>RESUME</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/projects/">
+            <div>PROJECTS</div>
+        </a>
+    </nav>
+    <div></div>
+</header>
+<div class="hide-on-phone"></div>
+        <div class="hide-on-phone"></div>
+        <main><div id="title-div">
+        <h1 id="title">Links</h1>
+        
+        
+    </div>
+    <p>Find me elsewhere!</p>
+<h2 id="social">Social</h2>
+<p>Active accounts:</p>
+<span class="button-row">
+    <a href="https://mastodon.online/@terts">Mastodon</a>
+    <a href="https://bsky.app/profile/tertsdiepraam.bsky.social">Bluesky</a>
+    <a href="www.linkedin.com/in/terts-diepraam-6b058097">LinkedIn</a>
+</span>
+<p>Inactive accounts kept for responding to others:</p>
+<span class="button-row">
+    <a href="https://www.reddit.com/user/tertsdiepraam/">Reddit</a>
+    <a href="https://news.ycombinator.com/user?id=terts">HackerNews</a>
+</span>
+<h2 id="forges">Forges</h2>
+<span class="button-row">
+    <a href="https://codeberg.org/terts">Codeberg</a>
+    <a href="https://github.com/tertsdiepraam">GitHub</a>
+    <a href="https://gitlab.com/tertsdiepraam">GitLab</a>
+</span>
+<h2 id="contact">Contact</h2>
+<span class="button-row">
+    <a href="mailto:terts.diepraam@gmail.com">Personal email</a>
+    <a href="mailto:terts@nlnetlabs.nl">Work email</a>
+</span>
+</main>
+        <div class="hide-on-phone"></div>
+        <footer>
+<nav>
+    <div></div>
+    <a href="mailto:terts.diepraam@gmail.com" title="Mail"><img src="/icons/envelope.svg" /></a>
+    <a href="https://github.com/tertsdiepraam" title="GitHub"><img src="/icons/github.svg" /></a>
+    <a rel="me" href="https://mastodon.online/@terts" title="Mastodon"><img src="/icons/mastodon.svg" /></a>
+    <div></div>
+</nav>
+</footer></body>
+</html>

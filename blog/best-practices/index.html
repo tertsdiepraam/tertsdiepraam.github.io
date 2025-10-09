@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="https://terts.dev/apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" type="text/css" href="https://terts.dev/styles.css"><title>Best Practices | Terts Diepraam</title>
+    <script type="text/javascript">
+        window.addEventListener('load', function() {
+            for (const ref of document.getElementsByClassName('footnote-reference')) {
+                const hash = ref.children[0].hash.substring(1);
+                const refhash = 'ref:' + hash;
+                ref.id = refhash;
+            }
+    
+            for (const footnote of document.getElementsByClassName('footnote-definition')) {
+                const hash = footnote.id;
+                const refhash = 'ref:' + hash;
+                const backlink = document.createElement('a');
+                backlink.href = '#' + refhash;
+                backlink.className = 'footnote-backlink';
+                backlink.innerText = '↩';
+                backlink.style.paddingLeft = "1ch"
+                const paras = footnote.children;
+                const lastPara = paras[paras.length - 1];
+                lastPara.appendChild(backlink);
+            }
+        });
+    </script></head>
+    <body>
+        <div class="hide-on-phone"></div>
+<header>
+    <div></div>
+    <nav id="large-nav">
+        <a class="sweep-up" href="https://terts.dev/" id="home-button">
+            <div>Terts Diepraam</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/blog/">
+            <div>BLOG</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/resume/">
+            <div>RESUME</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/projects/">
+            <div>PROJECTS</div>
+        </a>
+    </nav>
+    <div></div>
+</header>
+<div class="hide-on-phone"></div>
+        <div class="hide-on-phone"></div>
+        <main><div id="title-div">
+        <h1 id="title">Best Practices</h1>
+        
+            <p class="date">Posted on 12 February 2022</p>
+        
+        
+    </div>
+    <p>This is a list of best practices for programming. These are non-exhaustive, ever
+evolving and should not be considered final. Also, every rule has many
+exceptions; they are not meant to be followed to the letter. Almost every rule
+should be followed by "when possible".</p>
+<h1 id="general">General</h1>
+<ol>
+<li>Discuss best practices with the team.</li>
+<li>Include best practices into the repository.</li>
+</ol>
+<h2 id="tooling">Tooling</h2>
+<ol>
+<li>Enforce a linter and formatter for every language in the project.</li>
+<li>Choose linters and formatters that are as opinionated as possible.</li>
+<li>Linter warnings should be errors, unless explicitly silenced.</li>
+<li>Set up CI/CD for linters and formatters on every PR.</li>
+<li>Use Git.</li>
+<li>In projects with heavy data processing, use a DAG pipelining tool.</li>
+<li>Don't jump on the latest technology immediately, but don't be afraid to try
+new things either.</li>
+<li>Pick tooling that is not specific to a single editor (e.g. no Org-mode)</li>
+<li>Team members should pick their own editor.</li>
+<li>Use strictly typed (variants of) languages (e.g. TypeScript, Python with
+MyPy, Rust)</li>
+<li>Tooling, frameworks and libraries are often more important than the
+language.</li>
+</ol>
+<h2 id="comments-documentation">Comments &amp; Documentation</h2>
+<ol>
+<li>Use doc comments</li>
+<li>Comments should describe "why", not "what". Comments may also describe "how",
+but only when the "how" is complicated.</li>
+<li>Doc comments should not repeat the function signature</li>
+<li>Generate documentation from function signatures</li>
+<li>The <code>README</code> should be focused on usage, not development, of the project.</li>
+<li>Large projects should document the structure of the project.</li>
+<li>Markdown is the lingua franca for documentation.</li>
+<li>Outdated documentation is worse than no documentation.</li>
+</ol>
+<h2 id="issues-pull-requests">Issues &amp; Pull Requests</h2>
+<ol>
+<li>Pull requests should be focused on a single change.</li>
+<li>Always link to the issue the PR is solving.</li>
+<li>Describe both the problem and the solution.</li>
+<li>Don't shy away from changes just because they might cause a merge conflict.</li>
+<li>Pull Requests should pass all tests.</li>
+<li>Issues should be specific (e.g. not "Refactor X and Y", but "Decouple
+functions X and Y")</li>
+</ol>
+<h2 id="reviews">Reviews</h2>
+<ol>
+<li>Reviews should always acknowledge the work put in by the contributor and
+thank them, regardless of the quality of the code.</li>
+<li>Reviews should always assume the best intentions.</li>
+<li>A review should often be a discussion instead of forcing changes.</li>
+</ol>
+<h2 id="tests">Tests</h2>
+<ol>
+<li>There is no need write all tests up front.</li>
+<li>Add tests for every fix, so that any regression is caught.</li>
+<li>Test both successes and failures.</li>
+<li>Tests should be trivial to read and understand.</li>
+</ol>
+<h2 id="performance">Performance</h2>
+<ol>
+<li>Every claim about performance should be backed up by measurements.</li>
+</ol>
+<h1 id="specifics">Specifics</h1>
+<h2 id="rust">Rust</h2>
+<ol>
+<li>Think in <code>Iterator</code>s</li>
+<li><code>unsafe</code> for performance reasons should be put into a separate crate exposing
+a safe API when possible.</li>
+</ol>
+<h2 id="html-css">HTML &amp; CSS</h2>
+<ol>
+<li>Use plain HTML &amp; CSS for small projects.</li>
+<li>HTML/CSS are a compilation target in large projects.</li>
+<li>Use flexbox and grid.</li>
+</ol>
+<h2 id="jupyter-notebooks">Jupyter Notebooks</h2>
+<ol>
+<li>Imports that apply to multiple blocks should go into a separate code block at
+the top.</li>
+<li>Imports that you use once can be put in the block where they are needed.</li>
+<li>Structure the notebook with headings (see also here).</li>
+<li>Long operations should be in separate code blocks.</li>
+<li>Running the code from top to bottom should always work.</li>
+<li>Don't make the code blocks too dependent on each other. Normally, you have
+some preparation steps (loading and preparing the data) and then some things
+that you tried. Ideally, those exploratory parts are only dependent on the
+preparation part and not on each other. This makes it easier to run specific
+parts without having to wait on the entire thing. If that is not feasible,
+then make it clear what the minimum amount of code is to run a certain block.</li>
+<li>Make sure that the data is described in the notebook itself (which columns
+are we dealing with, what data types do they have &amp; what do they represent).</li>
+<li>Data science is often about exploration, so it's nice to document the things
+you tried that failed. You can do this by making your notebook into a
+narrative.</li>
+<li>So you describe what you tried and why you tried it, then show the code and
+evaluate and repeat. (Of course, do make it very clear what didn't work)</li>
+<li>Notebooks should be reproducible (taken from here)</li>
+<li>The output of code cells should not be checked into Git.</li>
+<li>Notebooks are purely for exploration. Code for in the data pipeline should
+be copied into the rest of the codebase.</li>
+</ol>
+</main>
+        <div class="hide-on-phone"></div>
+        <footer>
+<nav>
+    <div></div>
+    <a href="mailto:terts.diepraam@gmail.com" title="Mail"><img src="/icons/envelope.svg" /></a>
+    <a href="https://github.com/tertsdiepraam" title="GitHub"><img src="/icons/github.svg" /></a>
+    <a rel="me" href="https://mastodon.online/@terts" title="Mastodon"><img src="/icons/mastodon.svg" /></a>
+    <div></div>
+</nav>
+</footer></body>
+</html>

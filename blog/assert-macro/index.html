@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="https://terts.dev/apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" type="text/css" href="https://terts.dev/styles.css"><title>Trying to rewrite assert! to assert_eq! with a declarative macro | Terts Diepraam</title>
+    <script type="text/javascript">
+        window.addEventListener('load', function() {
+            for (const ref of document.getElementsByClassName('footnote-reference')) {
+                const hash = ref.children[0].hash.substring(1);
+                const refhash = 'ref:' + hash;
+                ref.id = refhash;
+            }
+    
+            for (const footnote of document.getElementsByClassName('footnote-definition')) {
+                const hash = footnote.id;
+                const refhash = 'ref:' + hash;
+                const backlink = document.createElement('a');
+                backlink.href = '#' + refhash;
+                backlink.className = 'footnote-backlink';
+                backlink.innerText = '↩';
+                backlink.style.paddingLeft = "1ch"
+                const paras = footnote.children;
+                const lastPara = paras[paras.length - 1];
+                lastPara.appendChild(backlink);
+            }
+        });
+    </script></head>
+    <body>
+        <div class="hide-on-phone"></div>
+<header>
+    <div></div>
+    <nav id="large-nav">
+        <a class="sweep-up" href="https://terts.dev/" id="home-button">
+            <div>Terts Diepraam</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/blog/">
+            <div>BLOG</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/resume/">
+            <div>RESUME</div>
+        </a>
+        <a class="sweep-up" href="https://terts.dev/projects/">
+            <div>PROJECTS</div>
+        </a>
+    </nav>
+    <div></div>
+</header>
+<div class="hide-on-phone"></div>
+        <div class="hide-on-phone"></div>
+        <main><div id="title-div">
+        <h1 id="title">Trying to rewrite assert! to assert_eq! with a declarative macro</h1>
+        
+        
+    </div>
+    <p>Rust has a couple of assert macros in its standard library:</p>
+<ul>
+<li><code>assert!</code>,</li>
+<li><code>assert_eq!</code>, and</li>
+<li><code>assert_ne!</code>.</li>
+</ul>
+<p>The first just takes a boolean expression and panics if it evaluates to <code>false</code>.
+The other two are just special cases where you pass to arguments and the
+assertion checks that whether they are equal or not, respectively, but their
+output is more helpful, because they print both operands, instead of just saying
+that the assertion failed.</p>
+<p>This brings up an interesting question: why can the macro not just detect that
+the expression in <code>assert!</code> is <code>A == B</code> or <code>A != B</code> and use <code>assert_eq!</code> or
+<code>assert_ne!</code> automatically? In many cases that would be a bit easier to read. Compare these calls:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span>assert!([</span><span style="color:#c18401;">1</span><span>,</span><span style="color:#c18401;">2</span><span>,</span><span style="color:#c18401;">3</span><span>] </span><span style="color:#a626a4;">== </span><span>[</span><span style="color:#c18401;">4</span><span>,</span><span style="color:#c18401;">5</span><span>,</span><span style="color:#c18401;">6</span><span>]);
+</span><span>assert_eq!([</span><span style="color:#c18401;">1</span><span>,</span><span style="color:#c18401;">2</span><span>,</span><span style="color:#c18401;">3</span><span>], [</span><span style="color:#c18401;">4</span><span>,</span><span style="color:#c18401;">5</span><span>,</span><span style="color:#c18401;">6</span><span>]);
+</span></code></pre>
+<p>It's not much of a difference, but I like the first one just a bit better.</p>
+<p>A proc macro could definitely do this (as for example the
+<a href="https://crates.io/crates/assert2"><code>assert2</code></a> crate proves), but is it also
+possible with a declarative macro?</p>
+<p><strong>Before you continue, I want to spoil the end: I failed.</strong> I was able to cover the most common cases, but there are expressions which I couldn't find a solution for. Still, I think it's interesting to investigate why this problem is hard and what techniques I used along the way.</p>
+<h1 id="why-the-simple-solution-does-not-work">Why the simple solution does not work</h1>
+<p>Declarative macros in Rust are basically pattern matches on the token streams of
+their input. In theory we could therefore first define a case for <code>==</code>, then one
+for <code>!=</code> and finally fall back to the general case. It would look like this:</p>
+<blockquote>
+<p>Note: To make this all work properly in a library, all nested macros need to
+be qualified with an absolute path, so that they don't need to be imported by
+the calling code.</p>
+</blockquote>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#0184bc;">macro_rules! </span><span>fancy_assert {
+</span><span>    (</span><span style="color:#e45649;">$a</span><span>:</span><span style="color:#a626a4;">expr</span><span> == </span><span style="color:#e45649;">$b</span><span>:</span><span style="color:#a626a4;">expr</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{ assert_eq!(</span><span style="color:#e45649;">$a</span><span>, </span><span style="color:#e45649;">$b</span><span>)};
+</span><span>    (</span><span style="color:#e45649;">$a</span><span>:</span><span style="color:#a626a4;">expr</span><span> != </span><span style="color:#e45649;">$b</span><span>:</span><span style="color:#a626a4;">expr</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{ assert_ne!(</span><span style="color:#e45649;">$a</span><span>, </span><span style="color:#e45649;">$b</span><span>)};
+</span><span>    (</span><span style="color:#e45649;">$a</span><span>:</span><span style="color:#a626a4;">expr</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{ assert!(</span><span style="color:#e45649;">$a</span><span>)};
+</span><span>}
+</span></code></pre>
+<p>Sadly, the compiler complains with the following error:</p>
+<pre data-lang="plain" style="background-color:#fafafa;color:#383a42;" class="language-plain "><code class="language-plain" data-lang="plain"><span>error: `$a:expr` is followed by `==`, which is not allowed for `expr` fragments
+</span><span> --&gt; src/main.rs:2:14
+</span><span>  |
+</span><span>2 |     ($a:expr == $b:expr) =&gt; {
+</span><span>  |              ^^ not allowed after `expr` fragments
+</span><span>  |
+</span><span>  = note: allowed there are: `=&gt;`, `,` or `;`
+</span></code></pre>
+<p>We cannot use a <code>==</code> token after an expression, which makes sense because the
+<code>==</code> could itself be part of the expression. Technically, it might be possible
+to parse with backtracking but the pattern matching for declarative macros is
+not that advanced. So it seems like we can't use expressions for this purpose.</p>
+<h1 id="matching-on-token-trees">Matching on token trees</h1>
+<p>Luckily, Rust also allows us to match on token trees, which are single tokens or
+tokens in matching delimiters like <code>()</code>, <code>[]</code> and <code>{}</code>. So instead of matching
+on the expression, we'll match on a list of token trees and find the <code>==</code>
+ourselves.</p>
+<p>Here's the general idea: we have some marker token in the token tree that we
+move recursively through the list of token trees. When we encounter a <code>==</code> or
+<code>!=</code>, we expand to a <code>assert_eq!</code> or <code>assert_ne!</code> respectively.</p>
+<p>Here is our first attempt at this:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#0184bc;">macro_rules! </span><span>internal_assert {
+</span><span>    </span><span style="color:#a0a1a7;">// If the token after the `;` is ==, we use assert_eq!
+</span><span>    (</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> ; == </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        assert_eq!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">*</span><span>, </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">*</span><span>)
+</span><span>
+</span><span>    };
+</span><span>    </span><span style="color:#a0a1a7;">// If the token after the `;` is !=, we use assert_ne!
+</span><span>    (</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> ; != </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        assert_ne!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">*</span><span>, </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">*</span><span>)
+</span><span>
+</span><span>    };
+</span><span>    </span><span style="color:#a0a1a7;">// If we reached the last token, we use assert!
+</span><span>    (</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> ; </span><span style="color:#a626a4;">$</span><span>(last:tt)?) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        assert!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:tt)</span><span style="color:#a626a4;">* $</span><span>(last)</span><span style="color:#a626a4;">?</span><span>)
+</span><span>    };
+</span><span>    </span><span style="color:#a0a1a7;">// Else we recurse by putting the `;` to the right
+</span><span>    (</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> ; </span><span style="color:#e45649;">$curr</span><span>:</span><span style="color:#a626a4;">tt $</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        internal_assert!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">* </span><span style="color:#e45649;">$curr</span><span>; </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">*</span><span>)
+</span><span>    };
+</span><span>}
+</span><span>
+</span><span style="color:#0184bc;">macro_rules! </span><span>fancy_assert {
+</span><span>    (</span><span style="color:#e45649;">$head</span><span>:</span><span style="color:#a626a4;">tt $</span><span>(</span><span style="color:#e45649;">$tail</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{ internal_assert!(</span><span style="color:#e45649;">$head</span><span>; </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$tail</span><span>)</span><span style="color:#a626a4;">*</span><span>) }
+</span><span>}
+</span></code></pre>
+<p>Again, this doesn't compile with the following error:</p>
+<pre data-lang="plain" style="background-color:#fafafa;color:#383a42;" class="language-plain "><code class="language-plain" data-lang="plain"><span>error: local ambiguity when calling macro `internal_assert`: multiple parsing options: built-in NTs tt (&#39;prev&#39;) or 1 other option.
+</span><span>  --&gt; src/main.rs:17:56
+</span><span>   |
+</span><span>17 |     ($head:tt $($tail:tt)*) =&gt; { internal_assert!($head; $($tail)*) }
+</span><span>   |                                                        ^
+</span><span>...
+</span><span>46 |     fancy_assert!(5 == 6);
+</span><span>   |     --------------------- in this macro invocation
+</span><span>   |
+</span><span>   = note: this error originates in the macro `fancy_assert` (in Nightly builds, run with -Z macro-backtrace for more info)
+</span><span>
+</span><span>error: could not compile `assert_macro` due to previous error
+</span></code></pre>
+<p>This error is very similar to the last one, because it's ambiguous whether the
+<code>;</code> should be parsed as a token tree or as the <code>;</code> in the pattern.</p>
+<h1 id="a-cursed-solution">A cursed solution</h1>
+<p>How can we put that <code>;</code> somewhere unambiguous? Well, we could use every other
+position as a marker that could be either <code>,</code> or <code>;</code> an expression like this:</p>
+<pre data-lang="txt" style="background-color:#fafafa;color:#383a42;" class="language-txt "><code class="language-txt" data-lang="txt"><span>2 + 4 == 3 + 3
+</span></code></pre>
+<p>would first be expanded into</p>
+<pre data-lang="txt" style="background-color:#fafafa;color:#383a42;" class="language-txt "><code class="language-txt" data-lang="txt"><span>2; +, 4, ==, 3, +, 3
+</span></code></pre>
+<p>And then we can match those tokens without the <code>tt</code> pattern!</p>
+<p>Here's what that looks like in code:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#0184bc;">macro_rules! </span><span>internal_assert {
+</span><span>    (</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>),</span><span style="color:#a626a4;">*</span><span> ; ==, </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>),</span><span style="color:#a626a4;">*</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        assert_eq!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">*</span><span>, </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">*</span><span>)
+</span><span>    };
+</span><span>    (</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>),</span><span style="color:#a626a4;">*</span><span> ; !=, </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>),</span><span style="color:#a626a4;">*</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        assert_ne!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">*</span><span>, </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">*</span><span>)
+</span><span>    };
+</span><span>    (</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>),</span><span style="color:#a626a4;">*</span><span> ; </span><span style="color:#a626a4;">$</span><span>(last:tt)?) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        assert!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:tt)</span><span style="color:#a626a4;">* $</span><span>(last)</span><span style="color:#a626a4;">?</span><span>)
+</span><span>    };
+</span><span>    (</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>),</span><span style="color:#a626a4;">*</span><span> ; </span><span style="color:#e45649;">$curr</span><span>:</span><span style="color:#a626a4;">tt</span><span>, </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>),</span><span style="color:#a626a4;">*</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        internal_assert!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>),</span><span style="color:#a626a4;">*</span><span>, </span><span style="color:#e45649;">$curr</span><span>; </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>),</span><span style="color:#a626a4;">*</span><span>)
+</span><span>    };
+</span><span>}
+</span><span>
+</span><span style="color:#0184bc;">macro_rules! </span><span>fancy_assert {
+</span><span>    (</span><span style="color:#e45649;">$head</span><span>:</span><span style="color:#a626a4;">tt $</span><span>(</span><span style="color:#e45649;">$tail</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{ internal_assert!(</span><span style="color:#e45649;">$head</span><span>; </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$tail</span><span>),</span><span style="color:#a626a4;">*</span><span>) }
+</span><span>}
+</span></code></pre>
+<p>And it works! I was happy with this for a little while, but I still found this
+solution to be lacking a bit. The insertion of <code>,</code> just didn't sit right with
+me. So let's try another solution.</p>
+<h1 id="brackets-to-the-rescue">Brackets to the rescue</h1>
+<p>I had kept thinking about this "marker" as the obvious solution, but the fact
+that the marker needs to be a token itself makes things difficult. So what
+symbol could we use that's not a token tree? Let's review the definition of a
+token tree:</p>
+<blockquote>
+<p>"a single token or tokens in matching delimiters (), [], or {}"</p>
+</blockquote>
+<p>That means the delimiters are special! We can use those! Because we already have
+so many <code>()</code> in our rules, I think it's best if we make <code>{}</code> our special
+symbols.This looks much better than our previous attempt:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#0184bc;">macro_rules! </span><span>internal_assert {
+</span><span>    </span><span style="color:#a0a1a7;">// If the first token on the right is ==, we use assert_eq!
+</span><span>    ({ </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> } { == </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> }) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        assert_eq!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">*</span><span>, </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">*</span><span>)
+</span><span>    };
+</span><span>    </span><span style="color:#a0a1a7;">// If the first token on the right is !=, we use assert_ne!
+</span><span>    ({ </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> } { != </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> }) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        assert_ne!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">*</span><span>, </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">*</span><span>)
+</span><span>    };
+</span><span>    </span><span style="color:#a0a1a7;">// If we did not encounter `==` or `!=`, we use assert!
+</span><span>    ({ </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> } {}) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        assert!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">*</span><span>)
+</span><span>    };
+</span><span>    </span><span style="color:#a0a1a7;">// If we have tokens left, but it&#39;s not `==` or `!=` move
+</span><span>    </span><span style="color:#a0a1a7;">// the token to the left braces.
+</span><span>    ({ </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> } { </span><span style="color:#e45649;">$curr</span><span>:</span><span style="color:#a626a4;">tt $</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> }) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        internal_assert!( { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">* </span><span style="color:#e45649;">$curr </span><span>} { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">* </span><span>})
+</span><span>    };
+</span><span>}
+</span><span>
+</span><span style="color:#0184bc;">macro_rules! </span><span>fancy_assert {
+</span><span>    (</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$tokens</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{ internal_assert!({} { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$tokens</span><span>)</span><span style="color:#a626a4;">* </span><span>}) }
+</span><span>}
+</span></code></pre>
+<p>That's it! I have tested this with the following expressions:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span>fancy_assert!(</span><span style="color:#c18401;">5 </span><span style="color:#a626a4;">== </span><span style="color:#c18401;">6</span><span>); </span><span style="color:#a0a1a7;">// =&gt; assert_eq!
+</span><span>fancy_assert!(</span><span style="color:#c18401;">2 </span><span style="color:#a626a4;">+ </span><span style="color:#c18401;">4 </span><span style="color:#a626a4;">== </span><span style="color:#c18401;">3 </span><span style="color:#a626a4;">+ </span><span style="color:#c18401;">4</span><span>); </span><span style="color:#a0a1a7;">// assert_eq!
+</span><span>
+</span><span>fancy_assert!(</span><span style="color:#c18401;">5 </span><span style="color:#a626a4;">!= </span><span style="color:#c18401;">5</span><span>); </span><span style="color:#a0a1a7;">// =&gt; assert_eq!
+</span><span>fancy_assert!(</span><span style="color:#c18401;">2 </span><span style="color:#a626a4;">+ </span><span style="color:#c18401;">4 </span><span style="color:#a626a4;">!= </span><span style="color:#c18401;">3 </span><span style="color:#a626a4;">+ </span><span style="color:#c18401;">3</span><span>); </span><span style="color:#a0a1a7;">// assert_eq!
+</span><span>
+</span><span>fancy_assert!(</span><span style="color:#c18401;">false</span><span>); </span><span style="color:#a0a1a7;">// =&gt; assert!
+</span><span>fancy_assert!(</span><span style="color:#a626a4;">!</span><span>Vec::&lt;</span><span style="color:#a626a4;">i32</span><span>&gt;::new().</span><span style="color:#0184bc;">is_empty</span><span>()); </span><span style="color:#a0a1a7;">// =&gt; assert!
+</span><span>
+</span><span style="color:#a0a1a7;">// Note that we can even use `==` inside the expression, because
+</span><span style="color:#a0a1a7;">// everything between parentheses is a single token tree.
+</span><span>fancy_assert!(</span><span style="color:#a626a4;">!</span><span>(</span><span style="color:#c18401;">3 </span><span style="color:#a626a4;">== </span><span style="color:#c18401;">4</span><span>)); </span><span style="color:#a0a1a7;">// =&gt; assert!
+</span></code></pre>
+<h1 id="chaining-comparison-operators">Chaining comparison operators</h1>
+<p>However, there is one case we did not think about yet: what if there are
+multiple comparison operators in the expression? As it turns out, normal Rust
+does not allow that. For example, this expression does not compile:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span>assert!(</span><span style="color:#c18401;">true </span><span style="color:#a626a4;">== </span><span style="color:#c18401;">true </span><span style="color:#a626a4;">== </span><span style="color:#c18401;">true</span><span>);
+</span></code></pre>
+<p>But in our last version, this does compile:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span>fancy_assert!(</span><span style="color:#c18401;">true </span><span style="color:#a626a4;">== </span><span style="color:#c18401;">true </span><span style="color:#a626a4;">== </span><span style="color:#c18401;">true</span><span>);
+</span></code></pre>
+<p>because it gets rewritten to</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span>assert_eq!(</span><span style="color:#c18401;">true</span><span>, </span><span style="color:#c18401;">true </span><span style="color:#a626a4;">== </span><span style="color:#c18401;">true</span><span>)
+</span></code></pre>
+<p>And so the final expression that Rust gets only has one comparison operator.
+This seems like it might trip people up, so we should restrict that. This
+essentially boils down to asserting that the tokens form a valid expression.</p>
+<p>A naive solution would be to only accept expressions as input an then pass that
+as tokens to the internal macro (<code>internal_assert!</code> is unchanged from above):</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#0184bc;">macro_rules! </span><span>fancy_assert {
+</span><span>    (</span><span style="color:#e45649;">$e</span><span>:</span><span style="color:#a626a4;">expr</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{ internal_assert!({} { </span><span style="color:#e45649;">$e </span><span>}) }
+</span><span>}
+</span></code></pre>
+<p>It compiles, so I tried to run this with <code>fancy_assert!(5 == 6)</code> and...</p>
+<pre data-lang="plain" style="background-color:#fafafa;color:#383a42;" class="language-plain "><code class="language-plain" data-lang="plain"><span>thread &#39;main&#39; panicked at &#39;assertion failed: 5 == 6&#39;, src/main.rs:46:5
+</span><span>note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+</span></code></pre>
+<p>Oh, it broke the macro? We have a valid assertion, but we just get the normal
+<code>assert!</code>, not <code>assert_eq!</code>. It seems like Rust is somehow changing the tokens
+of the expression and it is parsed as a single token tree.</p>
+<p>This means that our public macro needs to accept a list of token trees which
+need to be passed to the internal macro directly. But, we can still fix it! All
+we have to do is make a third macro that only accepts valid expressions!</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#0184bc;">macro_rules! </span><span>is_expr {
+</span><span>    (</span><span style="color:#e45649;">$e</span><span>:</span><span style="color:#a626a4;">expr</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{};
+</span><span>}
+</span><span>
+</span><span style="color:#0184bc;">macro_rules! </span><span>fancy_assert {
+</span><span>    (</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$t</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        is_expr!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$t</span><span>)</span><span style="color:#a626a4;">*</span><span>);
+</span><span>        internal_assert!({} { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$t</span><span>)</span><span style="color:#a626a4;">* </span><span>})
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>The <code>is_expr!</code> macro does not actually generate any code, it just acts as a
+guard, which generates this error when we try to chain comparison operators:</p>
+<pre data-lang="plain" style="background-color:#fafafa;color:#383a42;" class="language-plain "><code class="language-plain" data-lang="plain"><span>error: comparison operators cannot be chained
+</span><span>  --&gt; src/main.rs:50:24
+</span><span>   |
+</span><span>50 |     fancy_assert!(true == true == true); // =&gt; assert_eq!
+</span><span>   |                        ^^      ^^
+</span><span>   |
+</span><span>help: split the comparison into two
+</span><span>   |
+</span><span>50 |     fancy_assert!(true == true &amp;&amp; true == true); // =&gt; assert_eq!
+</span><span>   |                                +++++++
+</span></code></pre>
+<p>Problem solved! Right?</p>
+<h1 id="lower-precedence-operators">Lower precedence operators</h1>
+<p>What if we follow the suggestion from the compiler in that last error message? That would not work because it would expand to</p>
+<pre style="background-color:#fafafa;color:#383a42;"><code><span>assert_eq!(true, true &amp;&amp; true == true);
+</span></code></pre>
+<p>That's using the wrong precedence.</p>
+<p>So if any of these tokens appear, we need to fall back to <code>assert!</code>. So before we use our <code>interal_assert</code> macro, we can first scan for those tokens. Luckily, we can do that with a similar technique to above.</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#0184bc;">macro_rules! </span><span>scan_lower_precedence {
+</span><span>    ({ </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> } { &amp;&amp; </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> }) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        assert!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">* &amp;&amp; $</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">*</span><span>)
+</span><span>    };
+</span><span>    ({ </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> } { || </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> }) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        assert!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">* || $</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">*</span><span>)
+</span><span>    };
+</span><span>    ({ </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> } {}) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        internal_assert!({} {</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">*</span><span>})
+</span><span>    };
+</span><span>    ({ </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> } { </span><span style="color:#e45649;">$curr</span><span>:</span><span style="color:#a626a4;">tt $</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> }) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        scan_lower_precedence!({ </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">* </span><span style="color:#e45649;">$curr </span><span>} { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">* </span><span>})
+</span><span>    };
+</span><span>}
+</span><span>
+</span><span style="color:#0184bc;">macro_rules! </span><span>fancy_assert {
+</span><span>    (</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$t</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{ is_expr!(</span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$t</span><span>)</span><span style="color:#a626a4;">*</span><span>); scan_lower_precedence!({} { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$t</span><span>)</span><span style="color:#a626a4;">* </span><span>}) }
+</span><span>}
+</span></code></pre>
+<h1 id="if-expressions">If expressions</h1>
+<p>At this point, I really thought I was done and I was ready to put this all in a crate and publish it with great fanfare. But it turned out there were bigger problems than <code>&amp;&amp;</code> and <code>||</code>.</p>
+<p>The problem lies with <code>if</code>, <code>match</code>, <code>for</code> &amp; <code>while</code> which can all contain <code>==</code> in their expressions without them being enclosed within delimiters.</p>
+<p>I kept trying an I got <code>if</code> expressions mostly working, by using a stack to keep track of nested <code>if</code> statements. Here it is:</p>
+<pre data-lang="rust" style="background-color:#fafafa;color:#383a42;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#a0a1a7;">// The first argument is the callback for the macro with
+</span><span style="color:#a0a1a7;">// which we should continue execution when the stack is
+</span><span style="color:#a0a1a7;">// empty.
+</span><span style="color:#a0a1a7;">//
+</span><span style="color:#a0a1a7;">// The second argument is a stack of if&#39;s and matches that
+</span><span style="color:#a0a1a7;">// we are currently in. The base case is [] and each item
+</span><span style="color:#a0a1a7;">// wraps the last [if [if []]].
+</span><span style="color:#a0a1a7;">//
+</span><span style="color:#a0a1a7;">// If we find an `if`, we push it to the stack, if we find
+</span><span style="color:#a0a1a7;">// the end we pop it.
+</span><span style="color:#0184bc;">macro_rules! </span><span>parse_cond {
+</span><span>    </span><span style="color:#a0a1a7;">// Found the end of an if expression and if is at the top of the stack
+</span><span>    (</span><span style="color:#e45649;">$cb</span><span>:</span><span style="color:#a626a4;">ident</span><span> [if </span><span style="color:#e45649;">$stack</span><span>:</span><span style="color:#a626a4;">tt</span><span>] { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> } { </span><span style="color:#e45649;">$then</span><span>:</span><span style="color:#a626a4;">block</span><span> else </span><span style="color:#e45649;">$else</span><span>:</span><span style="color:#a626a4;">block $</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> }) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        parse_cond_or_callback!(</span><span style="color:#e45649;">$cb $stack </span><span>{ </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">* </span><span style="color:#e45649;">$then </span><span style="color:#a626a4;">else </span><span style="color:#e45649;">$else </span><span>} { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">* </span><span>})
+</span><span>    };
+</span><span>    </span><span style="color:#a0a1a7;">// Found the start of an if expression, put it on the stack and continue
+</span><span>    (</span><span style="color:#e45649;">$cb</span><span>:</span><span style="color:#a626a4;">ident </span><span style="color:#e45649;">$stack</span><span>:</span><span style="color:#a626a4;">tt</span><span> { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> } { if </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> }) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        parse_cond!(</span><span style="color:#e45649;">$cb </span><span>[</span><span style="color:#a626a4;">if </span><span style="color:#e45649;">$stack</span><span>] { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">* if </span><span>} { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">* </span><span>})
+</span><span>    };
+</span><span>    </span><span style="color:#a0a1a7;">// Some other token, we just recurse
+</span><span>    (</span><span style="color:#e45649;">$cb</span><span>:</span><span style="color:#a626a4;">ident </span><span style="color:#e45649;">$stack</span><span>:</span><span style="color:#a626a4;">tt</span><span> { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> } { </span><span style="color:#e45649;">$curr</span><span>:</span><span style="color:#a626a4;">tt $</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> }) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        parse_cond!(</span><span style="color:#e45649;">$cb $stack </span><span>{ </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">* </span><span style="color:#e45649;">$curr </span><span>} { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">* </span><span>})
+</span><span>    };
+</span><span>}
+</span><span>
+</span><span style="color:#a0a1a7;">// Expand to the callback if the stack is empty or recurse otherwise
+</span><span style="color:#0184bc;">macro_rules! </span><span>parse_cond_or_callback {
+</span><span>    (</span><span style="color:#e45649;">$cb</span><span>:</span><span style="color:#a626a4;">ident</span><span> [] </span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt </span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{ </span><span style="color:#e45649;">$cb</span><span style="color:#a626a4;">!</span><span>(</span><span style="color:#e45649;">$prev $next</span><span>) };
+</span><span>    (</span><span style="color:#e45649;">$cb</span><span>:</span><span style="color:#a626a4;">ident </span><span style="color:#e45649;">$stack</span><span>:</span><span style="color:#a626a4;">tt </span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt </span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>) </span><span style="color:#a626a4;">=&gt; </span><span>{ parse_cond!(</span><span style="color:#e45649;">$cb $stack $prev $next</span><span>)};
+</span><span>}
+</span><span>
+</span><span style="color:#a0a1a7;">// For the macros below other cases are the same as before.
+</span><span style="color:#0184bc;">macro_rules! </span><span>internal_assert {
+</span><span>    ({ </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> } { if </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> }) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        parse_cond!(internal_assert [</span><span style="color:#a626a4;">if </span><span>[]] { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">* if </span><span>} { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">* </span><span>})
+</span><span>    };
+</span><span>    </span><span style="color:#a0a1a7;">/* snip */
+</span><span>}
+</span><span>
+</span><span style="color:#0184bc;">macro_rules! </span><span>scan_lower_precedence {
+</span><span>    ({ </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> } { if </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>:</span><span style="color:#a626a4;">tt</span><span>)</span><span style="color:#a626a4;">*</span><span> }) </span><span style="color:#a626a4;">=&gt; </span><span>{
+</span><span>        parse_cond!(scan_lower_precedence [</span><span style="color:#a626a4;">if </span><span>[]] { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$prev</span><span>)</span><span style="color:#a626a4;">* if </span><span>} { </span><span style="color:#a626a4;">$</span><span>(</span><span style="color:#e45649;">$next</span><span>)</span><span style="color:#a626a4;">* </span><span>})
+</span><span>    };
+</span><span>    </span><span style="color:#a0a1a7;">/* snip */
+</span><span>}
+</span></code></pre>
+<p>This works, but I couldn't find a solution for the other cases like <code>match</code> and the code would frankly become too complicated. Instead the "solution" would just be to give a compile-time error if we encounter any <code>match</code>, <code>while</code> or <code>for</code>. It's unsatisfying, but maybe someone with better macro-fu skills can do better.</p>
+<h1 id="ending-this-madness">Ending this madness</h1>
+<p>The truth is that were only working with crude approximations of Rust syntax and that it is extremely hard to prove that it covers all cases. Instead of using the code from this post, I recommend <code>assert2</code>, which has this feature and much more and is actually able to parse the code.</p>
+<p>I would like to see some of the functionality of <code>assert2</code> in the standard <code>assert</code>, since it would greatly improve the default testing facilities in Rust. I'd love to see some discussion in that space.</p>
+<p>This whole ordeal was a fun experiment though! The technique for parsing is also interesting on its own. The Little Book of Rust Macros has a section on this technique, which they call <a href="https://veykril.github.io/tlborm/decl-macros/patterns/tt-muncher.html">TT munching</a>. It's a powerful technique, but also has quadratic time complexity, so use with caution. I can highly recommend looking at the Little Book if you need some advanced macro techniques. They also explain other techniques I used, like <a href="https://veykril.github.io/tlborm/decl-macros/patterns/callbacks.html">callbacks</a> and <a href="https://veykril.github.io/tlborm/decl-macros/patterns/tt-bundling.html">TT bundling</a>. I foolishly figured these out myself, because I forgot about the book, but I recommend checking it out!</p>
+<hr />
+<p>Thanks to Lucas, Jonathan &amp; Arav for solving this problem with me, providing interesting test cases and proofreading drafts of this post.</p>
+</main>
+        <div class="hide-on-phone"></div>
+        <footer>
+<nav>
+    <div></div>
+    <a href="mailto:terts.diepraam@gmail.com" title="Mail"><img src="/icons/envelope.svg" /></a>
+    <a href="https://github.com/tertsdiepraam" title="GitHub"><img src="/icons/github.svg" /></a>
+    <a rel="me" href="https://mastodon.online/@terts" title="Mastodon"><img src="/icons/mastodon.svg" /></a>
+    <div></div>
+</nav>
+</footer></body>
+</html>
