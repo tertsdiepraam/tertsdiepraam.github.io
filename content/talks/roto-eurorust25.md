@@ -8,7 +8,9 @@ Event: EuroRust 2025
 
 # Recording
 
-Will be added once it's published.
+<div class="wrapper">
+<iframe width="100%" height="100%" src="https://www.youtube.com/embed/7xJEFPlfy7Y?si=yw1078A0SPjklU-s" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
 
 # Slides
 
