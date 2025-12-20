@@ -1,6 +1,7 @@
 +++
 
 title = "Trying to rewrite assert! to assert_eq! with a declarative macro"
+date = "2020-06-16"
 
 +++
 

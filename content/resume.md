@@ -1,8 +1,6 @@
 +++
 template = "resume.html"
-
 title = "Resume"
-
 +++
 
 <div class="social">
@@ -43,13 +41,22 @@ title = "Resume"
 # Experience
 
 {{ resumeheader(
-    title ="Open Source Software Maintainer & Developer",
+    title ="Software Engineer",
     date = "Aug 2020 —  Present",
+    company = "NLnet Labs"
+    url = "https://nlnetlabs.nl/"
+) }}
+
+I'm currently a software engineer at NLnet Labs, working on open source applications for DNS and BGP.
+
+{{ resumeheader(
+    title ="Open Source Software Maintainer & Developer",
+    date = "Aug 2020 —  Feb 2023",
     company = "uutils"
     url = "https://uutils.github.io/"
 ) }}
 
-I am a maintainer on the uutils project, which aims to reimplement the GNU coreutils in Rust. The project is entirely open source with an active community on GitHub. We strive for perfect compatibility with the existing GNU utilities.
+I was a maintainer on the uutils project, which aims to reimplement the GNU coreutils in Rust. The project is entirely open source with an active community on GitHub. The project strives for perfect compatibility with the existing GNU utilities.
 
 {{ resumeheader(
     title ="Developer",
@@ -188,6 +195,8 @@ For my final project, I created a smartwatch based on a Raspberry Pi, including 
 # Talks
 
 - _"uutils/coreutils & the quest for compatibility"_ at the Rust at TU Delft meetup. [video link](https://www.youtube.com/watch?v=fu2sxy6OR54)
+
+- _"Roto: A Fast and Safe Scripting Language"_ at EuroRust 2025. [video link](https://www.youtube.com/watch?v=7xJEFPlfy7Y)
 
 # Recreation
 

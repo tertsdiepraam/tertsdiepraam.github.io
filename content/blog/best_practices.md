@@ -6,6 +6,7 @@ date = 2022-02-12
 
 description = "Ever evolving list of best practices for programming"
 
+draft = true
 +++
 
 This is a list of best practices for programming. These are non-exhaustive, ever

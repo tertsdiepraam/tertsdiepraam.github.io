@@ -2,6 +2,7 @@
 
 title = "uutils ❤️ nushell"
 author = "Terts Diepraam"
+draft = true
 +++
 
 The uutils and nushell teams have an exciting announcement: we are collaborating!

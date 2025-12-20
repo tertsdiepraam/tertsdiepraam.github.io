@@ -1,7 +1,7 @@
 +++
 
 title = "Coreutils Args"
-
+draft = true
 +++
 
 > **Note**: This design is a work in progress and there is no implementation.
@@ -488,4 +488,3 @@ struct Settings {
 We would now display a single column if `format == Format::SingleColumn` or 
 `single_column == true`. Luckily, there's only one such case that I know of 
 that needs this.
-
