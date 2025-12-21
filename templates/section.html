@@ -1,19 +1,33 @@
 {%- extends "base.html" -%}
 
 {%- block title -%}
-    <title>{{ section.title }} | {{ config.title }}</title>
+<title>{{ section.title }} | {{ config.title }}</title>
 {%- endblock title -%}
 
 {%- block main -%}
-    {%- for page in paginator.pages -%}
-        <a href="{{ page.permalink }}" class="post">
-            <h1 class="post-title">
-                {{ page.title }}
-            </h1>
-            <p class="date">{{ page.date }}</p>
-            {%  if page.description -%}
-                <p class="description">{{ page.description }}</p>
-            {%  endif -%}
-        </a>
-    {%- endfor -%}
+
+<h1>{{ section.title }}</h1>
+
+{{ section.content | safe }}
+
+{% if section.extra.class -%}
+<div class="{{ section.extra.class }}">
+{% else %}
+<div>
+{% endif -%}
+{%- for page in paginator.pages -%}
+<a href="{{ page.permalink }}" class="post">
+    <h2 class="post-title">{{ page.title }}</h2>
+
+    {% if page.extra.event -%}
+        <p class="event">{{ page.extra.event }}</span>
+    {% endif -%}
+    <p class="date">{{ page.date }}</p>
+    {% if page.description -%}
+        <p class="description">{{ page.description }}</p>
+    {% endif -%}
+</a>
+{%- endfor -%}
+</div>
+
 {%- endblock main -%}

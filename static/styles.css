@@ -54,7 +54,8 @@ body {
         filter: invert(90%);
     }
 }
-@media only screen and (max-width: 40em) {
+
+@media only screen and (max-width: 45em) {
     body {
         grid-template-columns: 0 100% 0;
         grid-column-gap: 0;
@@ -286,7 +287,7 @@ main > p > a > button {
     background-color: var(--background-color2);
 }
 
-.post > h1 {
+.post > h2 {
     margin: 0;
     font-size: 1.2em;
 }
@@ -294,6 +295,17 @@ main > p > a > button {
 .post > p {
     margin: 0;
     font-size: 0.9em;
+}
+
+@media only screen and (min-width: 45em) {
+    .project-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1em;
+    }
+    .project-list .post {
+        margin: 0;
+    }
 }
 
 /* Page */

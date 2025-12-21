@@ -1,10 +1,11 @@
 +++
 title = "Roto: A fast and safe scripting language for Rust"
 author = "Terts Diepraam"
-date = "2025-10-9"
-+++
+date = "2025-10-09"
 
-Event: EuroRust 2025
+[extra]
+event = "EuroRust 2025"
++++
 
 # Recording
 
