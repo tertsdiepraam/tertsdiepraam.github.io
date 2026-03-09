@@ -17,7 +17,7 @@
     --darker-accent: light-dark(#ac311f, #ac311f);
     --light-accent: light-dark(#ac311f, #ac311f);
 
-    --code: light-dark(#ac311f, #ac311f);
+    --code: light-dark(#ac311f, #d67768);
     --rule: 4px solid var(--dark-accent);
     --img-filter: light-dark(invert(0%), invert(100%));
     --img-filter-inverted: light-dark(invert(100%), invert(0%));
@@ -372,7 +372,7 @@ a {
 }
 
 pre {
-    padding: 1em;
+    padding: 0.5em 1em;
     border-radius: 0.5em;
     overflow-x: auto;
     background: var(--background-color2);
@@ -380,6 +380,29 @@ pre {
 
 .footnote-definition > * {
     display: inline;
+}
+
+blockquote.note {
+    margin: 0;
+    padding: 0.5em 1.2em 0.5em 1.2em;
+    border-left: 3px solid blue;
+    background: #0000ff11;
+
+    p {
+        margin: 0;
+    }
+}
+
+blockquote {
+    margin: 0;
+    padding: 0.5em 1.2em 0.5em 1.2em;
+    border-left: 3px solid var(--text-color);
+    background: light-dark(#00000006, #ffffff06);
+    font-style: italic;
+
+    p {
+        margin: 0;
+    }
 }
 
 code {
@@ -392,8 +415,7 @@ code {
 pre code {
     background: none;
     color: inherit;
-    padding: none;
-    border-radius: none;
+    padding: 0;
 }
 
 pre {
