@@ -20,9 +20,11 @@
     <h2 class="post-title">{{ page.title }}</h2>
 
     {% if page.extra.event -%}
-        <p class="event">{{ page.extra.event }}</span>
+        <p class="event">{{ page.extra.event }}</p>
     {% endif -%}
-    <p class="date">{{ page.date }}</p>
+    {% if page.date -%}
+    <p class="date">{{ page.date | date(format = "%e %b %y")}}</p>
+    {% endif -%}
     {% if page.description -%}
         <p class="description">{{ page.description }}</p>
     {% endif -%}

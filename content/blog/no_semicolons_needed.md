@@ -1,14 +1,16 @@
 +++
 
 title = "No Semicolons Needed"
-date = "2026-03-7"
+date = "2026-03-07"
+description = "An overview how different languages split statements without requiring semicolons."
 
 +++
 
-I'm making a scripting language called Roto. Like so many programming
-languages, it has the goal of being easy to use and read. These languages usually
-end up making semicolons to delimit or terminate statements optional. This sounds
-simple, but how do they implement that? How do they decide where a statement ends?
+I'm making a scripting language called [Roto](codeberg.org/NLnetLabs/roto).
+Like so many programming languages, it has the goal of being easy to use and
+read. These languages usually end up making semicolons to delimit or terminate
+statements optional. This sounds simple, but how do they implement that? How do
+they decide where a statement ends?
 
 To illustrate the problem, we can take an expression and format it bit weirdly.
 We can start with an example in Rust:
@@ -790,7 +792,7 @@ d = ( 3
 ```
 
 It seems to be dependent on the kind of the expression whether a newline
-continues a statement. But in principle, they seem to prefer splitting into
+continues a statement. But in general, they seem to prefer splitting into
 multiple lines if that is legal. The newline is really treated as a separator in
 the parser. In that sense, it matches other languages with a lot of use in the
 scientific community such as Python and R.
