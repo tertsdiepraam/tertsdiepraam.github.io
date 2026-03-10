@@ -4,6 +4,16 @@
 <title>{{ section.title }} | {{ config.title }}</title>
 {%- endblock title -%}
 
+{%- block rss -%}
+{% if section.generate_feeds %}
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ current_path }}rss.xml">
+  <link rel="alternate" type="application/atom+xml" title="Blog" href="{{ current_path }}atom.xml">
+{% else %}
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ get_url(path="rss.xml", trailing_slash=false) }}">
+  <link rel="alternate" type="application/atom+xml" title="Atom" href="{{ get_url(path="atom.xml", trailing_slash=false) }}">
+{% endif %}
+{%- endblock rss -%}
+
 {%- block main -%}
 
 <h1>{{ section.title }}</h1>
