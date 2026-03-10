@@ -15,13 +15,10 @@ generate_feeds = true
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
 
-[markdown]
-highlight_code = true
-highlight_theme = "css"
-highlight_themes_css = [
-  { theme = "OneHalfDark", filename = "syntax-theme-dark.css" },
-  { theme = "OneHalfLight", filename = "syntax-theme-light.css" },
-]
+[markdown.highlighting]
+style = "class"
+dark_theme = "one-dark-pro"
+light_theme = "one-light"
 
 [extra]
 # Put all your custom variables here
