@@ -6,9 +6,9 @@ description = "An overview how different languages split statements without requ
 
 +++
 
-I'm making a scripting language called [Roto](codeberg.org/NLnetLabs/roto).
+I'm making a scripting language called [Roto](https://codeberg.org/NLnetLabs/roto).
 Like so many programming languages, it has the goal of being easy to use and
-read. These languages usually end up making semicolons to delimit or terminate
+read. Many languages usually end up making semicolons to delimit or terminate
 statements optional. This sounds simple, but how do they implement that? How do
 they decide where a statement ends?
 
@@ -18,7 +18,7 @@ We can start with an example in Rust:
 ```rust
 fn foo(x: u32) -> u32 {
   let y = 2 * x
-      - 3;
+        - 3;
   y
 }
 ```
@@ -28,18 +28,18 @@ In Rust, that is perfectly unambiguous. Now let's do the same in Python:
 ```python
 def foo(x):
   y = 2 * x
-      - 3
+    - 3
   return y
 ```
 
 We get an "unexpected indent" error! Since Python doesn't require semicolons, it
 gets confused. As it turns out, many languages have different solutions to this
-problem! Here's Gleam, for instance:
+problem. Here's Gleam, for instance:
 
 ```gleam
 fn foo(x) {
   let y = 2 * x
-          - 3
+        - 3
   y
 }
 ```
@@ -47,10 +47,23 @@ fn foo(x) {
 That's allowed! And if we `echo foo(4)` we get `5` just like in Rust. So, how
 does Gleam determine that the expression continues on the second line?
 
-I wanted to find out how different languages approach this problem, but I
-couldn't find a good overview, so I decided to write one. And here it is. I
-looked at 11 (!) languages that have optional semicolons to see how similar
-their approaches are.
+I think these differences are important, especially when you're interested
+in programming language design. The rules of the language need to be intuitive
+and clear for the programmer, so that they can confidently explain how an
+expression gets parsed. Our confidence in understanding the syntax forms the
+bedrock of the understanding of our code.
+
+Usually, those syntactic rules are obvious; in many languages function arguments
+are delimited by `()`. The rules for newline-separated statements are often
+vaguer. The rules differ from language to language and users are often told
+either to defensively put semicolons in their code or not to worry about it.
+Both seem like failures of language design to me.
+
+How then do we get to an approach that *does* inspire confidence for Roto?
+I decided that my best course of action was to look at what 11 (!) languages
+are doing and how their approaches stack up.
+
+Enjoy!
 
 <blockquote class="note">
 
@@ -81,11 +94,11 @@ language, so here are links to all the sections:
 
 ## Python
 
-Let's start with the language with most famous for whitespace sensitivity
-([citation needed]). Python starts with the assumption that one line is one
-statement. In the [grammar](python-ref), it describes what it calls _logical
-lines_ which are constructed from one or more _physical lines_, i.e. the lines
-you see in your editor.
+Let's start with the language most famous for whitespace sensitivity ([citation
+needed]). Python assumes that one line is one statement. In its
+[grammar](python-ref), it describes what it calls _logical lines_. These are
+constructed from one or more _physical lines_, i.e. the lines you see in your
+editor.
 
 There are 2 ways that physical lines can be joined:
 
@@ -114,25 +127,25 @@ considering the example from the introduction again:
 
 ```python
 y = 2 * x
-    - 3
+  - 3
 ```
 
-Python would simply treat that as two statements if you forget to put a
-backslash at the end of the first line. Luckily, Python has a solution: it
-strictly enforces correct indentation. Since the `- 3` is on a new line, it
-must have the same indentation as the line before. This is not the only reason
-that Python has that rule, because it also relies on indentation for the program
-structure, but it does help.
+If you forget to put a backslash at the end of the first line, Python would
+simply treat that as two statements. Luckily, Python has a solution: it strictly
+enforces correct indentation. Since the `- 3` is on a newline, it must have the
+same indentation as the line before. This is not the only reason that Python has
+that rule, because it also relies on indentation for the program structure, but
+it does help.
 
-Now let's consider the consequences of this approach. Python is quite principled
+Now let's consider the consequences of Python's approach. It is quite principled
 and strict about its statement separation. It is also very unambiguous.
 It's easy to keep the rule of "one line, one statement" in your head while
 programming with the two exceptions being quite explicit.
 
 A somewhat ironic consequence for an indentation-based language, however,
-is that this has encouraged the community to embrace explicit delimiters.
-For example, the ubiquitous code formatters `black` and `ruff` both prefer
-parentheses over backslashes.
+is that Python's rules have encouraged the community to embrace explicit
+delimiters. For example, the ubiquitous code formatters `black` and `ruff` both
+prefer parentheses over backslashes.
 
 ```python
 # "Unidiomatic"
@@ -150,8 +163,8 @@ y = (
 )
 ```
 
-I think this system is pretty good! It's simple, it's clear and the indentation
-rules are likely to catch any mistakes.
+I think Python's system is pretty good! It's simple, it's clear and the
+indentation rules are likely to catch any mistakes.
 
 Sources:
 
@@ -162,16 +175,16 @@ Sources:
 
 ## Go
 
-Go's approach is very different from Python's. In the [official book][go-book]
-it states:
+Go's approach is very different from Python's. Go's [official book][go-book]
+states:
 
 > Like C, Go's formal grammar uses semicolons to terminate statements, but
-> unlike in C, those semicolons do not appear in the source. Instead the lexer
+> unlike in C, those semicolons do not appear in the source. Instead, the lexer
 > uses a simple rule to insert semicolons automatically as it scans, so the
 > input text is mostly free of them.
 
 The first thing that I dislike about this is that it encourages thinking of
-semicolons being inserted instead of statements being terminated. I find
+semicolons being inserted instead of statements being terminated. I find that
 to be a roundabout way of thinking about the problem. But alas, this is what
 we're dealing with. I want to highlight something in that text: the semicolons
 are inserted by the _lexer_. The reasoning behind this is this that it keeps the
@@ -212,7 +225,7 @@ with more complex expressions it usually errors on unused values that might
 occur by accident. That's good!
 
 [This post](go-medium) gives us an example that doesn't error and where the
-newline changes behaviour. It first requires a bit of setup:
+newline changes behavior. It first requires a bit of setup:
 
 ```go
 func g() int {
@@ -270,14 +283,14 @@ foo(
 ```
 
 That's fair, even if it seems a little pedantic. I like these formatting
-choices, but I'd prefer if the "wrong style" was still syntactically valid but
+choices, but I'd prefer if the "wrong style" was still syntactically valid and
 a formatter would be able to fix it. As it stands with Go, its formatter also
 errors on these invalid snippets. This strictness also seems to [lead to
 confusion for newcomers][SO_GO] to the language every once in a while,
 particularly if they come from languages like Java, where braces are often put
 on a separate line.
 
-So, Go's approach is simple, but in my opinion not not very friendly. It is
+So, Go's approach is simple, but in my opinion not very friendly. It is
 saved by disallowing some unused values, but I'm not competent enough with
 writing Go to evaluate whether that covers all ambiguous cases.
 
@@ -295,8 +308,8 @@ Sources:
 ## Kotlin
 
 As far as I can tell, Kotlin does not have simple "rules" for when a newline
-separates two statements, like Python and Go. Instead, it makes newlines an
-explicit part of the grammar. So for each construct where a newline is allowed,
+separates two statements, like Python and Go have. Instead, it makes newlines an
+explicit part of the grammar. So, for each construct where a newline is allowed,
 it opts into it explicitly. I'll spare you the BNF-like notation, but it seems
 to boil down to this:
 
@@ -312,14 +325,14 @@ to boil down to this:
  - Prefix unary operators allow a newline after themselves.
 
 This approach of baking newline handling into the grammar gives the
-language designers a lot of control, but this comes at the cost of simplicitly
+language designers a lot of control, but this comes at the cost of simplicity
 and transparency. This approach is like the opposite of Go's. It can get pretty
-nuanced and there's no clear explanation of any of it that I can find.
+nuanced and I can't find a clear explanation of it.
 
 My best attempt at summarizing this approach: an expression is allowed to
 continue on the next line if that is unambiguous in the grammar.
 
-After all that theory, we try our example:
+After that theory, we try our example:
 
 ```kotlin
 var x = 4
@@ -342,8 +355,8 @@ var y = 1
       + 2
 ```
 
-Another case where the "continue if unambiguous" approach gets into trouble
-is if very similar operators have different rules. Kotlin has the `::` and `.`
+Another case where the "continue if unambiguous" approach gets into trouble is
+when very similar operators have different rules. Kotlin has the `::` and `.`
 operators to respectively access a method and a field of a class. Of these two,
 `.` allows newlines on both sides, but `::` doesn't. That is because `::` also
 refers to the root namespace, so it is a valid start of a new expression.
@@ -356,8 +369,9 @@ val y = baz
   ::quux    // two expressions!
 ```
 
-Since newlines are part of te grammar explicitly and therefore plainly
-disallowed in some places. I expected that this would give me an error:
+Since newlines are part of the grammar explicitly and therefore plainly
+disallowed in some places. I expected that this would give me an error
+because `+` only allows newlines after the operator in the grammar:
 
 ```kotlin
 var y = (
@@ -366,16 +380,15 @@ var y = (
 )
 ```
 
-I figured that wouldn't work because `+` only allows newlines after the operator.
-But it works! It makes a lot of sense that they added this behaviour, but I
-cannot find traces of this behaviour in the specification. If somebody could
-show me where this is documented, I'd love to see it!
+But it works! I think it makes sense that they added this behavior, but I cannot
+find traces of this behavior in the specification. If somebody could show me
+where this is documented, I'd love to see it!
 
 The vibe that I get from this implementation is that Kotlin's designers try
-really hard to make the behaviour intuitive, regardless of how many rules and
+really hard to make the behavior intuitive, regardless of how many rules and
 exceptions they need. I guess that if people never run into problems with it,
-then they don't need to understand it fully either. I'm not sure I agree with it
-fully, but it's a somewhat reasonable position.
+then they don't need to understand it fully either. I'm not sure I agree with
+this fully, but it's a somewhat reasonable position.
 
 [This Stack Overflow answer][SO_Kotlin] echoes that sentiment:
 
@@ -385,11 +398,11 @@ fully, but it's a somewhat reasonable position.
 > is unnecessary with a warning of "redundant semicolon".
 
 One might call this approach "don't worry, your IDE will fix it" and I guess
-that's fair when the company behind the language creates IDEs. Nevertheless, if
+that's fair when the company behind the language creates IDEs. Although if
 that is truly the consensus in the community, they've done a pretty good job!
 
-Another potential problem might be that all these complex rules make it much
-harder to write custom parsers for Kotlin. I wouldn't want to be the person
+Another potential problem might be that all these complex rules might make it
+difficult to write custom parsers for Kotlin. I wouldn't want to be the person
 responsible for maintaining its tree-sitter grammar for instance.
 
 Sources:
@@ -420,11 +433,11 @@ let y = 2 * x
 print(y)
 ```
 
-But that's not too bad if you just have the rule that the language does not have
-significant whitespace. If that's the rule then people should be able to
-remember that. Interestingly, Swift does have _some_ significant whitespace
-to prevent mistakes. For example, it is not allowed to put multiple statements on a
-single line:
+But that's not too bad if you just have the rule that the language does not
+have significant whitespace. That's a rule people should be able to remember.
+Interestingly, Swift does have _some_ significant whitespace to prevent
+mistakes. For example, it is not allowed to put multiple statements on a single
+line:
 
 ```swift
 var y = 0
@@ -448,9 +461,8 @@ print(y)
 Why? Because Swift has some special rules for parsing operators. If an operator
 has whitespace on both or neither side, it's parsed as an infix operator. If it
 has only whitespace on the left, it's a prefix operator. And finally, if only
-has whitespace on the right, it's a prefix operator.
-
-This means that this also parses as two statements:
+has whitespace on the right, it's a postfix operator. This means that this also
+parses as two statements:
 
 ```swift
 let y = 2
@@ -461,11 +473,13 @@ Swift's designers seem to be aware of this problem (obviously) and therefore
 emit a warning on unused values, which would trigger on the example above. That
 should catch most erroneous cases.
 
-Another tweak they seem to have made is that the parentheses of a function call
-cannot be on their own line. The snippet below is parsed as two lines. They
-check whether the `(` is at the start of the line and do not continue parsing if
-that's the case. The same is also done for `[`. This is a pretty good rule! You
-can check the JavaScript section to see how a language can get this wrong.
+Another tweak they seem to have made is that the parentheses of a function
+call must be on the same line as the name of the function. If it isn't then
+expression will end after the first line. For example, The snippet below is parsed as
+two lines. They check whether the `(` is at the start of the line and do not
+continue parsing if that's the case. The same is also done for `[`. This is a
+pretty good rule! You can check the JavaScript section to see how a language can
+get this wrong.
 
 ```swift
 let y = x
@@ -491,8 +505,9 @@ Swift code to judge.
 [1 comment]: https://softwareengineering.stackexchange.com/questions/291987/why-does-swift-not-require-semicolons#comment811665_291989
 
 I like this approach a lot. It seems intuitive yet simple to understand and
-debug. The error messages might take a bit of a hit, but you also get no
-"missing semicolon" messages so that's a bit of a trade-off.
+debug. The error messages might take a bit of a hit compared to languages with
+explicit semicolons, but you also get no "missing semicolon" errors so that's
+a bit of a trade-off.
 
 Sources:
 
@@ -504,17 +519,20 @@ Sources:
 ## JavaScript
 
 JavaScript seems to be the language that has given Automatic Semicolon Insertion
-a bad reputation. Its rules are pretty complex, but luckily there's a very good
+a bad reputation. Its rules are pretty complex, but luckily there's an excellent
 [MDN article][MDN] about it.
 
 There are three important cases where a semicolon is inserted:
 
 1. If a token is encountered that is not allowed by the grammar that either
-  a. is separated by at least one newline with the previous token,
-  b. or if the token is `}`.
+
+    a. is separated by at least one newline with the previous token, or
+
+    b. if the token is `}`.
+
 2. If the end of the input is reached and that is not allowed by the grammar.
 3. If a newline is encountered in certain expressions such as after `return`,
-   `break` or `continue`, among others.
+   `break` or `continue`.
 
 Note that this is not everything! There are many exceptions to these rules, such
 as that no semicolons are inserted in the `for` statement's head and that no
@@ -524,10 +542,10 @@ All in all, this means that our example is parsed as one line:
 
 ```js
 const y = 2 * x
-   - 3
+        - 3
 // is parsed as
 const y = 2 * x
-   - 3;
+        - 3;
 ```
 
 The complexity of these rules is kind of a problem in itself as these rules
@@ -575,7 +593,7 @@ Sources:
 
 ## Gleam
 
-Gleam's appoach is very similar to Swift's: it also just parses the expressions
+Gleam's approach is very similar to Swift's: it also just parses the expressions
 until they naturally end. Swift had a few exceptions to this though, so let's
 investigate what Gleam does.
 
@@ -586,7 +604,7 @@ let y = 2 * x
       - 3
 ```
 
-That's parsed as one expression as we might expect. However, we can remove one
+As we might expect, that's parsed as one expression. However, we can remove one
 space to change that:
 
 ```gleam
@@ -608,7 +626,7 @@ pub fn main() {
 ```
 
 I would personally require a newline there if I was designing Gleam, but this
-is perfectly unambiguous. Gleam's formatter will also put both expressions on
+is technically unambiguous. Gleam's formatter will also put both expressions on
 their own line and Gleam will warn you about an unused value, so you'll notice
 that something's off soon enough.
 
@@ -621,10 +639,9 @@ pub fn main() {
 }
 ```
 
-Now if you've written any Gleam, you might be yelling at your screen, because
-that second example isn't ambiguous! It can only be a function call because
-Gleam uses `{}` for grouping expressions and if we use that it's not a function
-call anymore:
+Now if you've written any Gleam, you might be yelling at your screen: "That isn't ambiguous!"
+And you'd be right; it can only be a function call, because Gleam uses `{}` for
+grouping expressions. So, if we use `{}` it's not a function call anymore:
 
 ```gleam
 pub fn main() {
@@ -633,7 +650,7 @@ pub fn main() {
 }
 ```
 
-In another stroke of genius ambiguity prevention, Gleam also doesn't have list
+In another stroke of genius ambiguity prevention, Gleam doesn't have list
 indexing with `[]`. So this is also parsed as two expressions:
 
 ```gleam
@@ -662,17 +679,17 @@ that too! The [book] says:
 > just a convention. Line breaks play no role in Lua's syntax\[.\]
 
 This means that it basically works like Gleam! What sets it apart is that it
-does has indexing with `[]` and groups expressions with `()`. Here's an
+does have indexing with `[]` and groups expressions with `()`. Here's an
 example that requires a semicolon to prevent it being parsed as a single
 statement:
 
-```
+```lua
 (function() end)(); -- semicolon is required here
 (function() end)()
 ```
 
-There might be even more problematic cases, but I'm not good enough with Lua to
-find them.
+There might be even more problematic cases, but I'm not experienced enough with
+Lua to find them.
 
 Sources:
 
@@ -682,7 +699,7 @@ Sources:
 
 ## R
 
-We've seen before that some language insert semicolons when reading further
+We've seen before that some languages insert semicolons when reading further
 would be invalid. R sort of takes the opposite approach: it inserts a semicolon
 when the grammar allows it. Here's the official explanation from the [R Language
 Definition][R_DEF]:
@@ -694,10 +711,10 @@ parser will assume it does so, otherwise the newline is treated as whitespace.
 There's one exception to this rule, which is that the `else` keyword can appear
 on a separate line.
 
-That approach somewhat reminiscent of Python's, but not quite the same, because
-R allows expressions to continue to the next line if they are incomplete. Our
-recurring example would look like this and parse as two expressions because the
-grammar allows the expression to end after the `x`:
+That approach is somewhat reminiscent of Python's. However, R allows expressions
+to continue to the next line if they are incomplete. Our recurring example
+would parse as two expressions because the grammar allows the expression to end
+after the `x`:
 
 ```r
 y = 2 * x
@@ -712,11 +729,10 @@ y = 2 * x -
 ```
 
 The result is that you'd almost never have to worry about the next expression
-being parsed as part of the former, unless you're quite explicit about them
-being joined, for example with parentheses or trailing operators. The downside
-is that I would generally prefer to write the operator at the start of the next
-line, which we can only do if we wrap the expression in parentheses (just like
-with Python).
+being parsed as part of the former. They are only joined explicitly, , for
+example with parentheses or trailing operators. On the downside, I would
+generally prefer to write the operator at the start of the next line, which we
+can only do if we wrap the expression in parentheses (just like with Python).
 
 It looks like a pretty good approach. I like that the newline has some semantic
 meaning and it doesn't feel confusing.
@@ -791,13 +807,13 @@ d = ( 3
 # -> -1
 ```
 
-It seems to be dependent on the kind of the expression whether a newline
+It seems to be dependent on the kind of expression whether a newline
 continues a statement. But in general, they seem to prefer splitting into
 multiple lines if that is legal. The newline is really treated as a separator in
 the parser. In that sense, it matches other languages with a lot of use in the
-scientific community such as Python and R.
+scientific community, such as Python and R.
 
-If anybody knows where to find documentation on this, let me know!
+If anybody knows where to find documentation on Julia's syntax, let me know!
 
 Sources:
 
@@ -805,9 +821,10 @@ Sources:
 
 ## Odin
 
-While I was working on this post, GingerBill released a [blog post](odin-post)
-that contained an explanation of Odin's approach. What I found particularly
-interesting are the reasons he cites for implementing them:
+While I was working on this post, Odin's creator GingerBill released a [blog
+post][odin-post] that contained an explanation of Odin's approach. What I
+found particularly interesting are the reasons he cites for making semicolons
+optional:
 
 > There were two reasons I made them optional:
 >
@@ -816,7 +833,7 @@ interesting are the reasons he cites for implementing them:
 
 It looks like he didn't care much for that feature himself. What's nice about
 this post is that he lays out some reasoning for Odin's approach. He describes
-it as a mix of Python of Go, where there is semicolon insertion done by the
+it as a mix of Python and Go, where semicolon insertion is done by the
 lexer, but not within `()`, `{}` and `[]`.
 
 Another exception he lays out is that Odin has a few exceptions to allow braces
@@ -849,17 +866,17 @@ probably had good reasons to do so.
 
 Sources:
 
-- [Choosing a Language Based on its Syntax](odin-post)
+- [Choosing a Language Based on its Syntax][odin-post]
 
 [odin-post]: https://www.gingerbill.org/article/2026/02/19/choosing-a-language-based-on-syntax/
 
-## An idea I haven't seen yet
+## A Different Idea
 
-Here are some ideas I haven't seen being used and I wonder whether they make sense.
+Here is an idea I haven't seen being used and I wonder whether it makes sense.
 
 The only language that seems to consider indentation at all is Python, but only
 to restrict mistakes. I would love to see a language try to implement a rule
-where an indented line is considered part of the previous expression.
+where only an indented line is considered part of the previous expression.
 
 ```python
 x = 3
@@ -870,9 +887,11 @@ x = 3
 ```
 
 This feels quite intuitive to me. I could see this being a replacement for
-Python's line joining with `\\`. A problem is of course that now the indentation
-always needs to be correct and many developers (myself included) like to just
-have their formatter deal with the indentation.
+Python's line joining with `\`. A problem, of course, is that now the
+indentation always needs to be correct and many developers (myself included)
+like to just have their formatter deal with the indentation. In any case,
+it might be an interesting lint to consider for a language with optional
+semicolons.
 
 # Overview
 
@@ -903,16 +922,16 @@ the argument that they fit in multiple categories.
 </blockquote>
 
 You could make some other categories as well. For example, you could call
-Python, Ruby, R, Julia, and Odin _conservative_ in their parsing, as in, they
-usually stop parsing at a newline. Lua, Gleam and Swift, on the other hand, are
-more _greedy_: they usually keep parsing across newlines as far as they can.
+Python, Ruby, R, Julia, and Odin _conservative_ in their parsing, they usually
+stop parsing at a newline. Lua, Gleam and Swift, on the other hand, are more
+_greedy_: they usually keep parsing across newlines as far as they can.
 
 Another distinction to make is how it is implemented. JavaScript, Go and Odin
 have at least some part of the semicolon insertion implemented in the lexer,
 while many other languages make it part of the parser.
 
 A final interesting category are the languages that are entirely insensitive
-to whitespace such as Lua and Gleam. Even though Swift gets close to this
+to whitespace, such as Lua and Gleam. Even though Swift gets close to this
 category, it turned out to have some whitespace-sensitive rules.
 
 # Conclusion
@@ -923,26 +942,27 @@ same solution, because there might be other ways that the syntax differs that
 should be taken into account.
 
 Nevertheless, I guess this is the part where I have to give my opinion about
-all of this, so here are some guidelines I would use (which you might very well
+all of this, so here are some guidelines I would use (which you may very well
 disagree with):
 
-- Prefer defining clear rules over baking it into your parser (looking at you Kotlin).
-- Keep those rules as simple as possible (looking at you JS).
-- I prefer grouping with `()` over splitting with `;` in a language with
-  optional semicolons, so I would pick a strategy that splits on newlines in
-  most cases.
-- Add tooling to help catch mistakes (such as warnings on usused values) to
+- Prefer defining clear rules over baking it into your parser.
+- Keep those rules as simple as possible (looking at you, JS).
+- Use a parser that splits on newlines in most cases, instead of continuing
+  expressions greedily onto the next line.
+- Think about the rest of your language's syntax and what problems might arise
+  with your chosen approach.
+- Add tooling to help catch mistakes (such as warnings on unused values) to
   prevent the most ambiguous cases.
 
 Do you agree? What do you think is best? Have I missed any important languages?
 Do you have cool ideas for better implementations? Let me know be responding to
 [this post on Mastodon](todo)!
 
-# Acknowledgements
+# Acknowledgments
 
-Thanks to <insert names> for proof reading drafts of this post. Any mistakes are
-my own. You can send corrections to <terts.diepraam@gmail.com> or [on
-Mastodon](this-post).
+Thanks to Thijs Vromen, waffle and Anne Stijns for proofreading drafts
+of this post. Any mistakes are my own. You can send corrections to
+<terts.diepraam@gmail.com> or [on Mastodon](this-post).
 
 No LLMs were used while writing this piece, neither for gathering information or
 for writing.

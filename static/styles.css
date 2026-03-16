@@ -376,6 +376,19 @@ pre {
     border-radius: 0.5em;
     overflow-x: auto;
     background: var(--background-color2);
+    position: relative;
+}
+
+pre > code[data-lang]::before {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    content: attr(data-lang);
+    padding: 3px 0.5em;
+    background: light-dark(#00000008, #ffffff08);
+    border-radius: 0 0 0 0.5em;
+    font-family: "Noto Serif", serif;
+    text-transform: capitalize;
 }
 
 .footnote-definition > * {
