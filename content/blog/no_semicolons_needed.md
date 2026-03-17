@@ -7,19 +7,20 @@ description = "An overview how different languages split statements without requ
 +++
 
 I'm making a scripting language called [Roto](https://codeberg.org/NLnetLabs/roto).
-Like so many programming languages, it has the goal of being easy to use and
-read. Many languages usually end up making semicolons to delimit or terminate
-statements optional. This sounds simple, but how do they implement that? How do
-they decide where a statement ends?
+Like so many programming languages before it, it has the goal of being easy to
+use and read. Many languages end up making semicolons to delimit or terminate
+statements optional to that end. I want that too!
 
-To illustrate the problem, we can take an expression and format it bit weirdly.
-We can start with an example in Rust:
+This sounds simple, but how do they implement that? How do they decide where
+a statement ends without an explicit terminator? To illustrate the problem, we
+can take an expression and format it bit weirdly. We can start with an example
+in Rust:
 
 ```rust
 fn foo(x: u32) -> u32 {
-  let y = 2 * x
-        - 3;
-  y
+    let y = 2 * x
+          - 3;
+    y
 }
 ```
 
@@ -27,9 +28,9 @@ In Rust, that is perfectly unambiguous. Now let's do the same in Python:
 
 ```python
 def foo(x):
-  y = 2 * x
-    - 3
-  return y
+    y = 2 * x
+      - 3
+    return y
 ```
 
 We get an "unexpected indent" error! Since Python doesn't require semicolons, it
@@ -38,9 +39,9 @@ problem. Here's Gleam, for instance:
 
 ```gleam
 fn foo(x) {
-  let y = 2 * x
-        - 3
-  y
+    let y = 2 * x
+          - 3
+    y
 }
 ```
 
@@ -48,28 +49,27 @@ That's allowed! And if we `echo foo(4)` we get `5` just like in Rust. So, how
 does Gleam determine that the expression continues on the second line?
 
 I think these differences are important, especially when you're interested
-in programming language design. The rules of the language need to be intuitive
+in programming language design. The syntax of the language need to be intuitive
 and clear for the programmer, so that they can confidently explain how an
-expression gets parsed. Our confidence in understanding the syntax forms the
-bedrock of the understanding of our code.
+expression gets parsed.
 
-Usually, those syntactic rules are obvious; in many languages function arguments
-are delimited by `()`. The rules for newline-separated statements are often
-vaguer. The rules differ from language to language and users are often told
-either to defensively put semicolons in their code or not to worry about it.
-Both seem like failures of language design to me.
+Usually, those syntactic rules are obvious; in many languages, function
+arguments are delimited by `()`. The rules for newline-separated statements are
+often vaguer and differ from language to language. Users are often told either
+to defensively put semicolons in their code or not to worry about it. Both seem
+like (minor) failures of language design to me.
 
-How then do we get to an approach that *does* inspire confidence for Roto?
-I decided that my best course of action was to look at what 11 (!) languages
-are doing and how their approaches stack up.
-
-Enjoy!
+How then do I find an approach for Roto that doesn't have these problems? I
+decided that my best course of action was to look at what 11 (!) languages are
+doing and how their approaches stack up. This post is that exploration. I don't
+really have an answer on what's best, but I hope this is still be an informative
+overview.
 
 <blockquote class="note">
 
-**NOTE**: I'm not fluent in all the languages below, in fact I've barely used some of
-them. I've tried to mention some sources but I might still have gotten some
-details wrong. Let me know if you find any mistakes!
+**NOTE**: I'm not fluent in all the languages below, in fact, some of them I've
+barely used. I've tried to cite sources where possible but I might still have
+gotten some details wrong. Let me know if you find any mistakes!
 
 </blockquote>
 
@@ -132,10 +132,8 @@ y = 2 * x
 
 If you forget to put a backslash at the end of the first line, Python would
 simply treat that as two statements. Luckily, Python has a solution: it strictly
-enforces correct indentation. Since the `- 3` is on a newline, it must have the
-same indentation as the line before. This is not the only reason that Python has
-that rule, because it also relies on indentation for the program structure, but
-it does help.
+enforces correct indentation. Since the `- 3` is on a new line, it must have the
+same indentation as the line before.
 
 Now let's consider the consequences of Python's approach. It is quite principled
 and strict about its statement separation. It is also very unambiguous.
@@ -164,7 +162,9 @@ y = (
 ```
 
 I think Python's system is pretty good! It's simple, it's clear and the
-indentation rules are likely to catch any mistakes.
+indentation rules are likely to catch any mistakes. From my time writing Python,
+I don't remember this getting in my way much, except for sometimes having to
+wrap expressions in `()`. I was never really surprised by this behavior.
 
 Sources:
 
@@ -190,27 +190,28 @@ we're dealing with. I want to highlight something in that text: the semicolons
 are inserted by the _lexer_. The reasoning behind this is this that it keeps the
 rule for automatic semicolon insertion are very simple.
 
-Go's lexer inserts a semicolon after the following tokens:
+Go's lexer inserts a semicolon after the following tokens if they appear just
+before a newline or a `}`:
 
  - an identifier,
  - a basic literal,
- - or one of `break`, `continue`, `fallthrough`, `return`, `++`, `--`, `-`, `)`
+ - or one of `break`, `continue`, `fallthrough`, `return`, `++`, `--`, `)`
    or `}`.
 
 Simple enough! Let's go to our introductory example:
 
 ```go
-var x = 4
-var y = 2 * x
-      - 3
+x := 4
+y := 2 * x
+   - 3
 ```
 
 Those lines end with numbers so the lexer inserts semicolons:
 
 ```go
-var x = 4;
-var y = 2 * x;
-      - 3;
+x := 4;
+y := 2 * x;
+   - 3;
 ```
 
 Just like Python, that seems error prone! But as we run this, Go has a nice
@@ -286,9 +287,8 @@ That's fair, even if it seems a little pedantic. I like these formatting
 choices, but I'd prefer if the "wrong style" was still syntactically valid and
 a formatter would be able to fix it. As it stands with Go, its formatter also
 errors on these invalid snippets. This strictness also seems to [lead to
-confusion for newcomers][SO_GO] to the language every once in a while,
-particularly if they come from languages like Java, where braces are often put
-on a separate line.
+confusion for newcomers][SO_GO] every once in a while, particularly if they come
+from languages like Java, where braces are often put on a separate line.
 
 So, Go's approach is simple, but in my opinion not very friendly. It is
 saved by disallowing some unused values, but I'm not competent enough with
@@ -314,8 +314,8 @@ it opts into it explicitly. I'll spare you the BNF-like notation, but it seems
 to boil down to this:
 
  - Statements are separated by one or more newlines or `;`.
- - If a construct is unambiguously incomplete, it is allowed to continue on the
-   next line.
+ - If a construct is unambiguously incomplete at the end of a line, it is
+   allowed to continue on the next line.
  - Delimited constructs (like function calls) allow newlines within them.
  - Newlines are not allowed before `(`, `[` or `{`.
  - Binary operators seem to fall into two camps:
@@ -335,8 +335,8 @@ continue on the next line if that is unambiguous in the grammar.
 After that theory, we try our example:
 
 ```kotlin
-var x = 4
-var y = 2 * x
+val x = 4
+val y = 2 * x
       - 3
 print(y)
 ```
@@ -347,19 +347,19 @@ However, the logical operators `&&` and `||` allow newlines on both sides.
 
 ```kotlin
 // This is one expression:
-var y = false
+val y = false
       || true
 
 // This is two expressions:
-var y = 1
+val y = 1
       + 2
 ```
 
 Another case where the "continue if unambiguous" approach gets into trouble is
 when very similar operators have different rules. Kotlin has the `::` and `.`
 operators to respectively access a method and a field of a class. Of these two,
-`.` allows newlines on both sides, but `::` doesn't. That is because `::` also
-refers to the root namespace, so it is a valid start of a new expression.
+`.` allows newlines on both sides, but `::` doesn't. That is because `::` is
+also a valid start of a callable reference expression.
 
 ```kotlin
 val x = foo
@@ -370,11 +370,11 @@ val y = baz
 ```
 
 Since newlines are part of the grammar explicitly and therefore plainly
-disallowed in some places. I expected that this would give me an error
+disallowed in some places, I expected that this would give me an error
 because `+` only allows newlines after the operator in the grammar:
 
 ```kotlin
-var y = (
+val y = (
     1
     + 2
 )
@@ -397,8 +397,8 @@ this fully, but it's a somewhat reasonable position.
 > accidentally add an extra semicolon the syntax highlighting will show you it
 > is unnecessary with a warning of "redundant semicolon".
 
-One might call this approach "don't worry, your IDE will fix it" and I guess
-that's fair when the company behind the language creates IDEs. Although if
+We could characterize this approach "don't worry, your IDE will fix it" and I
+guess that's fair when the company behind the language creates IDEs. Although if
 that is truly the consensus in the community, they've done a pretty good job!
 
 Another potential problem might be that all these complex rules might make it
@@ -473,13 +473,13 @@ Swift's designers seem to be aware of this problem (obviously) and therefore
 emit a warning on unused values, which would trigger on the example above. That
 should catch most erroneous cases.
 
-Another tweak they seem to have made is that the parentheses of a function
-call must be on the same line as the name of the function. If it isn't then
-expression will end after the first line. For example, The snippet below is parsed as
-two lines. They check whether the `(` is at the start of the line and do not
-continue parsing if that's the case. The same is also done for `[`. This is a
-pretty good rule! You can check the JavaScript section to see how a language can
-get this wrong.
+Another tweak they made is that the parentheses of a function call must be on
+the same line as the name of the function. If it isn't, then expression will
+end after the first line. For example, The snippet below is parsed as two lines.
+They check whether the `(` is at the start of the line and do not continue
+parsing if that's the case. The same is also done for `[`. This is a pretty
+good rule! You can check the JavaScript section to see how a language can get
+this wrong.
 
 ```swift
 let y = x
@@ -561,9 +561,9 @@ const b = 1     // <- and also not here
 [1, 2, 3].forEach(console.log)
 ```
 
-If you want to code without semicolons in JS, you therefore have to think about
-whether consecutive lines would be valid syntax if they were joined. Or you have
-to learn a whole lot of rules such as:
+If you want to code without semicolons in JS, you have to think about whether
+consecutive lines would be valid syntax if they were joined. Or you have to
+learn a whole lot of rules such as:
 
 - Never put the operand of `return`, `break`, etc. on a separate line.
 - If a line starts with one of `(`, `[`, `` ` ``, `+`, `-`, `/`, prefix it with
@@ -626,8 +626,8 @@ pub fn main() {
 ```
 
 I would personally require a newline there if I was designing Gleam, but this
-is technically unambiguous. Gleam's formatter will also put both expressions on
-their own line and Gleam will warn you about an unused value, so you'll notice
+is technically unambiguous. Gleam's formatter will also put the expressions on
+separate lines and Gleam will warn you about an unused value, so you'll notice
 that something's off soon enough.
 
 This is parsed as one expression, i.e. a function call:
@@ -639,9 +639,10 @@ pub fn main() {
 }
 ```
 
-Now if you've written any Gleam, you might be yelling at your screen: "That isn't ambiguous!"
-And you'd be right; it can only be a function call, because Gleam uses `{}` for
-grouping expressions. So, if we use `{}` it's not a function call anymore:
+Now if you've written any Gleam, you might be yelling at your screen: "That
+isn't ambiguous!" And you'd be right; it can only be a function call, because
+Gleam uses `{}` for grouping expressions. So, if we use `{}` it's not a function
+call anymore:
 
 ```gleam
 pub fn main() {
@@ -672,7 +673,7 @@ Sources:
 ## Lua
 
 Speaking of languages that just parse the thing as far as they can, Lua does
-that too! The [book] says:
+that too! The [book][PIL] says:
 
 > A semicolon may optionally follow any statement. Usually, I use semicolons
 > only to separate two or more statements written in the same line, but this is
@@ -729,10 +730,10 @@ y = 2 * x -
 ```
 
 The result is that you'd almost never have to worry about the next expression
-being parsed as part of the former. They are only joined explicitly, , for
-example with parentheses or trailing operators. On the downside, I would
-generally prefer to write the operator at the start of the next line, which we
-can only do if we wrap the expression in parentheses (just like with Python).
+being parsed as part of the former. They are only joined explicitly, for example
+with parentheses or trailing operators. On the downside, I would generally
+prefer to write the operator at the start of the next line, which we can only do
+if we wrap the expression in parentheses (just like with Python).
 
 It looks like a pretty good approach. I like that the newline has some semantic
 meaning and it doesn't feel confusing.
@@ -746,7 +747,7 @@ Sources:
 ## Ruby
 
 Another famously semicolonless language is of course Ruby. It has a very similar
-approach to R, but as is becoming a bit of a theme, not quite the same. Like
+approach to R, but — as is becoming a bit of a theme — not quite the same. Like
 R, it splits statements by lines, but allows the expression to continue if it's
 incomplete. So we can basically copy our examples for R verbatim:
 
@@ -936,7 +937,7 @@ category, it turned out to have some whitespace-sensitive rules.
 
 # Conclusion
 
-This turned out to be a much more complicated topic than I ever expected! While
+This turned out to be a much more complicated topic than I expected! While
 there are approaches I like better than others, not all languages should use the
 same solution, because there might be other ways that the syntax differs that
 should be taken into account.

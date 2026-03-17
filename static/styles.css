@@ -387,7 +387,7 @@ pre > code[data-lang]::before {
     padding: 3px 0.5em;
     background: light-dark(#00000008, #ffffff08);
     border-radius: 0 0 0 0.5em;
-    font-family: "Noto Serif", serif;
+    font-family: "Noto Sans", sans-serif;
     text-transform: capitalize;
 }
 
