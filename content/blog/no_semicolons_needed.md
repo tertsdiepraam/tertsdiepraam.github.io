@@ -957,13 +957,14 @@ disagree with):
 
 Do you agree? What do you think is best? Have I missed any important languages?
 Do you have cool ideas for better implementations? Let me know be responding to
-[this post on Mastodon](todo)!
+[this post on Mastodon](https://mastodon.online/@terts/116251236166999491)!
 
 # Acknowledgments
 
 Thanks to Thijs Vromen, waffle and Anne Stijns for proofreading drafts
 of this post. Any mistakes are my own. You can send corrections to
-<terts.diepraam@gmail.com> or [on Mastodon](this-post).
+[terts.diepraam@gmail.com](mailto:terts.diepraam@gmail.com) or [on
+Mastodon](https://mastodon.online/@terts/116251236166999491).
 
 No LLMs were used while writing this piece, neither for gathering information or
 for writing.
