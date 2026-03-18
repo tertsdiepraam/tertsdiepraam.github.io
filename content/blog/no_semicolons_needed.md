@@ -13,7 +13,7 @@ statements optional to that end. I want that too!
 
 This sounds simple, but how do they implement that? How do they decide where
 a statement ends without an explicit terminator? To illustrate the problem, we
-can take an expression and format it bit weirdly. We can start with an example
+can take an expression and format it a bit weirdly. We can start with an example
 in Rust:
 
 ```rust
