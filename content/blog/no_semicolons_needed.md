@@ -1,7 +1,7 @@
 +++
 
 title = "No Semicolons Needed"
-date = "2026-03-07"
+date = "2026-03-18"
 description = "An overview how different languages split statements without requiring semicolons."
 
 +++
