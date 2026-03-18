@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Terts Diepraam - Talks</title>
+    <subtitle>Personal website of Terts Diepraam</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://terts.dev/talks/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://terts.dev/talks/"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-02-01T00:00:00+00:00</updated>
+    <id>https://terts.dev/talks/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Calling JIT-compiled Roto scripts from Rust</title>
+        <published>2026-02-01T00:00:00+00:00</published>
+        <updated>2026-02-01T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://terts.dev/talks/roto-fosdem26/"/>
+        <id>https://terts.dev/talks/roto-fosdem26/</id>
+        
+        <content type="html" xml:base="https://terts.dev/talks/roto-fosdem26/">&lt;h1 id=&quot;recording&quot;&gt;Recording&lt;&#x2F;h1&gt;
+&lt;p&gt;Coming up!&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;slides&quot;&gt;Slides&lt;&#x2F;h1&gt;
+&lt;div class=&quot;wrapper&quot;&gt;
+  &lt;iframe src=&quot;&#x2F;Roto @ FOSDEM.pdf&quot; width=&quot;100%&quot; height=&quot;100%&quot;&gt;
+  &lt;&#x2F;iframe&gt;
+&lt;&#x2F;div&gt;
+&lt;style&gt;
+  .wrapper { width: 100%; aspect-ratio: 16&#x2F;9 }
+&lt;&#x2F;style&gt;
+&lt;h1 id=&quot;links&quot;&gt;Links&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Roto: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;NLnetLabs&#x2F;roto&quot;&gt;repo&lt;&#x2F;a&gt;, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;roto.docs.nlnetlabs.nl&quot;&gt;docs&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Rotonda: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;NLnetLabs&#x2F;rotonda&quot;&gt;repo&lt;&#x2F;a&gt;, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;rotonda.docs.nlnetlabs.nl&quot;&gt;docs&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;RustWeek: &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;rustweek.org&quot;&gt;website&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;NLnet Labs: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;nlnetlabs.nl&quot;&gt;website&lt;&#x2F;a&gt;, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;NLnetLabs&quot;&gt;GitHub&lt;&#x2F;a&gt;, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;social.nlnetlabs.nl&#x2F;@nlnetlabs&quot;&gt;Mastodon&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Me: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;terts.dev&quot;&gt;website&lt;&#x2F;a&gt;, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;tertsdiepraam&quot;&gt;GitHub&lt;&#x2F;a&gt;, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;mastodon.online&#x2F;@terts&quot;&gt;Mastodon&lt;&#x2F;a&gt;, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;terts.dev&#x2F;links&quot;&gt;more&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Roto: A fast and safe scripting language for Rust</title>
+        <published>2025-10-09T00:00:00+00:00</published>
+        <updated>2025-10-09T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://terts.dev/talks/roto-eurorust25/"/>
+        <id>https://terts.dev/talks/roto-eurorust25/</id>
+        
+        <content type="html" xml:base="https://terts.dev/talks/roto-eurorust25/">&lt;h1 id=&quot;recording&quot;&gt;Recording&lt;&#x2F;h1&gt;
+&lt;div class=&quot;wrapper&quot;&gt;
+&lt;iframe width=&quot;100%&quot; height=&quot;100%&quot; src=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;embed&#x2F;7xJEFPlfy7Y?si=yw1078A0SPjklU-s&quot; title=&quot;YouTube video player&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share&quot; referrerpolicy=&quot;strict-origin-when-cross-origin&quot; allowfullscreen&gt;&lt;&#x2F;iframe&gt;
+&lt;&#x2F;div&gt;
+&lt;h1 id=&quot;slides&quot;&gt;Slides&lt;&#x2F;h1&gt;
+&lt;div class=&quot;wrapper&quot;&gt;
+  &lt;iframe src=&quot;&#x2F;Roto @ EuroRust.pdf&quot; width=&quot;100%&quot; height=&quot;100%&quot;&gt;
+  &lt;&#x2F;iframe&gt;
+&lt;&#x2F;div&gt;
+&lt;style&gt;
+  .wrapper { width: 100%; aspect-ratio: 16&#x2F;9 }
+&lt;&#x2F;style&gt;
+&lt;h1 id=&quot;links&quot;&gt;Links&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Demo: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;tertsdiepraam&#x2F;roto-demo&quot;&gt;repo&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Roto: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;NLnetLabs&#x2F;roto&quot;&gt;repo&lt;&#x2F;a&gt;, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;roto.docs.nlnetlabs.nl&quot;&gt;docs&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Rotonda: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;NLnetLabs&#x2F;rotonda&quot;&gt;repo&lt;&#x2F;a&gt;, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;rotonda.docs.nlnetlabs.nl&quot;&gt;docs&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;RustWeek: &lt;a rel=&quot;external&quot; href=&quot;http:&#x2F;&#x2F;rustweek.org&quot;&gt;website&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;NLnet Labs: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;nlnetlabs.nl&quot;&gt;website&lt;&#x2F;a&gt;, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;NLnetLabs&quot;&gt;GitHub&lt;&#x2F;a&gt;, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;social.nlnetlabs.nl&#x2F;@nlnetlabs&quot;&gt;Mastodon&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Me: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;terts.dev&quot;&gt;website&lt;&#x2F;a&gt;, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;tertsdiepraam&quot;&gt;GitHub&lt;&#x2F;a&gt;, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;mastodon.online&#x2F;@terts&quot;&gt;Mastodon&lt;&#x2F;a&gt;, &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;terts.dev&#x2F;links&quot;&gt;more&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>uutils&#x2F;coreutils &amp; the quest for compatibility</title>
+        <published>2023-10-26T00:00:00+00:00</published>
+        <updated>2023-10-26T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://terts.dev/talks/uutils-delft-meetup/"/>
+        <id>https://terts.dev/talks/uutils-delft-meetup/</id>
+        
+        <content type="html" xml:base="https://terts.dev/talks/uutils-delft-meetup/">&lt;h1 id=&quot;recording&quot;&gt;Recording&lt;&#x2F;h1&gt;
+&lt;div class=&quot;wrapper&quot;&gt;
+    &lt;iframe width=&quot;100%&quot; height=&quot;100%&quot; style=&quot;aspect-ratio: 16&#x2F;9&quot; src=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;embed&#x2F;fu2sxy6OR54&quot; title=&quot;YouTube video player&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share&quot; referrerpolicy=&quot;strict-origin-when-cross-origin&quot; allowfullscreen&gt;&lt;&#x2F;iframe&gt;
+&lt;&#x2F;div&gt;
+&lt;h1 id=&quot;links&quot;&gt;Links&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;tertsdiepraam&#x2F;&quot;&gt;@tertsdiepraam on GitHub&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;mastodon.online&#x2F;@terts&quot;&gt;@terts@mastodon.online&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;uutils.github.io&#x2F;&quot;&gt;uutils.github.io&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;uutils&#x2F;coreutils&quot;&gt;uutils&#x2F;coreutils on GitHub&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;discord.gg&#x2F;wQVJbvJ&quot;&gt;uutils Discord&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+</feed>
