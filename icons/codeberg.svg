@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg1468"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title16">Codeberg logo</title>
+  <defs
+     id="defs1462">
+    <linearGradient
+       xlink:href="#linearGradient6924-6"
+       id="linearGradient6918-3"
+       x1="42519.285"
+       y1="-7078.7891"
+       x2="42575.336"
+       y2="-6966.9307"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.02427861,0,0,0.02427861,-1030.1564,172.96981)" />
+    <linearGradient
+       id="linearGradient6924-6">
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="0"
+         id="stop6920-7" />
+      <stop
+         id="stop6926-5"
+         offset="0.49517274"
+         style="stop-color:#000000;stop-opacity:0.76731181;" />
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="1"
+         id="stop6922-3" />
+    </linearGradient>
+  </defs>
+  <metadata
+     id="metadata1465">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Codeberg logo</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Robert Martinez</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Codeberg and the Codeberg Logo are trademarks of Codeberg e.V.</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:date>2020-04-09</dc:date>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title>Codeberg e.V.</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:source>codeberg.org</dc:source>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <path
+     id="path6733-5"
+     style="font-variation-settings:normal;vector-effect:none;fill:url(#linearGradient6918-3);fill-opacity:1;stroke:none;stroke-width:0.0893079;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:2;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill;stop-color:#000000"
+     d="M 2.152738,1.1066467 A 0.01847284,0.01378823 0 0 0 2.13482,1.1230077 L 2.9502418,4.1794082 A 2.1166665,2.1166665 0 0 0 3.9063577,3.359675 L 2.168859,1.1134277 a 0.01847284,0.01378823 0 0 0 -0.016121,-0.00678 z" />
+  <path
+     id="path360787"
+     style="fill:#000000;fill-opacity:1;stroke-width:1.56045;paint-order:markers fill stroke;stop-color:#000000"
+     d="m 2.1130405,0.11972125 c -1.16904385,0 -2.11666672,0.94766875 -2.11666672,2.11667585 0,0.3976492 0.11194925,0.7872693 0.32318464,1.124209 L 2.084319,1.0790804 c 0.012663,-0.01648 0.044596,-0.01648 0.057259,0 L 3.9064307,3.3606979 C 4.1176661,3.0237398 4.2297071,2.634083 4.2297071,2.2363971 4.2297071,1.06739 3.2820843,0.11972125 2.1130405,0.11972125 Z" />
+</svg>

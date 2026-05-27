@@ -1,0 +1,148 @@
+{
+    "basics": {
+        "name": "Terts Diepraam",
+        "label": "Programmer",
+        "picture": "",
+        "email": "terts.diepraam@gmail.com",
+        "phone": "+31 6 34 11 60 44",
+        "website": "tertsdiepraam.gitlab.io",
+        "summary": "",
+        "location": {
+            "city": "Amsterdam",
+            "countryCode": "NL",
+            "region": "North-Holland"
+        },
+        "profiles": [
+            {
+                "network": "GitLab",
+                "username": "tertsdiepraam",
+                "url": "http://gitlab.com/tertsdiepraam"
+            },
+            {
+                "network": "GitHub",
+                "username": "tertsdiepraam",
+                "url": "http://github.com/tertsdiepraam"
+            }
+        ]
+    },
+    "work": [
+        {
+            "company": "Bit",
+            "position": "Developer",
+            "website": "https://wearebit.com",
+            "startDate": "2019-10-01",
+            "summary": "Bit develops innovative prototypes from the ground up using cutting-edge technologies. I work at Bit as a developer and have worked on many projects, from data science to mobile applications and advanced routing algorithms."
+        },
+        {
+            "company": "Bit Academy",
+            "position": "Coach",
+            "website": "https://www.bit-academy.nl/",
+            "startDate": "2020-09-01",
+            "endDate": "2021-08-01",
+            "summary": "The Bit Academy teaches programming at MBO level. I coached MBO students, teaching them web programming and data science with technologies such as HTML, CSS, JS, PHP, SQL & Python."
+        },
+        {
+            "company": "Machine Learning Programs",
+            "position": "Data Science Intern",
+            "website": "https://www.mlprograms.com",
+            "startDate": "2019-09-01",
+            "endDate": "2019-12-31",
+            "summary": "MLP applies machine learning in the insurance industry. I worked here as a data science intern, where I applied many machine learning strategies and techniques to real data."
+        },
+        {
+            "company": "Stedelijk Museum Amsterdam",
+            "position": "Blikopener",
+            "website": "https://www.stedelijk.nl/",
+            "startDate": "2015-09-01",
+            "endDate": "2018-12-01",
+            "summary": "The <a href='https://www.stedelijk.nl/en/museum/blikopeners'>Blikopeners</a> are young Amsterdam residents who aim to awaken their friends and other peers’ enthusiasm for art and culture. They look at art from a fresh perspective and share their ideas about current affairs, programs and exhibitions. The Blikopeners also organize tours, workshops & events in the museum."
+        }
+    ],
+    "education": [
+        {
+            "institution": "Technische Universiteit Delft",
+            "area": "Computer Science",
+            "studyType": "Master",
+            "startDate": "2021-09-01",
+            "summary": "",
+            "courses": [],
+            "url": "http://www.tudelft.nl"
+        },
+        {
+            "institution": "Amsterdam University College (UvA/VU partnership)",
+            "area": "Liberal Arts and Sciences (Honours Programme)",
+            "studyType": "Bachelor",
+            "startDate": "2017-09-01",
+            "endDate": "2020-08-01",
+            "gpa": "3.92",
+            "thesis": {
+                "title": "Removing Confusion in Locally Finite Petri Nets (A+, Thesis of Distinction)",
+                "url": "https://tertsdiepraam.gitlab.io/Terts_Diepraam_Thesis.pdf"
+            },
+            "honors": "summa cum laude",
+            "url": "https://www.auc.nl/",
+            "summary": "AUC is a partnership between the Universiteit van Amsterdam and Vrije Universiteit Amsterdam. All students develop their individual study plan by taking courses from the Academic Core, their major and a variety of elective courses. My curriculum was focused on Computer Science, Mathematics & Physics.",
+            "courses": [
+                "Introduction to Physics",
+                "Calculus",
+                "Theme Course: Information, Communication & Cognition: Introduction",
+                "Academic Writing Skills",
+                "Spanish A1",
+                "Logic, Information Flow and Argumentation",
+                "Introduction to Chemistry",
+                "Linear Algebra",
+                "Electricity & Magnetism",
+                "Statistics for Sciences",
+                "Global Identity Experience",
+                "Thermodynamics",
+                "Data Structure & Algorithms",
+                "Vector Calculus",
+                "Quantum Physics",
+                "Big Questions in Future Society",
+                "Spanish A2",
+                "Advanced Research Writing",
+                "Mathematical Logic",
+                "Electrodynamics",
+                "Astroparticle Physics",
+                "Advanced Programming",
+                "Physics Lab",
+                "Machine Learning",
+                "Discrete Mathematics & Algebra",
+                "Mathematics of Physics",
+                "Statistical Mechanics",
+                "Theme Course: Quantum Information & Quantum Computing",
+                "Modelling Real World Problems"
+            ]
+        },
+        {
+            "institution": "Het 4e Gymnasium Amsterdam",
+            "studyType": "Gymnasium (Voorbereidend Wetenschappelijk Onderwijs)",
+            "startDate": "2012-09-01",
+            "endDate": "2017-08-01",
+            "honors": "cum laude",
+            "summary": "Grade: cum laude",
+            "profile": "Economy & Society, Culture & Society",
+            "url": "https://het4egymnasium.nl/",
+            "courses": [
+                "Dutch",
+                "Greek",
+                "English",
+                "Mathematics",
+                "German",
+                "History",
+                "Physics",
+                "Art"
+            ]
+        }
+    ],
+    "languages": [
+        {
+            "language": "English",
+            "fluency": "Fluent"
+        },
+        {
+            "language": "Dutch",
+            "fluency": "Native speaker"
+        }
+    ],
+}
