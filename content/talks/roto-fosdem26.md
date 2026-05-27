@@ -9,7 +9,12 @@ event = "FOSDEM 2026"
 
 # Recording
 
-Coming up!
+<div class="wrapper">
+  <video preload="none" controls="controls" width="75%">
+    <source src="https://video.fosdem.org/2026/ub2252a/DS7LFX-rust-roto-calling-jit-compiled-scripts.av1.webm" type="video/webm; codecs=&quot;av01.0.08M.08.0.110.01.01.01.0&quot;">
+    <source src="https://video.fosdem.org/2026/ub2252a/DS7LFX-rust-roto-calling-jit-compiled-scripts.mp4" type="video/mp4">
+  </video>
+</div>
 
 # Slides
 
@@ -20,6 +25,9 @@ Coming up!
 
 <style>
   .wrapper { width: 100%; aspect-ratio: 16/9 }
+  video {
+    width: 100%;
+  }
 </style>
 
 # Links
